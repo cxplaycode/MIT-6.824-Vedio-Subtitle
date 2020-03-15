@@ -1,0 +1,5030 @@
+WEBVTT
+
+1
+00:00:13.400 --> 00:00:15.320
+I'm writing are the term numbers of the
+
+2
+00:00:18.500 --> 00:00:20.780
+commands are then I got a number the log
+
+3
+00:00:20.780 --> 00:00:35.289
+slots and so let's imagine that the
+
+4
+00:00:35.289 --> 00:00:38.840
+presumably the the next term is term six
+
+5
+00:00:38.840 --> 00:00:40.820
+although you can't actually tell that
+
+6
+00:00:40.820 --> 00:00:42.500
+from looking the evidence on the board
+
+7
+00:00:42.500 --> 00:00:44.770
+but it must be at least six or greater
+
+8
+00:00:44.770 --> 00:00:47.479
+let's imagine that server s3 is chosen
+
+9
+00:00:47.479 --> 00:00:52.579
+as the leader for term six and at some
+
+10
+00:00:52.579 --> 00:00:56.119
+point s3 the new leader is going to want
+
+11
+00:00:56.119 --> 00:00:58.310
+to send out a new log entry so let's
+
+12
+00:00:58.310 --> 00:01:00.109
+suppose it wants to send out its first
+
+13
+00:01:00.109 --> 00:01:02.990
+log entry per term six so we're sort of
+
+14
+00:01:02.990 --> 00:01:04.459
+thinking about the append entries our
+
+15
+00:01:04.459 --> 00:01:06.200
+PCs that the leader is going to send out
+
+16
+00:01:06.200 --> 00:01:11.299
+to carry the first log entry for term
+
+17
+00:01:11.299 --> 00:01:13.900
+six really should be under slot thirteen
+
+18
+00:01:13.900 --> 00:01:16.459
+the rules in Figure two say that an
+
+19
+00:01:16.459 --> 00:01:18.920
+append entries are bc actually as - as
+
+20
+00:01:28.129 --> 00:01:33.280
+RPC also contains this previous log
+
+21
+00:01:33.280 --> 00:01:39.469
+index field and a previous log term
+
+22
+00:01:39.469 --> 00:01:44.269
+field and when we're sending out an end
+
+23
+00:01:44.269 --> 00:01:46.430
+pend entries for where this is the first
+
+24
+00:01:46.430 --> 00:01:48.859
+entry we're leaders supposed to put
+
+25
+00:01:48.859 --> 00:01:51.379
+information about the previous slot the
+
+26
+00:01:51.379 --> 00:01:54.680
+slot before the new information sending
+
+27
+00:01:54.680 --> 00:01:57.170
+out so in this case the log index of the
+
+28
+00:02:06.709 --> 00:02:10.759
+previous entry is by so sends out this
+
+29
+00:02:10.759 --> 00:02:13.400
+information to the followers
+
+30
+00:02:13.400 --> 00:02:16.409
+and the followers before they accept a
+
+31
+00:02:16.409 --> 00:02:18.960
+upend entries are supposed to check you
+
+32
+00:02:18.960 --> 00:02:19.889
+know they know they've received an
+
+33
+00:02:19.889 --> 00:02:23.909
+append entries that for some log entries
+
+34
+00:02:23.909 --> 00:02:26.849
+that start here and the first thing they
+
+35
+00:02:26.849 --> 00:02:29.310
+do is check that there are previous the
+
+36
+00:02:29.310 --> 00:02:30.930
+receiving followers check that their
+
+37
+00:02:30.930 --> 00:02:34.199
+previous log entry matches the previous
+
+38
+00:02:34.199 --> 00:02:36.120
+information that follow that the leader
+
+39
+00:02:36.120 --> 00:02:38.310
+sent out so for a server to of course it
+
+40
+00:02:38.310 --> 00:02:42.360
+doesn't match the server to has a entry
+
+41
+00:02:42.360 --> 00:02:43.949
+here all right but it's an entry from
+
+42
+00:02:43.949 --> 00:02:46.800
+term for not from turn five and so the
+
+43
+00:02:46.800 --> 00:02:49.349
+server twos going to reject this append
+
+44
+00:02:54.689 --> 00:02:56.699
+have anything here so server ones gonna
+
+45
+00:03:03.479 --> 00:03:05.819
+terrible thing that that has been
+
+46
+00:03:05.819 --> 00:03:08.219
+averted at this point is you know the
+
+47
+00:03:08.219 --> 00:03:09.990
+bad thing we absolutely don't want to
+
+48
+00:03:15.210 --> 00:03:20.280
+sort of inductive proofs essentially
+
+49
+00:03:20.280 --> 00:03:24.599
+that the figure to scheme relies on and
+
+50
+00:03:24.599 --> 00:03:27.360
+hide the fact that server two actually
+
+51
+00:03:27.360 --> 00:03:28.800
+had a different log so instead of
+
+52
+00:03:28.800 --> 00:03:30.300
+accepting log entry server two projects
+
+53
+00:03:30.300 --> 00:03:34.439
+this RPC the leader sees is two
+
+54
+00:03:34.439 --> 00:03:36.150
+rejections and leader is maintaining
+
+55
+00:03:36.150 --> 00:03:38.330
+this next index field one for each
+
+56
+00:03:38.330 --> 00:03:45.199
+follower so it has a next index for
+
+57
+00:03:45.199 --> 00:03:48.629
+server two and the leader has a next
+
+58
+00:03:48.629 --> 00:03:54.659
+index for server one presumably if the
+
+59
+00:03:54.659 --> 00:03:56.129
+should have said this before if the
+
+60
+00:03:56.129 --> 00:03:58.430
+server sending out information about
+
+61
+00:03:58.430 --> 00:04:01.889
+slot thirteen here that must mean that
+
+62
+00:04:01.889 --> 00:04:03.870
+the server's next index is for both of
+
+63
+00:04:13.229 --> 00:04:14.939
+restarted because the figure two rules
+
+64
+00:04:14.939 --> 00:04:16.649
+say that next index starts out at the
+
+65
+00:04:16.649 --> 00:04:21.240
+end of the new leaders log and so in
+
+66
+00:04:21.240 --> 00:04:23.759
+response to errors the leaders supposed
+
+67
+00:04:23.759 --> 00:04:25.980
+to decrement its next in
+
+68
+00:04:25.980 --> 00:04:28.470
+steal so it does that for both got
+
+69
+00:04:28.470 --> 00:04:34.709
+errors from boat deca mr. Calvin resends
+
+70
+00:04:34.709 --> 00:04:36.300
+and this time the server is going to
+
+71
+00:04:36.300 --> 00:04:39.449
+send out append entries with previous
+
+72
+00:04:39.449 --> 00:04:41.779
+log index equals 11
+
+73
+00:04:41.779 --> 00:04:47.430
+and previous log term equals 3 and this
+
+74
+00:04:47.430 --> 00:04:50.339
+new append entries has it has a
+
+75
+00:04:50.339 --> 00:04:53.250
+different previous log index but it's
+
+76
+00:04:53.250 --> 00:04:55.800
+the content in the log entries that the
+
+77
+00:04:55.800 --> 00:04:58.139
+server is going to send out this time
+
+78
+00:04:58.139 --> 00:05:01.410
+include you know all the entries after
+
+79
+00:05:01.410 --> 00:05:03.420
+that the new previous log index is
+
+80
+00:05:03.420 --> 00:05:06.240
+sending out so server 2 now the previous
+
+81
+00:05:06.240 --> 00:05:10.709
+log index 11 it looks there and it sees
+
+82
+00:05:10.709 --> 00:05:12.959
+a ha you know the term is 3 same as what
+
+83
+00:05:12.959 --> 00:05:15.509
+the reader is sending me so server 2 is
+
+84
+00:05:15.509 --> 00:05:17.220
+actually going to accept this append
+
+85
+00:05:17.220 --> 00:05:20.519
+entries and figure 2 rules say oh if you
+
+86
+00:05:20.519 --> 00:05:22.439
+accept a pendent we supposed to delete
+
+87
+00:05:28.339 --> 00:05:32.360
+server tune is going to do that now it's
+
+88
+00:05:32.810 --> 00:05:35.759
+he just went to 5 6 server 1 still has a
+
+89
+00:05:35.759 --> 00:05:38.579
+problem cuz it has nothing at slot 11
+
+90
+00:05:38.579 --> 00:05:41.730
+middle would return another error the
+
+91
+00:05:41.730 --> 00:05:47.730
+server will now backup its server 1 next
+
+92
+00:05:47.730 --> 00:05:51.240
+index 2 11 it'll send out its log
+
+93
+00:05:51.240 --> 00:05:54.329
+starting here with the previous index
+
+94
+00:05:54.329 --> 00:05:56.339
+and term referring now to this slot and
+
+95
+00:05:56.339 --> 00:05:58.250
+this one's actually acceptable server 1
+
+96
+00:05:58.250 --> 00:06:00.990
+it'll adopt it'll accept the new log
+
+97
+00:06:00.990 --> 00:06:03.120
+entries and send a positive response
+
+98
+00:06:03.120 --> 00:06:06.740
+back to the server and now they're all
+
+99
+00:06:07.670 --> 00:06:13.879
+now they're all caught up and the
+
+100
+00:06:14.720 --> 00:06:17.879
+presumably the server also when it sees
+
+101
+00:06:17.879 --> 00:06:21.420
+that followers accepted and append
+
+102
+00:06:21.420 --> 00:06:22.920
+entries that had a certain number of log
+
+103
+00:06:22.920 --> 00:06:24.360
+entries it actually increments this next
+
+104
+00:06:36.769 --> 00:06:38.370
+followers logs
+
+105
+00:06:38.370 --> 00:06:39.759
+started to be equal to this
+
+106
+00:06:39.759 --> 00:06:42.430
+servers and then sent each of the
+
+107
+00:06:42.430 --> 00:06:43.899
+followers starting from that point that
+
+108
+00:06:43.899 --> 00:06:47.279
+a complete remainder of the server's log
+
+109
+00:06:47.279 --> 00:06:49.810
+after that last point at which they were
+
+110
+00:06:49.810 --> 00:07:01.889
+equal any questions all right
+
+111
+00:07:01.920 --> 00:07:05.740
+just to repeat discussion we've had
+
+112
+00:07:05.740 --> 00:07:07.990
+before and we'll probably have again you
+
+113
+00:07:07.990 --> 00:07:09.790
+notice that we erased some blog entries
+
+114
+00:07:09.790 --> 00:07:11.740
+here which are now su erase that I
+
+115
+00:07:18.569 --> 00:07:21.310
+remember we erased this log entry here
+
+116
+00:07:21.310 --> 00:07:24.759
+this used to say for um server - the
+
+117
+00:07:24.759 --> 00:07:27.459
+question is why was it ok for the system
+
+118
+00:07:27.459 --> 00:07:29.439
+to forget about this client command
+
+119
+00:07:29.439 --> 00:07:32.170
+right this thing we erased corresponds
+
+120
+00:07:32.170 --> 00:07:33.370
+to some client command which are now
+
+121
+00:07:33.370 --> 00:07:36.970
+throwing away I talked about this
+
+122
+00:07:36.970 --> 00:07:42.790
+yesterday what's the rationale here yeah
+
+123
+00:07:46.720 --> 00:07:49.300
+it was who sent this out couldn't have
+
+124
+00:07:49.300 --> 00:07:51.310
+gotten acknowledgments from a majority
+
+125
+00:07:51.310 --> 00:07:52.810
+of servers therefore that previous
+
+126
+00:07:52.810 --> 00:07:55.240
+leader couldn't have decided it was
+
+127
+00:07:55.240 --> 00:07:57.399
+committed couldn't have executed it and
+
+128
+00:07:57.399 --> 00:07:58.930
+applied it to the application state
+
+129
+00:07:58.930 --> 00:08:00.970
+could never have sent a positive reply
+
+130
+00:08:00.970 --> 00:08:03.579
+back to the client so because this isn't
+
+131
+00:08:03.579 --> 00:08:05.319
+done a majority of servers we know that
+
+132
+00:08:08.860 --> 00:08:10.240
+gotten a reply because one of the rules
+
+133
+00:08:10.240 --> 00:08:12.939
+is the server only sends over the leader
+
+134
+00:08:20.379 --> 00:08:23.379
+received by any server and then and the
+
+135
+00:08:23.379 --> 00:08:24.730
+rules of figure to basically say the
+
+136
+00:08:24.730 --> 00:08:26.589
+client if he gets no response after a
+
+137
+00:08:26.589 --> 00:08:27.879
+while it supposed to resend the request
+
+138
+00:08:27.879 --> 00:08:29.800
+so we know whatever request this was it
+
+139
+00:08:29.800 --> 00:08:33.700
+threw away we've never executed never
+
+140
+00:08:58.440 --> 00:09:03.460
+well it's always deleting suffix of the
+
+141
+00:09:03.460 --> 00:09:08.289
+followers log I mean in the end the sort
+
+142
+00:09:08.289 --> 00:09:10.750
+of backup answer to this is that the
+
+143
+00:09:10.750 --> 00:09:13.840
+leader has a complete log so all its
+
+144
+00:09:13.840 --> 00:09:16.509
+fails it can just send us complete log
+
+145
+00:09:16.509 --> 00:09:19.269
+to the follower and indeed if you know
+
+146
+00:09:19.269 --> 00:09:20.590
+if you've just started up the system and
+
+147
+00:09:20.590 --> 00:09:22.389
+something very strange happened even at
+
+148
+00:09:22.389 --> 00:09:24.879
+the very beginning then you may end up
+
+149
+00:09:24.879 --> 00:09:26.139
+actually you know maybe in some of the
+
+150
+00:09:26.139 --> 00:09:28.779
+tests for lab two you may end up backing
+
+151
+00:09:28.779 --> 00:09:31.330
+up to the very first entry and then
+
+152
+00:09:31.330 --> 00:09:32.919
+having the leader essentially send the
+
+153
+00:09:32.919 --> 00:09:34.179
+whole log but because the leader has
+
+154
+00:09:34.179 --> 00:09:35.620
+this whole law we know it could sort of
+
+155
+00:09:35.620 --> 00:09:37.330
+it's got all the information that's
+
+156
+00:09:37.330 --> 00:09:40.330
+required to feel everybody's logs if it
+
+157
+00:09:40.330 --> 00:09:42.570
+needs to
+
+158
+00:09:49.259 --> 00:09:53.950
+okay all right so in this example which
+
+159
+00:09:53.950 --> 00:09:57.850
+I guess are now erased we elected s3 as
+
+160
+00:09:57.850 --> 00:10:02.679
+the leader and the question is could we
+
+161
+00:10:02.679 --> 00:10:04.870
+you know who can we who are we allowed
+
+162
+00:10:04.870 --> 00:10:08.830
+to elect this leader right cool
+
+163
+00:10:08.830 --> 00:10:10.840
+you know that all right if you read the
+
+164
+00:10:10.840 --> 00:10:12.730
+paper you know the answer is not just
+
+165
+00:10:12.730 --> 00:10:15.669
+anyone it turns out it matters a lot for
+
+166
+00:10:15.669 --> 00:10:17.409
+the correctness the correctness of the
+
+167
+00:10:17.409 --> 00:10:19.899
+system that we don't allow just anyone
+
+168
+00:10:19.899 --> 00:10:21.669
+to be the leader like for example the
+
+169
+00:10:21.669 --> 00:10:24.610
+first node whose timer goes off may in
+
+170
+00:10:24.610 --> 00:10:28.149
+fact not be an acceptable leader and so
+
+171
+00:10:28.149 --> 00:10:29.799
+it turns out raft has some rules that
+
+172
+00:10:29.799 --> 00:10:32.620
+applies about oh yes you can be leader
+
+173
+00:10:32.620 --> 00:10:35.440
+or you can't be leader and to see why
+
+174
+00:10:46.120 --> 00:10:49.210
+the longest log as the leader right you
+
+175
+00:10:49.210 --> 00:10:50.830
+know some alternate universe that could
+
+176
+00:10:50.830 --> 00:10:52.419
+be true and it is actually true in
+
+177
+00:10:57.340 --> 00:11:02.259
+investigating is why not use the
+
+178
+00:11:02.259 --> 00:11:09.909
+cervical longest law as leader and this
+
+179
+00:11:09.909 --> 00:11:11.710
+would involve changing the voting rules
+
+180
+00:11:19.600 --> 00:11:21.610
+the example that's going to be
+
+181
+00:11:25.899 --> 00:11:29.980
+servers again and now the log set setups
+
+182
+00:11:29.980 --> 00:11:34.360
+are server Wan has entries for terms
+
+183
+00:11:34.360 --> 00:11:38.529
+five six and seven server two four five
+
+184
+00:11:38.529 --> 00:11:41.950
+and eight and server three also four
+
+185
+00:11:41.950 --> 00:11:46.899
+five and eight that's the first question
+
+186
+00:11:51.610 --> 00:11:54.519
+nonsense is to make sure that convince
+
+187
+00:11:54.519 --> 00:11:56.320
+ourselves that this configuration could
+
+188
+00:11:59.799 --> 00:12:01.389
+may be a waste of time to figure out
+
+189
+00:12:01.389 --> 00:12:03.759
+what would happen if it did arise so
+
+190
+00:12:03.759 --> 00:12:07.629
+anybody wanna propose a sequence of
+
+191
+00:12:07.629 --> 00:12:10.779
+events whereby this set of logs could
+
+192
+00:12:10.779 --> 00:12:17.139
+have arisen how about an argument that
+
+193
+00:12:17.139 --> 00:12:27.159
+it couldn't have arisen oh yeah okay so
+
+194
+00:12:27.159 --> 00:12:31.649
+well maybe we'll back up sometime
+
+195
+00:12:31.799 --> 00:12:34.450
+all right so server one wins is wins the
+
+196
+00:12:34.450 --> 00:12:37.149
+election at this point and it's in term
+
+197
+00:12:37.149 --> 00:12:42.519
+six sends out yeah it receives a client
+
+198
+00:12:52.899 --> 00:12:56.159
+everything's fine so far nothing's wrong
+
+199
+00:12:56.789 --> 00:12:59.769
+all right well a good bet for all these
+
+200
+00:12:59.769 --> 00:13:01.960
+things is then it crashes right or it
+
+201
+00:13:01.960 --> 00:13:04.990
+receives the client requests in term six
+
+202
+00:13:04.990 --> 00:13:06.789
+it appends the client requests to its
+
+203
+00:13:06.789 --> 00:13:08.590
+own log which it does first and it's
+
+204
+00:13:08.590 --> 00:13:10.269
+about to send out a pen entries but it
+
+205
+00:13:10.269 --> 00:13:12.759
+crashes yes it didn't send out any pen
+
+206
+00:13:12.759 --> 00:13:14.769
+entries and then you know we need then
+
+207
+00:13:14.769 --> 00:13:16.509
+it crashes and restarts very quickly
+
+208
+00:13:16.509 --> 00:13:19.360
+there's a new election and gosh server
+
+209
+00:13:24.460 --> 00:13:25.840
+receives a client request appends it to
+
+210
+00:13:25.840 --> 00:13:33.220
+its log and then it crashes right and
+
+211
+00:13:33.220 --> 00:13:35.379
+then after after a crashes we have a new
+
+212
+00:13:35.379 --> 00:13:37.360
+election maybe server 2 gets elected
+
+213
+00:13:37.360 --> 00:13:42.580
+this time maybe server 1 is down now so
+
+214
+00:13:42.580 --> 00:13:45.970
+off the table if server 2 is elected at
+
+215
+00:13:45.970 --> 00:13:48.909
+this point suppose server 1 is still
+
+216
+00:13:48.909 --> 00:13:51.340
+dead what term is server what server two
+
+217
+00:13:51.340 --> 00:13:53.549
+venues
+
+218
+00:13:56.419 --> 00:13:58.309
+yeah eights the right answer so why
+
+219
+00:13:58.309 --> 00:14:00.710
+eight and not remember this you know
+
+220
+00:14:00.710 --> 00:14:04.570
+this is now gone why eight and not six
+
+221
+00:14:07.240 --> 00:14:09.620
+that's absolutely right so not written
+
+222
+00:14:09.620 --> 00:14:11.269
+on the board but in order for server one
+
+223
+00:14:11.269 --> 00:14:12.740
+to have been elected here it must have
+
+224
+00:14:12.740 --> 00:14:14.149
+votes from majority of nodes which
+
+225
+00:14:14.149 --> 00:14:16.690
+include at least one of server-to-server
+
+226
+00:14:16.690 --> 00:14:21.100
+three if you look at the vote request
+
+227
+00:14:21.100 --> 00:14:24.379
+code and figure two if you vote for
+
+228
+00:14:24.379 --> 00:14:25.639
+somebody you're you're supposed to
+
+229
+00:14:32.899 --> 00:14:35.149
+server 3 are both new about term six and
+
+230
+00:14:39.710 --> 00:14:41.750
+new leader at least one of them knows
+
+231
+00:14:41.750 --> 00:14:44.929
+that the current term was eight if that
+
+232
+00:14:49.100 --> 00:14:51.230
+could win an election because it has the
+
+233
+00:14:51.230 --> 00:14:52.399
+higher terminal birth they both know
+
+234
+00:14:52.399 --> 00:14:53.840
+about term eight sorry if they both know
+
+235
+00:14:53.840 --> 00:14:56.149
+about term seven then they'll both and
+
+236
+00:14:56.149 --> 00:14:57.740
+either one of them will try to be leader
+
+237
+00:14:57.740 --> 00:15:00.529
+and term eight so that fact of that the
+
+238
+00:15:00.529 --> 00:15:02.960
+next term must be term a dis is insured
+
+239
+00:15:10.490 --> 00:15:12.710
+persistent and guarantee did not be lost
+
+240
+00:15:12.710 --> 00:15:14.809
+even if there were some crashes here so
+
+241
+00:15:14.809 --> 00:15:15.649
+the next term is going to be eight
+
+242
+00:15:15.649 --> 00:15:17.360
+server two or server three will win the
+
+243
+00:15:17.360 --> 00:15:19.490
+leadership election and let's just
+
+244
+00:15:19.490 --> 00:15:21.350
+imagine that whichever one it is sends
+
+245
+00:15:21.350 --> 00:15:25.820
+out append entries for a new client
+
+246
+00:15:25.820 --> 00:15:27.379
+requests the other one gets it and so
+
+247
+00:15:38.149 --> 00:15:42.860
+we have an election would it be okay to
+
+248
+00:15:42.860 --> 00:15:44.720
+use server one would it be okay to have
+
+249
+00:15:44.720 --> 00:15:48.889
+the rule be the longest log wins the
+
+250
+00:15:48.889 --> 00:15:54.289
+longest log gets to be the leader yeah
+
+251
+00:15:54.289 --> 00:15:56.690
+obviously not right because server was a
+
+252
+00:15:56.690 --> 00:16:04.460
+leader did it's going to force its log
+
+253
+00:16:04.460 --> 00:16:07.250
+on to the to followers by the append
+
+254
+00:16:07.250 --> 00:16:08.570
+entries machinery that we just talked
+
+255
+00:16:08.570 --> 00:16:09.950
+about a few minutes ago
+
+256
+00:16:09.950 --> 00:16:11.389
+if we live server one to be the leader
+
+257
+00:16:11.389 --> 00:16:13.850
+it's gonna you know sent out a pen
+
+258
+00:16:13.850 --> 00:16:15.710
+entries whatever backup overwrite these
+
+259
+00:16:21.470 --> 00:16:23.480
+overwrite them with this six and seven
+
+260
+00:16:30.379 --> 00:16:39.860
+why are we upset about this yeah yeah
+
+261
+00:16:52.669 --> 00:16:56.509
+so we're not entitled to delete it and
+
+262
+00:16:56.509 --> 00:17:00.110
+therefore server one cannot be allowed
+
+263
+00:17:00.110 --> 00:17:02.659
+to become leader and force its log onto
+
+264
+00:17:02.659 --> 00:17:06.170
+servers two and three everybody see why
+
+265
+00:17:15.920 --> 00:17:19.970
+for elections of course shortest log
+
+266
+00:17:19.970 --> 00:17:23.779
+didn't work too well either and so in
+
+267
+00:17:23.779 --> 00:17:26.900
+fact if you read forward to section
+
+268
+00:17:26.900 --> 00:17:31.299
+something five point four point one
+
+269
+00:17:32.950 --> 00:17:34.910
+draft actually has a slightly more
+
+270
+00:17:34.910 --> 00:17:41.380
+sophisticated election restriction that
+
+271
+00:17:43.960 --> 00:17:47.119
+the request vote handling RPC handling
+
+272
+00:17:47.119 --> 00:17:49.519
+code is supposed to check before it says
+
+273
+00:17:49.519 --> 00:17:51.740
+yes before votes yes for a different
+
+274
+00:18:02.630 --> 00:18:10.730
+over request votes only if candidate has
+
+275
+00:18:10.730 --> 00:18:13.990
+a higher
+
+276
+00:18:26.809 --> 00:18:31.450
+term same charming the last log entry
+
+277
+00:18:44.720 --> 00:18:51.740
+that received the boat request and so if
+
+278
+00:18:51.740 --> 00:18:53.839
+we apply this here if server two gets a
+
+279
+00:18:53.839 --> 00:18:58.400
+vote request from server one there our
+
+280
+00:18:58.400 --> 00:19:03.410
+last log entry terms or seven the server
+
+281
+00:19:03.410 --> 00:19:04.670
+one's gonna send out a request votes
+
+282
+00:19:04.670 --> 00:19:08.150
+with a last entry term whatever of 7
+
+283
+00:19:08.150 --> 00:19:11.920
+server twos is eight so this isn't true
+
+284
+00:19:11.920 --> 00:19:14.900
+server service we didn't get a request
+
+285
+00:19:14.900 --> 00:19:16.369
+from somebody with a higher term in the
+
+286
+00:19:16.369 --> 00:19:22.220
+last entry and or the last entry terms
+
+287
+00:19:22.220 --> 00:19:23.480
+aren't the same either said the second
+
+288
+00:19:23.480 --> 00:19:26.539
+Clause doesn't apply either so neither
+
+289
+00:19:26.539 --> 00:19:28.460
+server to new serve nor server three is
+
+290
+00:19:28.460 --> 00:19:30.470
+going to vote for server one and so even
+
+291
+00:19:30.470 --> 00:19:32.240
+if it sends out this vote requests first
+
+292
+00:19:32.240 --> 00:19:33.650
+because this has a shorter election
+
+293
+00:19:33.650 --> 00:19:35.509
+timeout nobody's going to vote for it
+
+294
+00:19:35.509 --> 00:19:36.829
+except itself so I don't think it's one
+
+295
+00:19:36.829 --> 00:19:38.900
+vote it's not a majority if either
+
+296
+00:19:38.900 --> 00:19:41.900
+server two or server three becomes a
+
+297
+00:19:41.900 --> 00:19:44.630
+candidate then either of them will
+
+298
+00:19:44.630 --> 00:19:45.920
+accept the other because they have the
+
+299
+00:19:45.920 --> 00:19:48.259
+same last term number and their logs are
+
+300
+00:19:56.920 --> 00:20:00.140
+yes because either server 2 or server 3
+
+301
+00:20:00.140 --> 00:20:01.369
+has a higher term number in the last
+
+302
+00:20:01.369 --> 00:20:05.960
+entry so you know what this is doing is
+
+303
+00:20:05.960 --> 00:20:07.940
+making sure that you can only become a
+
+304
+00:20:07.940 --> 00:20:11.779
+candidate if or it prefers candidates
+
+305
+00:20:11.779 --> 00:20:13.460
+that knew about higher that have log
+
+306
+00:20:13.460 --> 00:20:15.710
+entries some higher terms that is it
+
+307
+00:20:18.680 --> 00:20:23.750
+the previous leader and you know this
+
+308
+00:20:23.750 --> 00:20:25.400
+second part says well we were all
+
+309
+00:20:25.400 --> 00:20:26.809
+listening to the previous leader then
+
+310
+00:20:26.809 --> 00:20:27.380
+we're going to
+
+311
+00:20:27.380 --> 00:20:30.500
+for the server that has saw more
+
+312
+00:20:30.500 --> 00:20:35.539
+requests from the very last leader any
+
+313
+00:20:35.539 --> 00:20:40.509
+questions about the election restriction
+
+314
+00:20:59.509 --> 00:21:01.460
+least as I described it and it's as its
+
+315
+00:21:01.460 --> 00:21:03.680
+described in Figure two rolls back one
+
+316
+00:21:15.289 --> 00:21:18.529
+tests where backing up one entry at a
+
+317
+00:21:18.529 --> 00:21:20.119
+time is going to take a long long time
+
+318
+00:21:20.119 --> 00:21:22.400
+and so the real-world situation where
+
+319
+00:21:22.400 --> 00:21:25.819
+that might be true is if they if a
+
+320
+00:21:25.819 --> 00:21:27.950
+follower has been down for a long time
+
+321
+00:21:27.950 --> 00:21:30.170
+and missed a lot of upend entries and
+
+322
+00:21:30.170 --> 00:21:33.109
+the leader restarts and if you follow
+
+323
+00:21:33.109 --> 00:21:34.670
+the pseudocode in Figure two if a leader
+
+324
+00:21:34.670 --> 00:21:36.230
+restarts is supposed to set its next
+
+325
+00:21:36.230 --> 00:21:38.569
+index to the end of the leaders log so
+
+326
+00:21:38.569 --> 00:21:40.190
+if the follower has been down and you
+
+327
+00:21:40.190 --> 00:21:42.559
+know miss the last thousand log entries
+
+328
+00:21:42.559 --> 00:21:45.619
+and leader reboots the leader is gonna
+
+329
+00:21:45.619 --> 00:21:48.349
+have to walk back off one at a time one
+
+330
+00:21:48.349 --> 00:21:50.960
+RPC at a time all thousand of those log
+
+331
+00:21:50.960 --> 00:21:53.839
+entries that the follower missed and
+
+332
+00:21:53.839 --> 00:21:55.190
+there's no you know particular reason
+
+333
+00:21:55.190 --> 00:21:57.589
+why this would never happen in real life
+
+334
+00:21:57.589 --> 00:22:01.160
+it could easily happen at somewhat more
+
+335
+00:22:01.160 --> 00:22:03.950
+contrived situation that the tests are
+
+336
+00:22:03.950 --> 00:22:07.190
+definitely explorers is if a follower is
+
+337
+00:22:07.190 --> 00:22:09.890
+if we say we have five servers and
+
+338
+00:22:09.890 --> 00:22:13.910
+there's there's a leader but the leaders
+
+339
+00:22:18.440 --> 00:22:19.789
+know it's not leader anymore and it's
+
+340
+00:22:19.789 --> 00:22:21.920
+still sending out append entries to its
+
+341
+00:22:21.920 --> 00:22:23.150
+one follower and none of which are
+
+342
+00:22:23.150 --> 00:22:25.940
+committed while in the other majority
+
+343
+00:22:25.940 --> 00:22:28.730
+partition the system is continuing as
+
+344
+00:22:28.730 --> 00:22:32.500
+usual the ex leader and follower in that
+
+345
+00:22:32.500 --> 00:22:35.690
+Minority partition could end up putting
+
+346
+00:22:35.690 --> 00:22:37.490
+in their logs you know sort of unlimited
+
+347
+00:22:37.490 --> 00:22:40.789
+numbers of log entries for a stale term
+
+348
+00:22:40.789 --> 00:22:42.259
+that will never be committed and need to
+
+349
+00:22:42.259 --> 00:22:44.240
+be deleted and overwritten eventually
+
+350
+00:22:44.240 --> 00:22:47.599
+when they rejoin the main group that's
+
+351
+00:22:47.599 --> 00:22:48.740
+maybe a little less likely in the real
+
+352
+00:22:48.740 --> 00:22:52.519
+world but you'll see it happen and the
+
+353
+00:22:52.519 --> 00:22:55.279
+test set up so in order to be able to
+
+354
+00:22:55.279 --> 00:22:57.609
+back up faster that paper has
+
+355
+00:22:57.609 --> 00:22:59.950
+somewhat a vague description of a faster
+
+356
+00:23:07.299 --> 00:23:10.150
+I'm gonna try to explain what their
+
+357
+00:23:10.150 --> 00:23:11.650
+ideas about how to back up faster a
+
+358
+00:23:11.650 --> 00:23:13.269
+little bit better and the general idea
+
+359
+00:23:13.269 --> 00:23:15.519
+is to be able to to have the follower
+
+360
+00:23:15.519 --> 00:23:17.380
+send enough information to the leader
+
+361
+00:23:17.380 --> 00:23:19.630
+that the leader can jump back an entire
+
+362
+00:23:19.630 --> 00:23:22.960
+terms worth of entries that have to be
+
+363
+00:23:22.960 --> 00:23:26.140
+deleted per append entries so it leader
+
+364
+00:23:26.140 --> 00:23:27.579
+may only have to send one in a pennant
+
+365
+00:23:27.579 --> 00:23:30.880
+and append entries per term in which the
+
+366
+00:23:30.880 --> 00:23:33.849
+leader and follower disagree instead of
+
+367
+00:23:39.910 --> 00:23:42.960
+you can probably think of many different
+
+368
+00:23:42.960 --> 00:23:46.619
+log backup acceleration strategies and
+
+369
+00:23:46.619 --> 00:23:50.170
+here's one so I'm going to divide the
+
+370
+00:23:50.170 --> 00:23:51.880
+kinds of situations you might see into
+
+371
+00:23:51.880 --> 00:24:01.480
+three cases so this is fast backup case
+
+372
+00:24:01.480 --> 00:24:06.940
+one I'm just going to talk about one
+
+373
+00:24:06.940 --> 00:24:09.279
+follower and the leader and not worry
+
+374
+00:24:44.640 --> 00:24:47.680
+so in this case we need to back up over
+
+375
+00:24:47.680 --> 00:24:49.180
+some entries but their entries for a
+
+376
+00:24:49.180 --> 00:24:50.410
+term that the leader actually knows
+
+377
+00:24:50.410 --> 00:24:53.980
+about so apparently the this followers
+
+378
+00:24:53.980 --> 00:24:56.799
+saw a couple of entry a couple of the
+
+379
+00:24:56.799 --> 00:24:58.960
+very Flass few append entries sent out
+
+380
+00:24:58.960 --> 00:25:01.900
+by a leader that was about to crash but
+
+381
+00:25:01.900 --> 00:25:03.640
+the new leader didn't see them we still
+
+382
+00:25:03.640 --> 00:25:05.859
+need to back up over them and a third
+
+383
+00:25:05.859 --> 00:25:11.680
+case is where the followers entirely
+
+384
+00:25:11.680 --> 00:25:15.210
+missing the following the leader agree
+
+385
+00:25:15.210 --> 00:25:19.900
+but the followers is missing the end of
+
+386
+00:25:19.900 --> 00:25:24.789
+the leaders log and I believe you can
+
+387
+00:25:24.789 --> 00:25:27.210
+take care of all three of these with
+
+388
+00:25:27.210 --> 00:25:29.920
+three pieces of extra information in the
+
+389
+00:25:29.920 --> 00:25:32.140
+reply that a follower sends back to the
+
+390
+00:25:32.140 --> 00:25:35.589
+leader in the case in the append entries
+
+391
+00:25:35.589 --> 00:25:37.299
+so we're talking about the append
+
+392
+00:25:37.299 --> 00:25:42.220
+entries reply if the follower rejects
+
+393
+00:25:42.220 --> 00:25:43.930
+the append entries because the logs
+
+394
+00:25:43.930 --> 00:25:46.210
+don't agree there's three pieces of
+
+395
+00:25:46.210 --> 00:25:47.500
+information that will be useful and
+
+396
+00:25:47.500 --> 00:25:49.990
+taking care of three street cases I'll
+
+397
+00:25:49.990 --> 00:25:55.450
+call them X term which is the term of
+
+398
+00:25:55.450 --> 00:25:58.299
+the conflicting entry I remember the
+
+399
+00:25:58.299 --> 00:26:05.460
+leader sent this previous log term and
+
+400
+00:26:05.460 --> 00:26:07.809
+if the follower rejects it because it
+
+401
+00:26:12.880 --> 00:26:19.329
+conflicting entry here or you know I'm
+
+402
+00:26:30.220 --> 00:26:33.309
+conflicting but the index are the first
+
+403
+00:26:33.309 --> 00:26:36.240
+entry with that term
+
+404
+00:26:46.750 --> 00:26:49.839
+and finally if there wasn't any log
+
+405
+00:26:49.839 --> 00:26:52.750
+entry there at all the follower will
+
+406
+00:26:52.750 --> 00:26:56.859
+send back on the length of its law like
+
+407
+00:26:56.859 --> 00:27:02.470
+the followers log so for case one the
+
+408
+00:27:02.470 --> 00:27:12.789
+way this helps if the it's a leader sees
+
+409
+00:27:12.789 --> 00:27:16.150
+that the leader doesn't even have an
+
+410
+00:27:22.869 --> 00:27:24.400
+leader didn't have turn five and if the
+
+411
+00:27:24.400 --> 00:27:26.259
+leader can simply back up to the
+
+412
+00:27:26.259 --> 00:27:30.569
+beginning of the followers run of
+
+413
+00:27:41.650 --> 00:27:45.180
+followers run of items from term five
+
+414
+00:27:45.180 --> 00:27:48.460
+alright so if the leader doesn't have X
+
+415
+00:27:53.710 --> 00:27:55.569
+case you can detect the fault the leader
+
+416
+00:27:55.569 --> 00:27:59.769
+can detect if X term is valid and the
+
+417
+00:27:59.769 --> 00:28:04.900
+leader actually has log entries of term
+
+418
+00:28:04.900 --> 00:28:08.279
+X term that's the case here where the
+
+419
+00:28:08.279 --> 00:28:10.509
+you know the disagreement is here but
+
+420
+00:28:10.509 --> 00:28:12.819
+the leader actually has some entries
+
+421
+00:28:12.819 --> 00:28:14.890
+that term in that case the leader should
+
+422
+00:28:14.890 --> 00:28:18.509
+back up to the last entry it has that
+
+423
+00:28:18.509 --> 00:28:22.930
+has the contesta followers term for the
+
+424
+00:28:22.930 --> 00:28:24.789
+conflicting term in it that is the last
+
+425
+00:28:24.789 --> 00:28:26.920
+entry that a leader has for term for in
+
+426
+00:28:26.920 --> 00:28:29.710
+this case and if neither of these two
+
+427
+00:28:29.710 --> 00:28:33.130
+cases hold that is the well actually if
+
+428
+00:28:37.660 --> 00:28:39.519
+have anything whatsoever at the
+
+429
+00:28:39.519 --> 00:28:41.920
+conflicting log and index because it's
+
+430
+00:28:41.920 --> 00:28:46.960
+log is too short then the leader should
+
+431
+00:28:46.960 --> 00:28:49.779
+back up its next index to the last entry
+
+432
+00:28:49.779 --> 00:28:51.400
+that the follower had at all and start
+
+433
+00:28:51.400 --> 00:28:53.839
+sending from there
+
+434
+00:28:53.839 --> 00:28:55.829
+and I'm telling you this because it'll
+
+435
+00:28:55.829 --> 00:29:00.650
+be useful for doing a lab and if you
+
+436
+00:29:05.130 --> 00:29:20.970
+this backing up business Jack I think
+
+437
+00:29:26.880 --> 00:29:29.609
+solutions I mean that you know after
+
+438
+00:29:29.609 --> 00:29:32.130
+reading the papers non description of
+
+439
+00:29:32.130 --> 00:29:34.470
+how to do it I like cook this up and
+
+440
+00:29:34.470 --> 00:29:37.529
+there's probably other ways to do this
+
+441
+00:29:40.589 --> 00:29:41.880
+you're willing to send back more
+
+442
+00:29:41.880 --> 00:29:43.890
+information or have a more sophisticated
+
+443
+00:29:50.549 --> 00:29:53.150
+certainly need to do something
+
+444
+00:29:53.150 --> 00:29:55.140
+experience suggests that in order to
+
+445
+00:29:55.140 --> 00:29:57.599
+pass the tests you'll need to do
+
+446
+00:30:04.950 --> 00:30:06.420
+one of the solutions I've written over
+
+447
+00:30:06.420 --> 00:30:08.549
+the years actually does the stupid thing
+
+448
+00:30:08.549 --> 00:30:11.490
+and still passes the tests but because
+
+449
+00:30:11.490 --> 00:30:15.990
+the tests you know the one of the sort
+
+450
+00:30:15.990 --> 00:30:17.430
+of unfortunate but inevitable things
+
+451
+00:30:17.430 --> 00:30:19.410
+about the tests we give you is that they
+
+452
+00:30:19.410 --> 00:30:21.660
+have a bit of a real time requirement
+
+453
+00:30:21.660 --> 00:30:23.250
+that is the tests are not willing to
+
+454
+00:30:23.250 --> 00:30:25.589
+wait forever for your solution to
+
+455
+00:30:25.589 --> 00:30:29.369
+produce an answer so it is possible to
+
+456
+00:30:29.369 --> 00:30:30.720
+have a solution that's you know
+
+457
+00:30:30.720 --> 00:30:33.930
+technically correct but takes so long
+
+458
+00:30:33.930 --> 00:30:36.710
+that the tester gives up and
+
+459
+00:30:40.829 --> 00:30:42.809
+doesn't finish the test and whatever the
+
+460
+00:30:42.809 --> 00:30:44.789
+time limit is and therefore you do
+
+461
+00:30:44.789 --> 00:30:46.940
+actually have to pay some attention to
+
+462
+00:30:46.940 --> 00:30:50.460
+performance in order you know your
+
+463
+00:30:50.460 --> 00:30:52.470
+solution has to be both correct and have
+
+464
+00:30:56.490 --> 00:30:58.259
+you which is like 10 minutes or I don't
+
+465
+00:30:58.259 --> 00:31:00.390
+know what it is and unfortunately it's
+
+466
+00:31:00.390 --> 00:31:02.279
+relatively this stuff's complex enough
+
+467
+00:31:02.279 --> 00:31:04.650
+that it's not that hard to write a color
+
+468
+00:31:04.650 --> 00:31:05.210
+correction
+
+469
+00:31:05.210 --> 00:31:15.349
+that's not fast enough yes so the way
+
+470
+00:31:15.349 --> 00:31:16.849
+you can tap the leader can tell the
+
+471
+00:31:16.849 --> 00:31:20.720
+difference is that the follower we're
+
+472
+00:31:20.720 --> 00:31:23.119
+supposed to send back the term number it
+
+473
+00:31:23.119 --> 00:31:25.730
+sees in the conflicting entry you we
+
+474
+00:31:25.730 --> 00:31:29.119
+have case one if the leader does not
+
+475
+00:31:29.119 --> 00:31:31.359
+have that term in its log
+
+476
+00:31:31.359 --> 00:31:34.880
+so here the follower will set X term to
+
+477
+00:31:34.880 --> 00:31:37.579
+five to five because this is this is
+
+478
+00:31:37.579 --> 00:31:39.920
+going to be the this is gonna be the
+
+479
+00:31:39.920 --> 00:31:44.210
+conflicting entry the follower says this
+
+480
+00:31:44.210 --> 00:31:46.369
+X term to five the leader observes oh I
+
+481
+00:31:46.369 --> 00:31:48.740
+do not have term five in my log and
+
+482
+00:31:48.740 --> 00:31:57.200
+therefore this case one and you know it
+
+483
+00:32:00.170 --> 00:32:02.539
+has none of those and term five entry so
+
+484
+00:32:02.539 --> 00:32:04.130
+it should just get rid of all of them in
+
+485
+00:32:04.130 --> 00:32:05.779
+the follower by backing up to the
+
+486
+00:32:05.779 --> 00:32:20.119
+beginning which is X index yeah yeah
+
+487
+00:32:20.119 --> 00:32:22.490
+because the leaders gonna back up its
+
+488
+00:32:22.490 --> 00:32:25.910
+next index to here and then send an
+
+489
+00:32:29.900 --> 00:32:31.940
+just has to replace its log so it is
+
+490
+00:32:31.940 --> 00:32:37.819
+gonna get rid of the fives okay alright
+
+491
+00:32:37.819 --> 00:32:38.930
+the next thing I want to talk about is
+
+492
+00:32:38.930 --> 00:32:42.140
+persistence you'll notice in Figure two
+
+493
+00:32:42.140 --> 00:32:44.509
+that the state in the upper left-hand
+
+494
+00:32:44.509 --> 00:32:47.750
+corners sort of divided and summer
+
+495
+00:32:47.750 --> 00:32:50.829
+marked persistent and some are marked
+
+496
+00:32:50.829 --> 00:32:54.650
+volatile and what's going on here is
+
+497
+00:32:54.650 --> 00:32:57.650
+that the the distinction between
+
+498
+00:32:57.650 --> 00:32:59.900
+persistence and volatile you know only
+
+499
+00:32:59.900 --> 00:33:03.559
+matters if a server reboots crashes and
+
+500
+00:33:03.559 --> 00:33:06.259
+restarts because the persistent what the
+
+501
+00:33:06.259 --> 00:33:08.210
+persistent means is that if you change
+
+502
+00:33:08.210 --> 00:33:09.740
+one of those items it's marked
+
+503
+00:33:09.740 --> 00:33:14.119
+persistent you're supposed to the server
+
+504
+00:33:14.119 --> 00:33:15.710
+supposed to write it to disk or to some
+
+505
+00:33:15.710 --> 00:33:17.930
+other non-volatile storage like as
+
+506
+00:33:17.930 --> 00:33:20.799
+or battery-backed something or whatever
+
+507
+00:33:20.799 --> 00:33:23.450
+that will ensure that if the server
+
+508
+00:33:23.450 --> 00:33:26.329
+restarts that it will be able to find
+
+509
+00:33:26.329 --> 00:33:28.490
+that information and sort of reload it
+
+510
+00:33:28.490 --> 00:33:34.160
+into memory and that's to allow us to
+
+511
+00:33:34.160 --> 00:33:35.990
+allow servers to be able to pick up
+
+512
+00:33:35.990 --> 00:33:37.940
+where they left off if they crash and
+
+513
+00:33:37.940 --> 00:33:46.400
+restart now you might think that it
+
+514
+00:33:46.400 --> 00:33:48.170
+would it would be sufficient and simpler
+
+515
+00:33:48.170 --> 00:33:51.710
+to say well if a server crashes then we
+
+516
+00:33:51.710 --> 00:33:55.880
+just throw it away and or we need to be
+
+517
+00:33:55.880 --> 00:33:57.559
+able to throw it away and replace it
+
+518
+00:34:01.970 --> 00:34:04.609
+do actually it is vital to be able to do
+
+519
+00:34:04.609 --> 00:34:06.589
+that right because if some server
+
+520
+00:34:06.589 --> 00:34:08.179
+suffers a failure of some catastrophic
+
+521
+00:34:08.179 --> 00:34:10.789
+failure like it's you know disk melts or
+
+522
+00:34:10.789 --> 00:34:14.480
+something you absolutely need to be able
+
+523
+00:34:14.480 --> 00:34:17.119
+to replace it and you cannot count on
+
+524
+00:34:17.119 --> 00:34:18.889
+getting anything useful off its disk if
+
+525
+00:34:18.889 --> 00:34:20.719
+something bad happened to its disk so we
+
+526
+00:34:24.860 --> 00:34:28.369
+state whatsoever you might think that's
+
+527
+00:34:28.369 --> 00:34:30.380
+sufficient to handle any difficulties
+
+528
+00:34:30.380 --> 00:34:32.599
+but it's actually not it turns out that
+
+529
+00:34:32.599 --> 00:34:34.760
+another common failure mode is power
+
+530
+00:34:34.760 --> 00:34:38.539
+failure of you know the entire cluster
+
+531
+00:34:38.539 --> 00:34:40.699
+where they all stop executing at the
+
+532
+00:34:40.699 --> 00:34:43.130
+same time right and in that case we
+
+533
+00:34:43.130 --> 00:34:46.789
+can't handle or we can't handle that
+
+534
+00:34:46.789 --> 00:34:48.679
+failure by simply throwing away the
+
+535
+00:34:48.679 --> 00:34:50.719
+servers and replacing them with new
+
+536
+00:34:50.719 --> 00:34:53.750
+hardware that we buy from Dell we
+
+537
+00:34:53.750 --> 00:34:56.480
+actually have to be able to get off the
+
+538
+00:34:56.480 --> 00:34:58.969
+ground we need to be able to get a copy
+
+539
+00:34:58.969 --> 00:35:01.639
+of the state back in order to keep
+
+540
+00:35:01.639 --> 00:35:04.130
+executing if we want our service to be
+
+541
+00:35:09.289 --> 00:35:11.690
+of simultaneous power failure we have to
+
+542
+00:35:11.690 --> 00:35:13.400
+have a way for the server's to sort of
+
+543
+00:35:13.400 --> 00:35:15.320
+save their state somewhere where it will
+
+544
+00:35:20.570 --> 00:35:23.960
+on with persistence it said that's the
+
+545
+00:35:23.960 --> 00:35:26.489
+state that's required
+
+546
+00:35:26.489 --> 00:35:28.860
+to get a server going again I'm after
+
+547
+00:35:28.860 --> 00:35:31.199
+either a single power failure or power
+
+548
+00:35:31.199 --> 00:35:33.590
+failure of the entire cluster
+
+549
+00:35:33.590 --> 00:35:38.610
+alright so figure two this three items
+
+550
+00:35:38.610 --> 00:35:42.500
+only three items are persistent so
+
+551
+00:35:44.900 --> 00:35:49.199
+there's a log that's like all the log
+
+552
+00:35:49.199 --> 00:36:03.780
+entries current term and voted for and
+
+553
+00:36:07.559 --> 00:36:09.840
+explicit check to make sure that these
+
+554
+00:36:09.840 --> 00:36:14.849
+data are valid on its disk before it
+
+555
+00:36:14.849 --> 00:36:17.219
+rejoins the raft cluster I have to have
+
+556
+00:36:17.219 --> 00:36:18.869
+some way of saying oh yeah I actually do
+
+557
+00:36:18.869 --> 00:36:20.400
+have some save persistent state as
+
+558
+00:36:20.400 --> 00:36:24.179
+opposed to a bunch of zeros that that
+
+559
+00:36:24.179 --> 00:36:28.380
+are not valid all right so the reason
+
+560
+00:36:28.380 --> 00:36:34.170
+why log has to be persisted is that at
+
+561
+00:36:40.159 --> 00:36:42.119
+that is figure two doesn't really have a
+
+562
+00:36:42.119 --> 00:36:44.159
+notion fears two does not say that we
+
+563
+00:36:44.159 --> 00:36:46.260
+have to persist the application state so
+
+564
+00:36:46.260 --> 00:36:48.329
+if we're running a database or you know
+
+565
+00:36:48.329 --> 00:36:50.550
+a test and set service like for vmware
+
+566
+00:36:50.550 --> 00:36:53.309
+ft the actual database or the actual
+
+567
+00:36:57.210 --> 00:36:59.250
+the logins and so when the server
+
+568
+00:36:59.250 --> 00:37:02.159
+restarts the only information available
+
+569
+00:37:02.159 --> 00:37:05.219
+to reconstruct the application state is
+
+570
+00:37:05.219 --> 00:37:08.460
+the sequence of commands in the log and
+
+571
+00:37:08.460 --> 00:37:13.440
+so that has to be persisted that's what
+
+572
+00:37:13.440 --> 00:37:17.369
+about current term why does current term
+
+573
+00:37:17.369 --> 00:37:20.329
+have to be persistent
+
+574
+00:37:39.760 --> 00:37:43.150
+most one leader so yeah so voted for the
+
+575
+00:37:43.150 --> 00:37:45.909
+specific you know potential damaging
+
+576
+00:37:45.909 --> 00:37:48.340
+case is that if a server receives a boat
+
+577
+00:37:48.340 --> 00:37:50.800
+request and votes for server one and
+
+578
+00:37:50.800 --> 00:37:53.260
+then it crashes and if it didn't persist
+
+579
+00:37:53.260 --> 00:37:55.719
+this the identity of who had voted for
+
+580
+00:37:59.920 --> 00:38:01.840
+server two and say gosh I haven't voted
+
+581
+00:38:01.840 --> 00:38:03.550
+for anybody because my voted for is
+
+582
+00:38:03.550 --> 00:38:03.940
+blank
+
+583
+00:38:03.940 --> 00:38:05.860
+now I'm gonna vote for server 2 and now
+
+584
+00:38:05.860 --> 00:38:08.349
+our servers voted for server 1 and for
+
+585
+00:38:08.349 --> 00:38:12.159
+server 2 in the same term and that might
+
+586
+00:38:12.159 --> 00:38:14.289
+allow two servers
+
+587
+00:38:17.980 --> 00:38:19.210
+have a majority out of three and they're
+
+588
+00:38:19.210 --> 00:38:20.440
+both going to become leader now we have
+
+589
+00:38:20.440 --> 00:38:23.349
+two simultaneous servers for the same
+
+590
+00:38:23.349 --> 00:38:24.909
+term so this that's why I voted for it
+
+591
+00:38:24.909 --> 00:38:28.570
+has to be persistent current term is
+
+592
+00:38:28.570 --> 00:38:30.699
+gonna be a little more subtle but we
+
+593
+00:38:30.699 --> 00:38:34.510
+actually talked before about how you
+
+594
+00:38:34.510 --> 00:38:36.400
+know again we don't want to have more
+
+595
+00:38:36.400 --> 00:38:38.469
+than one server for a term and if we
+
+596
+00:38:38.469 --> 00:38:41.219
+don't know what term number it is then
+
+597
+00:38:41.219 --> 00:38:44.500
+we can't necessarily then it may be hard
+
+598
+00:38:44.500 --> 00:38:46.780
+to ensure that there's only one server
+
+599
+00:38:46.780 --> 00:38:49.780
+for a term and I think maybe in this
+
+600
+00:38:57.190 --> 00:38:59.679
+elect a new server they need evidence
+
+601
+00:38:59.679 --> 00:39:02.139
+that the correct turn numbers 8 and not
+
+602
+00:39:02.139 --> 00:39:04.989
+6 right because if they if they forgot
+
+603
+00:39:04.989 --> 00:39:06.670
+about current term and it was just
+
+604
+00:39:06.670 --> 00:39:08.320
+server 2 and server 3 voting for each
+
+605
+00:39:08.320 --> 00:39:09.550
+other and they only had their log to
+
+606
+00:39:09.550 --> 00:39:10.989
+look at they might think the next term
+
+607
+00:39:10.989 --> 00:39:12.849
+should be term 6 they did that they
+
+608
+00:39:12.849 --> 00:39:14.679
+start producing stuff for term 6 but now
+
+609
+00:39:14.679 --> 00:39:16.119
+there's gonna be a lot of confusion
+
+610
+00:39:16.119 --> 00:39:18.719
+because we have two different term sixes
+
+611
+00:39:18.719 --> 00:39:21.719
+and so that's the reason my current term
+
+612
+00:39:21.719 --> 00:39:24.820
+has to be persistent to preserve
+
+613
+00:39:24.820 --> 00:39:27.579
+evidence about term numbers that have
+
+614
+00:39:27.579 --> 00:39:34.409
+already been used these have to be
+
+615
+00:39:34.409 --> 00:39:38.440
+persisted pretty much every time you
+
+616
+00:39:38.440 --> 00:39:42.639
+change them right so certainly the safe
+
+617
+00:39:42.639 --> 00:39:44.170
+thing to do is every time you add an
+
+618
+00:39:44.170 --> 00:39:46.900
+entry of log or change current term
+
+619
+00:39:46.900 --> 00:39:51.190
+are said voted for you need you probably
+
+620
+00:39:51.190 --> 00:39:53.320
+need to persist that and in a real raft
+
+621
+00:39:53.320 --> 00:39:54.519
+server that would mean writing it to the
+
+622
+00:39:54.519 --> 00:39:56.320
+disk so you'd have some set of files
+
+623
+00:39:56.320 --> 00:39:59.230
+that recorded this stuff you can
+
+624
+00:39:59.230 --> 00:40:01.989
+probably be a little bit you may be can
+
+625
+00:40:01.989 --> 00:40:04.619
+cut some corners if you observed that
+
+626
+00:40:04.619 --> 00:40:08.139
+you don't need to persist these things
+
+627
+00:40:08.139 --> 00:40:09.730
+until you communicate with the outside
+
+628
+00:40:09.730 --> 00:40:11.889
+world so there may be some opportunity
+
+629
+00:40:11.889 --> 00:40:13.210
+for a little bit of batching by saying
+
+630
+00:40:13.210 --> 00:40:14.500
+well we don't have to persist anything
+
+631
+00:40:14.500 --> 00:40:17.230
+until we're about to reply to an RPC or
+
+632
+00:40:17.230 --> 00:40:20.739
+about to send out an RPC I mean that may
+
+633
+00:40:20.739 --> 00:40:23.219
+allow you to avoid a few persisting x'
+
+634
+00:40:31.179 --> 00:40:32.619
+expensive it's a if it's a mechanical
+
+635
+00:40:32.619 --> 00:40:34.329
+hard drive that we're talking about then
+
+636
+00:40:38.650 --> 00:40:41.380
+disk writing anything on the disk cost
+
+637
+00:40:45.269 --> 00:40:47.559
+for the point you want to write to spin
+
+638
+00:40:47.559 --> 00:40:49.900
+under the head which disk only rotates
+
+639
+00:40:49.900 --> 00:40:51.849
+about once every 10 milliseconds or
+
+640
+00:40:51.849 --> 00:40:53.139
+worse that you may actually have to seek
+
+641
+00:40:53.139 --> 00:40:55.690
+to move the arm the right track right so
+
+642
+00:40:55.690 --> 00:40:58.570
+these per systems can be terribly
+
+643
+00:40:58.570 --> 00:41:01.510
+terribly expensive and if for sort of
+
+644
+00:41:01.510 --> 00:41:03.519
+any kind of straightforward design
+
+645
+00:41:03.519 --> 00:41:06.219
+they're likely to be the limiting factor
+
+646
+00:41:13.690 --> 00:41:15.340
+these graph servers takes ten
+
+647
+00:41:15.340 --> 00:41:18.579
+milliseconds a pop and 10 milliseconds
+
+648
+00:41:18.579 --> 00:41:20.409
+as far longer than it takes to say send
+
+649
+00:41:20.409 --> 00:41:23.320
+an RPC or almost anything else you might
+
+650
+00:41:23.320 --> 00:41:26.170
+do 10 milliseconds each means you can
+
+651
+00:41:26.170 --> 00:41:29.610
+just never if you persist data to a
+
+652
+00:41:29.610 --> 00:41:31.869
+mechanical drive you just can never
+
+653
+00:41:31.869 --> 00:41:33.400
+build a raft service it can serve more
+
+654
+00:41:33.400 --> 00:41:37.329
+than 100 requests per second because
+
+655
+00:41:37.329 --> 00:41:38.530
+that's what you get it at 10
+
+656
+00:41:38.530 --> 00:41:41.619
+milliseconds per operation and you know
+
+657
+00:41:41.619 --> 00:41:44.769
+this is this cost so this is really all
+
+658
+00:41:44.769 --> 00:41:48.420
+about cost of synchronous
+
+659
+00:41:59.530 --> 00:42:00.969
+systems that are running in your laptops
+
+660
+00:42:00.969 --> 00:42:03.280
+are that the designers spend a huge
+
+661
+00:42:03.280 --> 00:42:05.170
+amount of time sort of trying to
+
+662
+00:42:05.170 --> 00:42:07.119
+navigate around the performance problems
+
+663
+00:42:10.960 --> 00:42:12.369
+to get safe on your disk in order to
+
+664
+00:42:12.369 --> 00:42:14.199
+update the file system on your laptop's
+
+665
+00:42:14.199 --> 00:42:18.429
+disk safely there turns out the file
+
+666
+00:42:18.429 --> 00:42:20.619
+system has to like be careful about how
+
+667
+00:42:20.619 --> 00:42:22.840
+it writes and needs to sometimes wait
+
+668
+00:42:22.840 --> 00:42:25.420
+for the disk to finish writing so this
+
+669
+00:42:25.420 --> 00:42:27.880
+is a like a cross-cutting issue in all
+
+670
+00:42:27.880 --> 00:42:29.739
+kinds of systems certainly comes up in
+
+671
+00:42:29.739 --> 00:42:33.699
+draft if you want it to build a system
+
+672
+00:42:33.699 --> 00:42:34.900
+they could serve more than a hundred
+
+673
+00:42:34.900 --> 00:42:38.829
+quests per second then there's a bunch
+
+674
+00:42:38.829 --> 00:42:39.940
+of options one is you can use a
+
+675
+00:42:39.940 --> 00:42:41.769
+solid-state drive or some kind of flash
+
+676
+00:42:41.769 --> 00:42:44.320
+or something solid eight drives can do a
+
+677
+00:42:44.320 --> 00:42:50.530
+write to the flash memory in maybe a
+
+678
+00:42:50.530 --> 00:42:52.599
+tenth of a millisecond so that's a
+
+679
+00:42:52.599 --> 00:42:55.480
+factor of a hundred for you or if you're
+
+680
+00:42:55.480 --> 00:42:57.730
+even more sophisticated maybe you can
+
+681
+00:42:57.730 --> 00:43:02.199
+build yourself battery backed DRAM and
+
+682
+00:43:02.199 --> 00:43:03.820
+do the persistence into battery back
+
+683
+00:43:03.820 --> 00:43:07.269
+DRAM and then if the server reboots hope
+
+684
+00:43:12.429 --> 00:43:14.559
+that this stuff you persisted is still
+
+685
+00:43:14.559 --> 00:43:17.769
+in the RAM and the reason I mean if you
+
+686
+00:43:17.769 --> 00:43:19.420
+have money and sophistication the reason
+
+687
+00:43:19.420 --> 00:43:21.400
+to favor that is you can write DRAM you
+
+688
+00:43:21.400 --> 00:43:23.230
+know millions of times per second and so
+
+689
+00:43:23.230 --> 00:43:24.599
+it's probably not going to be a
+
+690
+00:43:24.599 --> 00:43:28.599
+performance bottleneck anyway so that
+
+691
+00:43:28.599 --> 00:43:33.369
+this problem is why and it's sort of
+
+692
+00:43:33.369 --> 00:43:35.230
+marking a persistent versus volatile and
+
+693
+00:43:35.230 --> 00:43:36.880
+figure 2 is like has a lot of
+
+694
+00:43:36.880 --> 00:43:38.909
+significance for performance as well as
+
+695
+00:43:38.909 --> 00:43:43.690
+crash recovery and correctness any
+
+696
+00:43:43.690 --> 00:43:48.300
+questions about persisting yeah
+
+697
+00:43:55.570 --> 00:44:08.239
+yes alright so your question is
+
+698
+00:44:08.239 --> 00:44:10.340
+basically you're writing code say go
+
+699
+00:44:10.340 --> 00:44:12.409
+code for your raft implementation or
+
+700
+00:44:12.409 --> 00:44:13.519
+you're trying to write a real rafterman
+
+701
+00:44:13.519 --> 00:44:15.199
+implementation and you actually want to
+
+702
+00:44:15.199 --> 00:44:18.500
+make sure that when you persist your an
+
+703
+00:44:18.500 --> 00:44:20.179
+update to the law or the current term or
+
+704
+00:44:20.179 --> 00:44:21.800
+whatever that it in fact will be there
+
+705
+00:44:21.800 --> 00:44:23.869
+after a crash and reboot like what's the
+
+706
+00:44:23.869 --> 00:44:26.300
+recipe for what you have to do to make
+
+707
+00:44:34.449 --> 00:44:36.980
+you know the right system call is how
+
+708
+00:44:36.980 --> 00:44:38.510
+you write to a disk file you simply call
+
+709
+00:44:38.510 --> 00:44:41.329
+right as you pointed out it is not the
+
+710
+00:44:41.329 --> 00:44:43.670
+case that after the write returns the
+
+711
+00:44:43.670 --> 00:44:45.800
+data is safe on disk and will survive a
+
+712
+00:44:45.800 --> 00:44:48.650
+reboot it almost certainly isn't almost
+
+713
+00:44:48.650 --> 00:44:51.199
+certainly not on disk so the you know
+
+714
+00:44:51.199 --> 00:44:53.480
+the particular piece of magic you need
+
+715
+00:44:53.480 --> 00:44:56.210
+to do is on unix at any rate you need
+
+716
+00:44:56.210 --> 00:44:58.510
+you need to call right so you cannot
+
+717
+00:44:58.510 --> 00:45:01.340
+write some file you've opened that's
+
+718
+00:45:01.340 --> 00:45:02.719
+going to contain the stuff that you want
+
+719
+00:45:02.719 --> 00:45:06.289
+to write and then you got a call this F
+
+720
+00:45:06.289 --> 00:45:09.710
+st. call which on most systems the
+
+721
+00:45:15.349 --> 00:45:18.139
+written into this file is safely on the
+
+722
+00:45:18.139 --> 00:45:22.130
+surface on the media in a place on a
+
+723
+00:45:22.130 --> 00:45:23.780
+place where it will still be there if
+
+724
+00:45:23.780 --> 00:45:26.929
+there's a crash so so this thing is some
+
+725
+00:45:30.619 --> 00:45:33.500
+Wright doesn't write the disk only F
+
+726
+00:45:33.500 --> 00:45:35.420
+sync does is because it's so expensive
+
+727
+00:45:40.460 --> 00:45:46.280
+data okay so you can use more expensive
+
+728
+00:45:46.280 --> 00:45:47.929
+disk hardware the other trick people
+
+729
+00:45:47.929 --> 00:45:51.409
+play a lot is to try to batch that is if
+
+730
+00:45:51.409 --> 00:45:53.809
+you can if client requests are if you
+
+731
+00:45:53.809 --> 00:45:55.369
+have a lot of client requests coming in
+
+732
+00:45:55.369 --> 00:45:57.409
+maybe you should accept a lot of them
+
+733
+00:45:57.409 --> 00:45:59.210
+and not reply to any of them for a
+
+734
+00:45:59.210 --> 00:46:00.860
+little bit we call a lot of them
+
+735
+00:46:00.860 --> 00:46:01.639
+accumulate
+
+736
+00:46:07.610 --> 00:46:09.800
+clients and you know only then send out
+
+737
+00:46:09.800 --> 00:46:12.320
+the append entries good because you do
+
+738
+00:46:12.320 --> 00:46:13.550
+actually have to persist this stuff to
+
+739
+00:46:13.550 --> 00:46:16.130
+disk if you receive a client request you
+
+740
+00:46:16.130 --> 00:46:17.599
+have to persist the new entry to disk
+
+741
+00:46:17.599 --> 00:46:20.329
+before you send the append entries our
+
+742
+00:46:20.329 --> 00:46:24.920
+PCs the followers because you're not
+
+743
+00:46:24.920 --> 00:46:26.690
+allowed if the leader you know the
+
+744
+00:46:26.690 --> 00:46:29.420
+leader it's essentially promising to
+
+745
+00:46:29.420 --> 00:46:34.400
+commit that that request and can't
+
+746
+00:46:34.400 --> 00:46:35.150
+forget about it
+
+747
+00:46:35.150 --> 00:46:37.489
+and indeed the followers have to persist
+
+748
+00:46:37.489 --> 00:46:39.260
+the new log entry to their disk before
+
+749
+00:46:39.260 --> 00:46:40.880
+they reply to the append entries because
+
+750
+00:46:40.880 --> 00:46:42.170
+they were apply to the append entries
+
+751
+00:46:42.170 --> 00:46:45.110
+it's also a promise to preserve and
+
+752
+00:46:45.110 --> 00:46:46.969
+eventually commit that log entry so they
+
+753
+00:46:46.969 --> 00:46:48.619
+can't be allowed to forget about it if
+
+754
+00:46:48.619 --> 00:46:51.949
+they crash other questions about
+
+755
+00:46:51.949 --> 00:47:01.429
+persistence all right well final you
+
+756
+00:47:01.429 --> 00:47:02.780
+know a little detail about persistence
+
+757
+00:47:02.780 --> 00:47:09.619
+is that some of the stuff in figure two
+
+758
+00:47:09.619 --> 00:47:11.300
+is not persistent and so it's worth
+
+759
+00:47:11.300 --> 00:47:12.769
+scratching your head a little bit about
+
+760
+00:47:12.769 --> 00:47:15.289
+why commit index lasts apply next index
+
+761
+00:47:15.289 --> 00:47:17.239
+and match index why it's fair game for
+
+762
+00:47:17.239 --> 00:47:19.639
+them to be simply thrown away if the
+
+763
+00:47:24.860 --> 00:47:26.510
+apply it like geez last applied is the
+
+764
+00:47:26.510 --> 00:47:29.360
+record of how much we've executed right
+
+765
+00:47:29.360 --> 00:47:30.440
+if we throw that away aren't we gonna
+
+766
+00:47:30.440 --> 00:47:32.179
+execute log entries twice and is that
+
+767
+00:47:32.179 --> 00:47:35.690
+correct how about that why is why is it
+
+768
+00:47:35.690 --> 00:47:39.309
+safe to throw away last applied
+
+769
+00:47:46.679 --> 00:47:55.630
+yes I am we're all about simplicity and
+
+770
+00:47:55.630 --> 00:47:58.150
+safety here with raft so that's exactly
+
+771
+00:47:58.150 --> 00:48:02.320
+correct the the reason why all that
+
+772
+00:48:02.320 --> 00:48:04.239
+other stuff can be non-volatile as you
+
+773
+00:48:04.239 --> 00:48:06.880
+mentioned I mean sorry volatile the
+
+774
+00:48:06.880 --> 00:48:07.929
+reason why those other fields can be
+
+775
+00:48:07.929 --> 00:48:10.360
+volatile and thrown away is that we can
+
+776
+00:48:10.360 --> 00:48:12.579
+the leader can reconstruct sort of
+
+777
+00:48:12.579 --> 00:48:15.340
+what's been committed by inspecting its
+
+778
+00:48:15.340 --> 00:48:17.650
+own log and by the results of append
+
+779
+00:48:20.679 --> 00:48:22.300
+it if everybody restarts because they
+
+780
+00:48:22.300 --> 00:48:23.320
+experienced a power failure
+
+781
+00:48:23.320 --> 00:48:24.940
+initially the leader does not know
+
+782
+00:48:24.940 --> 00:48:27.880
+what's committed what's executed but
+
+783
+00:48:27.880 --> 00:48:29.679
+when it sends out log and append entries
+
+784
+00:48:29.679 --> 00:48:31.210
+it'll sort of gather back information
+
+785
+00:48:31.210 --> 00:48:32.769
+and essentially from the followers about
+
+786
+00:48:32.769 --> 00:48:34.780
+What's in how much of their logs match
+
+787
+00:48:34.780 --> 00:48:36.369
+the leaders and therefore how much must
+
+788
+00:48:41.949 --> 00:48:43.150
+not the real world
+
+789
+00:48:43.150 --> 00:48:45.130
+another thing about figure two is that
+
+790
+00:48:45.130 --> 00:48:47.769
+figure two assumes that the application
+
+791
+00:48:47.769 --> 00:48:51.579
+state is destroyed and thrown away if
+
+792
+00:48:51.579 --> 00:48:54.309
+there's a crash in a restart so the
+
+793
+00:48:54.309 --> 00:48:55.900
+figure two world assumes that while log
+
+794
+00:48:55.900 --> 00:48:57.550
+is persistent that the application state
+
+795
+00:49:04.199 --> 00:49:07.389
+the in figure 2 the log is preserved
+
+796
+00:49:15.639 --> 00:49:18.460
+rules in figure 2 after a leader restart
+
+797
+00:49:18.460 --> 00:49:21.130
+is that the leader will eventually re
+
+798
+00:49:26.500 --> 00:49:28.599
+starting with log entry one after a
+
+799
+00:49:28.599 --> 00:49:31.420
+reboot it's the raft is gonna hand the
+
+800
+00:49:31.420 --> 00:49:33.340
+application every log entry starting
+
+801
+00:49:33.340 --> 00:49:34.840
+from one and so that will after a
+
+802
+00:49:34.840 --> 00:49:36.789
+restart the application will completely
+
+803
+00:49:36.789 --> 00:49:39.639
+reconstruct its state from scratch by a
+
+804
+00:49:39.639 --> 00:49:41.889
+replay from the beginning of the time of
+
+805
+00:49:41.889 --> 00:49:45.429
+the entire log after each restart and
+
+806
+00:49:45.429 --> 00:49:46.360
+again that's like a sort of
+
+807
+00:49:46.360 --> 00:49:49.389
+straightforward elegant plan but
+
+808
+00:49:49.389 --> 00:49:55.289
+obviously potentially very slow
+
+809
+00:50:04.670 --> 00:50:07.969
+this has a lot to do with lab 3b
+
+810
+00:50:07.969 --> 00:50:09.619
+actually you'll see log compaction and
+
+811
+00:50:09.619 --> 00:50:13.969
+snapshots in vlog 3b in lab 3b and so
+
+812
+00:50:13.969 --> 00:50:15.440
+the problem that log compaction and
+
+813
+00:50:15.440 --> 00:50:18.800
+snapshotting is solving a raft is that
+
+814
+00:50:18.800 --> 00:50:20.690
+indeed for a long-running system that's
+
+815
+00:50:20.690 --> 00:50:22.360
+been going for weeks or months or years
+
+816
+00:50:22.360 --> 00:50:25.309
+if we just follow the figure 2 rules the
+
+817
+00:50:25.309 --> 00:50:27.409
+log just keeps on growing may end up you
+
+818
+00:50:27.409 --> 00:50:28.489
+know millions and millions of entries
+
+819
+00:50:28.489 --> 00:50:30.769
+long and so requires a lot of memory to
+
+820
+00:50:30.769 --> 00:50:34.130
+store if you store it on disk like if
+
+821
+00:50:34.130 --> 00:50:35.360
+you have to persist it every time you
+
+822
+00:50:35.360 --> 00:50:37.130
+persist the log it's using up a huge I
+
+823
+00:50:37.130 --> 00:50:39.199
+may not space on disk and if a server
+
+824
+00:50:39.199 --> 00:50:41.989
+ever be starts it has to reconstruct its
+
+825
+00:50:41.989 --> 00:50:44.659
+state by replaying these millions and
+
+826
+00:50:52.789 --> 00:50:54.679
+restarts all of which is like similar
+
+827
+00:50:54.679 --> 00:50:56.480
+what kind of wasted because before it
+
+828
+00:50:56.480 --> 00:50:58.670
+crashed it had already had applications
+
+829
+00:50:58.670 --> 00:51:08.230
+state and so in order to cope with this
+
+830
+00:51:08.230 --> 00:51:11.750
+wrath has this idea of snapshots and the
+
+831
+00:51:11.750 --> 00:51:15.230
+sort of idea behind snapshots is to be
+
+832
+00:51:15.230 --> 00:51:18.409
+able to save or ask the application to
+
+833
+00:51:18.409 --> 00:51:20.840
+save a copy of its state as of a
+
+834
+00:51:20.840 --> 00:51:23.269
+particular log entry so we've been
+
+835
+00:51:23.269 --> 00:51:24.920
+mostly kind of ignoring the application
+
+836
+00:51:24.920 --> 00:51:28.159
+but the fact is that you know if we have
+
+837
+00:51:28.159 --> 00:51:30.139
+a suppose we're building a key value
+
+838
+00:51:30.139 --> 00:51:33.349
+store under BRAF you know the log is
+
+839
+00:51:33.349 --> 00:51:34.940
+gonna contain a bunch of you know
+
+840
+00:51:39.679 --> 00:51:42.409
+that some client wants to set X to one
+
+841
+00:51:42.409 --> 00:51:44.360
+and then another one where it says X to
+
+842
+00:51:44.360 --> 00:51:47.690
+2 and then you know y equals 7 or
+
+843
+00:51:53.570 --> 00:51:55.730
+going to be this if the layer above Rath
+
+844
+00:51:55.730 --> 00:51:57.260
+there's going to be this application and
+
+845
+00:51:57.260 --> 00:51:59.389
+the application if it's a key value
+
+846
+00:51:59.389 --> 00:52:01.519
+store databases it's going to be meeting
+
+847
+00:52:01.519 --> 00:52:05.420
+this table and as raft hands it one
+
+848
+00:52:05.420 --> 00:52:07.219
+command after our next
+
+849
+00:52:07.219 --> 00:52:09.139
+the applications going to update its
+
+850
+00:52:09.139 --> 00:52:10.880
+table so you know after the first
+
+851
+00:52:10.880 --> 00:52:12.889
+command it's going to set X to one and
+
+852
+00:52:12.889 --> 00:52:14.300
+it's stable after the second command
+
+853
+00:52:14.300 --> 00:52:18.400
+it's going to update its table you know
+
+854
+00:52:24.320 --> 00:52:26.989
+likely to be much smaller than the
+
+855
+00:52:26.989 --> 00:52:29.840
+corresponding log right at some level we
+
+856
+00:52:29.840 --> 00:52:31.550
+know that the the you know the log and
+
+857
+00:52:31.550 --> 00:52:33.710
+the state are the log in that and the
+
+858
+00:52:33.710 --> 00:52:35.150
+state as of some point in the log are
+
+859
+00:52:35.150 --> 00:52:38.320
+kind of interchangeable right they both
+
+860
+00:52:38.320 --> 00:52:40.820
+sort of implied the same thing about the
+
+861
+00:52:40.820 --> 00:52:44.570
+state of the application but the log may
+
+862
+00:52:48.170 --> 00:52:49.849
+lot of space in the log but are also to
+
+863
+00:52:49.849 --> 00:52:51.860
+effectively compact it down to a single
+
+864
+00:52:51.860 --> 00:52:53.510
+entry in the table and that's pretty
+
+865
+00:52:53.510 --> 00:52:56.300
+typical of these replicated applications
+
+866
+00:52:56.300 --> 00:53:00.110
+but the point is that instead of storing
+
+867
+00:53:00.110 --> 00:53:02.690
+the log which may go to be huge we have
+
+868
+00:53:02.690 --> 00:53:05.329
+the option of storing instead the table
+
+869
+00:53:11.630 --> 00:53:14.420
+raft feels that it's log has gotten to
+
+870
+00:53:14.420 --> 00:53:17.690
+be too large you know more than a
+
+871
+00:53:17.690 --> 00:53:19.190
+megabyte or ten megabytes or whatever
+
+872
+00:53:19.190 --> 00:53:21.619
+some arbitrary limit raft will ask the
+
+873
+00:53:21.619 --> 00:53:24.260
+application to take make a snapshot of
+
+874
+00:53:24.260 --> 00:53:26.989
+it the application state as of a certain
+
+875
+00:53:26.989 --> 00:53:28.369
+point in the log
+
+876
+00:53:28.369 --> 00:53:30.760
+so if we add if raft asked the
+
+877
+00:53:30.760 --> 00:53:33.110
+application for a snapshot reference it
+
+878
+00:53:33.110 --> 00:53:35.300
+would pick a point in the log that the
+
+879
+00:53:35.300 --> 00:53:37.369
+snapshot referred to and require the
+
+880
+00:53:37.369 --> 00:53:39.769
+application to produce a snapshot as at
+
+881
+00:53:39.769 --> 00:53:41.570
+that point this is extremely critical
+
+882
+00:53:41.570 --> 00:53:44.480
+because the because what we're about to
+
+883
+00:53:44.480 --> 00:53:45.980
+do is throw away everything before that
+
+884
+00:53:45.980 --> 00:53:47.360
+point so if there's not a will to find
+
+885
+00:53:47.360 --> 00:53:48.860
+point that corresponds to a snapshot
+
+886
+00:53:48.860 --> 00:53:51.289
+then we can't safely throw away the log
+
+887
+00:53:51.289 --> 00:53:54.909
+before that point so that means that
+
+888
+00:53:58.340 --> 00:54:00.650
+the table it's just about a database
+
+889
+00:54:00.650 --> 00:54:04.519
+server and we also need to annotate the
+
+890
+00:54:04.519 --> 00:54:07.400
+snapshot with the entry number that are
+
+891
+00:54:07.400 --> 00:54:09.889
+corresponds to you so it's basically you
+
+892
+00:54:09.889 --> 00:54:12.380
+know if the entries are 1 2 3 this
+
+893
+00:54:12.380 --> 00:54:16.400
+snapshot corresponds to just after log
+
+894
+00:54:16.400 --> 00:54:19.809
+index 3 with the snapshot in hand
+
+895
+00:54:19.809 --> 00:54:23.329
+if we persist it to disk rats persistent
+
+896
+00:54:23.329 --> 00:54:26.869
+to disk raft never again will need this
+
+897
+00:54:26.869 --> 00:54:33.889
+part of the logs and it can simply throw
+
+898
+00:54:33.889 --> 00:54:36.650
+it away as long as it persists a
+
+899
+00:54:36.650 --> 00:54:39.590
+snapshot as of a certain in debt log
+
+900
+00:54:39.590 --> 00:54:42.710
+index plus the log after that index as
+
+901
+00:54:42.710 --> 00:54:44.449
+long as that's persisted to disk we
+
+902
+00:54:44.449 --> 00:54:46.480
+never going to need to log before that
+
+903
+00:54:46.480 --> 00:54:49.789
+and so this is what RAF does the rocks
+
+904
+00:54:49.789 --> 00:54:51.530
+ask the application for snapshot gets
+
+905
+00:54:51.530 --> 00:54:52.969
+the snapshot saves it to disk with the
+
+906
+00:54:52.969 --> 00:54:54.469
+log after that it just throws away this
+
+907
+00:54:54.469 --> 00:54:58.369
+log here right and so it really operates
+
+908
+00:54:58.369 --> 00:55:00.949
+or the sort of persistence story is all
+
+909
+00:55:00.949 --> 00:55:03.530
+about pairs of a snapshot in the log
+
+910
+00:55:03.530 --> 00:55:06.230
+after that after the point in the log
+
+911
+00:55:06.230 --> 00:55:09.889
+associated with snapshot I don't see
+
+912
+00:55:09.889 --> 00:55:12.699
+this yes
+
+913
+00:55:24.309 --> 00:55:27.679
+no it's still it's it's you know there's
+
+914
+00:55:27.679 --> 00:55:29.269
+these sort of phantom entries one two
+
+915
+00:55:29.269 --> 00:55:31.429
+three and this you know suffix of the
+
+916
+00:55:31.429 --> 00:55:37.389
+log is indeed viewed as still the it's
+
+917
+00:55:37.389 --> 00:55:39.230
+maybe the right way to think of it is
+
+918
+00:55:39.230 --> 00:55:41.239
+still there's just one log except these
+
+919
+00:55:41.239 --> 00:55:43.510
+entries are sort of phantom entries that
+
+920
+00:55:43.510 --> 00:55:46.579
+we that we can view as being kind of
+
+921
+00:55:46.579 --> 00:55:48.769
+there in principle but since we're we
+
+922
+00:55:52.550 --> 00:55:53.869
+just happened not to be stored anywhere
+
+923
+00:55:53.869 --> 00:55:57.829
+is neither here nor there but it's but
+
+924
+00:55:57.829 --> 00:55:58.699
+yeah you should think of it as being
+
+925
+00:55:58.699 --> 00:56:01.639
+stole the same log it's just not just
+
+926
+00:56:01.639 --> 00:56:04.820
+threw away their early entries did this
+
+927
+00:56:04.820 --> 00:56:06.440
+that's a maybe a little bit too glib of
+
+928
+00:56:06.440 --> 00:56:07.579
+an answer because the fact is that
+
+929
+00:56:07.579 --> 00:56:10.130
+figure two talks about the log in ways
+
+930
+00:56:10.130 --> 00:56:12.559
+that makes it that if you just follow
+
+931
+00:56:12.559 --> 00:56:14.239
+figure to you sometimes still need these
+
+932
+00:56:14.239 --> 00:56:15.800
+earlier entries and so you'll have to
+
+933
+00:56:15.800 --> 00:56:17.420
+reinterpret figure two a little bit in
+
+934
+00:56:17.420 --> 00:56:19.670
+light of the fact that sometimes it says
+
+935
+00:56:19.670 --> 00:56:22.309
+blah blah blah a log entry where the log
+
+936
+00:56:22.309 --> 00:56:32.679
+entry doesn't exist okay
+
+937
+00:56:39.389 --> 00:56:43.119
+okay and so what happens on a restart
+
+938
+00:56:43.119 --> 00:56:44.889
+so the restart story is a little more
+
+939
+00:56:44.889 --> 00:56:46.329
+complicated in it than it used to be
+
+940
+00:56:46.329 --> 00:56:48.699
+with just a log what happens on a
+
+941
+00:56:48.699 --> 00:56:50.289
+restart is that there needs to be away
+
+942
+00:56:50.289 --> 00:56:54.550
+for raft to give the latest for graph to
+
+943
+00:56:54.550 --> 00:56:56.980
+find the latest snapshot log pair on its
+
+944
+00:57:03.130 --> 00:57:04.989
+able to replay you know all the log
+
+945
+00:57:04.989 --> 00:57:06.460
+entries so there must be some other way
+
+946
+00:57:06.460 --> 00:57:08.739
+to initialize the application basically
+
+947
+00:57:08.739 --> 00:57:10.239
+not only is the application have to be
+
+948
+00:57:10.239 --> 00:57:11.440
+able to produce a snapshot of
+
+949
+00:57:11.440 --> 00:57:13.929
+application state but but it has to be
+
+950
+00:57:13.929 --> 00:57:15.840
+able to absorb a previously made
+
+951
+00:57:15.840 --> 00:57:17.980
+snapshot and sort of reconstruct it
+
+952
+00:57:17.980 --> 00:57:20.739
+stable in memory from a snapshot and so
+
+953
+00:57:20.739 --> 00:57:22.239
+this now even though raft is kind of
+
+954
+00:57:22.239 --> 00:57:23.710
+managing this whole snapshotting stuff
+
+955
+00:57:23.710 --> 00:57:26.199
+the snapshot contents are really the
+
+956
+00:57:26.199 --> 00:57:28.300
+property to the application and RAF
+
+957
+00:57:28.300 --> 00:57:29.949
+doesn't even understand what's in here
+
+958
+00:57:29.949 --> 00:57:31.420
+only the application does because it's
+
+959
+00:57:36.280 --> 00:57:39.789
+application has to be able to absorb the
+
+960
+00:57:39.789 --> 00:57:45.789
+latest snapshot that raft found so for
+
+961
+00:57:45.789 --> 00:57:48.750
+just this simple it would be simple
+
+962
+00:57:54.579 --> 00:57:56.920
+might throw away part of its log
+
+963
+00:57:56.920 --> 00:57:59.679
+introduces a major piece of complexity
+
+964
+00:57:59.679 --> 00:58:01.809
+and that is that if there's some
+
+965
+00:58:01.809 --> 00:58:05.940
+follower out there whose log ends before
+
+966
+00:58:05.940 --> 00:58:10.809
+the point at which the leaders log
+
+967
+00:58:10.809 --> 00:58:14.139
+starts then unless we invent something
+
+968
+00:58:14.139 --> 00:58:15.820
+new we need monney install snapshot
+
+969
+00:58:15.820 --> 00:58:17.920
+unless we invent something new that
+
+970
+00:58:17.920 --> 00:58:20.860
+follower can never get up-to-date right
+
+971
+00:58:25.210 --> 00:58:27.400
+the first two log entries we no longer
+
+972
+00:58:27.400 --> 00:58:29.889
+have the log entry three that's required
+
+973
+00:58:29.889 --> 00:58:32.710
+to send it to that follower in an append
+
+974
+00:58:32.710 --> 00:58:35.409
+entries RPC to allow its log to catch up
+
+975
+00:58:35.409 --> 00:58:41.150
+to the leaders now
+
+976
+00:58:41.150 --> 00:58:44.820
+we could avoid this problem by having
+
+977
+00:58:44.820 --> 00:58:47.880
+the leader never drop part of its log if
+
+978
+00:58:47.880 --> 00:58:50.429
+there's any follower out there that
+
+979
+00:58:50.429 --> 00:58:53.369
+hasn't caught up to the point at which
+
+980
+00:58:53.369 --> 00:58:54.960
+the leader is thinking about doing a
+
+981
+00:58:54.960 --> 00:58:56.489
+snapshot because the leader knows
+
+982
+00:58:56.489 --> 00:58:58.920
+through next index
+
+983
+00:58:58.920 --> 00:59:00.960
+well actually leader doesn't really know
+
+984
+00:59:00.960 --> 00:59:02.570
+but the leader could know in principle
+
+985
+00:59:02.570 --> 00:59:05.550
+how far each follower had gotten and the
+
+986
+00:59:05.550 --> 00:59:06.659
+leader could say well I'm just never
+
+987
+00:59:06.659 --> 00:59:09.300
+gonna drop the part of my log before the
+
+988
+00:59:26.730 --> 00:59:28.769
+gonna be acknowledging log entries and
+
+989
+00:59:28.769 --> 00:59:31.260
+that means that the leader can't reduce
+
+990
+00:59:31.260 --> 00:59:34.349
+its memory use by snapshotting so the
+
+991
+00:59:43.619 --> 00:59:45.769
+other scheme that append entries to deal
+
+992
+00:59:49.349 --> 00:59:51.840
+leaders log and so that solution is the
+
+993
+00:59:51.840 --> 01:00:02.880
+install snapshot RPC and the deal is
+
+994
+01:00:02.880 --> 01:00:06.929
+that when a leader we have some follower
+
+995
+01:00:06.929 --> 01:00:09.480
+whose log is that you know just powered
+
+996
+01:00:09.480 --> 01:00:12.239
+on its log as short the leaders gonna
+
+997
+01:00:12.239 --> 01:00:14.550
+send it and append entries and you know
+
+998
+01:00:14.550 --> 01:00:15.869
+it's gonna be forced the leaders gonna
+
+999
+01:00:15.869 --> 01:00:17.250
+be forced to backup and at some point
+
+1000
+01:00:20.820 --> 01:00:23.340
+to realize it it's reached the beginning
+
+1001
+01:00:23.340 --> 01:00:25.139
+of the actual log its doors and at that
+
+1002
+01:00:25.139 --> 01:00:27.150
+point instead of sending in append
+
+1003
+01:00:27.150 --> 01:00:30.329
+entries the leader will send its current
+
+1004
+01:00:30.329 --> 01:00:33.570
+snapshot plus current law well send its
+
+1005
+01:00:33.570 --> 01:00:35.670
+current snapshot to the follower and
+
+1006
+01:00:35.670 --> 01:00:37.889
+then presumably immediately follow it
+
+1007
+01:00:46.769 --> 01:00:49.769
+questions
+
+1008
+01:00:52.369 --> 01:00:55.250
+yeah I'm the sad truth this is like this
+
+1009
+01:00:55.250 --> 01:00:59.139
+is adds significant complexity here
+
+1010
+01:00:59.139 --> 01:01:02.539
+Jarrell I'm three partially because of
+
+1011
+01:01:07.219 --> 01:01:08.780
+bit of a violation of modularity it
+
+1012
+01:01:13.579 --> 01:01:15.980
+comes in it's delivered to raft but raft
+
+1013
+01:01:15.980 --> 01:01:17.780
+really requires the application to
+
+1014
+01:01:17.780 --> 01:01:23.239
+absorb the snapshot so they have to talk
+
+1015
+01:01:23.239 --> 01:01:24.110
+to each other more than they otherwise
+
+1016
+01:01:24.110 --> 01:01:33.619
+might yes the question is that this is
+
+1017
+01:01:33.619 --> 01:01:35.210
+the way the snapshot is created
+
+1018
+01:01:35.210 --> 01:01:36.889
+dependent on the application
+
+1019
+01:01:36.889 --> 01:01:38.719
+it's absolutely it so the snapshot
+
+1020
+01:01:38.719 --> 01:01:40.969
+creation function is part of the
+
+1021
+01:01:40.969 --> 01:01:42.679
+application as part of like the key
+
+1022
+01:01:42.679 --> 01:01:45.260
+value server so raffle you know somehow
+
+1023
+01:01:45.260 --> 01:01:46.789
+call up to the application and say geez
+
+1024
+01:01:46.789 --> 01:01:48.139
+you know I really like a snapshot right
+
+1025
+01:01:48.139 --> 01:01:50.329
+now in the application because only the
+
+1026
+01:01:50.329 --> 01:01:53.889
+application understands what it's status
+
+1027
+01:01:53.889 --> 01:01:57.650
+and you know the inverse function by
+
+1028
+01:01:57.650 --> 01:01:59.449
+which an application reconstructs a
+
+1029
+01:01:59.449 --> 01:02:01.730
+state from a snapshot files also totally
+
+1030
+01:02:06.860 --> 01:02:09.500
+snapshot has to be labeled with a point
+
+1031
+01:02:09.500 --> 01:02:12.789
+in a log that it corresponds to
+
+1032
+01:02:25.269 --> 01:02:27.230
+talking about rule six and figure
+
+1033
+01:02:27.230 --> 01:02:39.679
+thirteen okay so yeah the question here
+
+1034
+01:02:39.679 --> 01:02:42.559
+is that and you will be faced with this
+
+1035
+01:02:42.559 --> 01:02:46.250
+in lab three that because the RPC system
+
+1036
+01:02:46.250 --> 01:02:48.650
+isn't perfectly reliable and perfectly
+
+1037
+01:02:48.650 --> 01:02:50.900
+sequenced and RBC's can arrive out of
+
+1038
+01:02:50.900 --> 01:02:52.639
+order or not at all or you may send an
+
+1039
+01:02:52.639 --> 01:02:54.650
+RPC and get no response and think it was
+
+1040
+01:02:54.650 --> 01:02:56.449
+lost but actually was delivered and was
+
+1041
+01:02:56.449 --> 01:02:58.309
+the reply that was lost all these things
+
+1042
+01:02:58.309 --> 01:03:02.539
+happen including to send to whatever
+
+1043
+01:03:02.539 --> 01:03:04.610
+install snapshot our pcs and the leaders
+
+1044
+01:03:04.610 --> 01:03:06.860
+almost certainly sending out many our
+
+1045
+01:03:06.860 --> 01:03:08.750
+pcs concurrently you know both append
+
+1046
+01:03:08.750 --> 01:03:12.199
+entries and install snapshots that means
+
+1047
+01:03:29.989 --> 01:03:31.219
+know has to think carefully about an
+
+1048
+01:03:31.219 --> 01:03:35.650
+install snapshot that arrives and the
+
+1049
+01:03:37.269 --> 01:03:39.440
+yeah I think the specific thing you're
+
+1050
+01:03:39.440 --> 01:03:41.989
+asking is that if follower receives that
+
+1051
+01:03:41.989 --> 01:03:43.789
+an install snapshot that appears to be
+
+1052
+01:03:43.789 --> 01:03:46.309
+completely redundant that is the install
+
+1053
+01:03:46.309 --> 01:03:47.780
+snapshot contains information that's
+
+1054
+01:03:47.780 --> 01:03:50.389
+older than the information the follower
+
+1055
+01:03:50.389 --> 01:03:51.440
+already has
+
+1056
+01:03:51.440 --> 01:03:55.250
+what should the follower do and rule six
+
+1057
+01:03:55.250 --> 01:03:57.349
+and figure thirteen says something but I
+
+1058
+01:03:57.349 --> 01:03:59.480
+think equally valid response to that is
+
+1059
+01:03:59.480 --> 01:04:01.340
+that the follower can ignore a snapshot
+
+1060
+01:04:01.340 --> 01:04:07.460
+that clearly is from the past I don't
+
+1061
+01:04:17.989 --> 01:04:21.710
+conceptual topic for a bit so far we
+
+1062
+01:04:21.710 --> 01:04:24.730
+haven't really tried to nail down
+
+1063
+01:04:28.610 --> 01:04:33.860
+what I meant for a replicated service
+
+1064
+01:04:33.860 --> 01:04:36.289
+already any other kind of service to be
+
+1065
+01:04:42.320 --> 01:04:44.239
+life I managed to get by without
+
+1066
+01:04:47.960 --> 01:04:49.730
+is that you know if you're trying to
+
+1067
+01:04:49.730 --> 01:04:51.380
+optimize something or you're trying to
+
+1068
+01:05:00.469 --> 01:05:01.909
+you know for here what we're talking
+
+1069
+01:05:01.909 --> 01:05:03.679
+about is you know clients are sending in
+
+1070
+01:05:03.679 --> 01:05:05.539
+requests to the to our replicated
+
+1071
+01:05:05.539 --> 01:05:07.699
+service with our PC maybe they'll be
+
+1072
+01:05:07.699 --> 01:05:09.710
+sending who knows well maybe the service
+
+1073
+01:05:09.710 --> 01:05:11.840
+is crash it can be starting and you know
+
+1074
+01:05:11.840 --> 01:05:14.210
+loading snapshots or whatever the client
+
+1075
+01:05:14.210 --> 01:05:15.949
+sends in a request and gets a response
+
+1076
+01:05:15.949 --> 01:05:18.320
+like is that response correct how are we
+
+1077
+01:05:22.429 --> 01:05:26.210
+response B so we need a notion we need a
+
+1078
+01:05:26.210 --> 01:05:27.739
+pretty formal notion of distinguishing
+
+1079
+01:05:33.769 --> 01:05:36.230
+notion of correctness is linearize
+
+1080
+01:05:36.230 --> 01:05:42.409
+ability and I mentioned strong
+
+1081
+01:05:42.409 --> 01:05:43.909
+consistency and some of the papers I
+
+1082
+01:05:43.909 --> 01:05:45.489
+mentioned strong consistency and
+
+1083
+01:05:45.489 --> 01:05:47.269
+basically equivalent to linearize
+
+1084
+01:05:47.269 --> 01:05:50.539
+ability linearize ability is a sort of a
+
+1085
+01:05:50.539 --> 01:05:54.579
+formalization of more or less of the
+
+1086
+01:05:54.579 --> 01:05:57.409
+behavior you would expect if there was
+
+1087
+01:05:57.409 --> 01:05:59.719
+just one server and it didn't crash and
+
+1088
+01:05:59.719 --> 01:06:02.210
+it executed the command client requests
+
+1089
+01:06:02.210 --> 01:06:04.909
+one at a time and you know nothing funny
+
+1090
+01:06:04.909 --> 01:06:09.170
+ever happened so it has it has a
+
+1091
+01:06:09.170 --> 01:06:12.349
+definition and the definition I'll write
+
+1092
+01:06:12.349 --> 01:06:14.110
+out the definition then talk about it so
+
+1093
+01:06:14.110 --> 01:06:24.610
+so an execution history is linearizable
+
+1094
+01:06:24.610 --> 01:06:30.829
+linearizable and this is in the notes if
+
+1095
+01:06:30.829 --> 01:06:33.139
+there exists a total order so an
+
+1096
+01:06:33.139 --> 01:06:34.909
+execution history is a sequence of
+
+1097
+01:06:34.909 --> 01:06:37.219
+client requests maybe many requests from
+
+1098
+01:06:37.219 --> 01:06:39.510
+many clients
+
+1099
+01:06:39.510 --> 01:06:46.889
+if there's some total order of the
+
+1100
+01:06:46.889 --> 01:06:53.639
+operations in the history it matches the
+
+1101
+01:06:53.639 --> 01:06:55.559
+real-time order of requests so if one
+
+1102
+01:06:55.559 --> 01:06:56.250
+request
+
+1103
+01:06:56.250 --> 01:06:57.989
+if client sends out a request and gets a
+
+1104
+01:06:57.989 --> 01:07:01.199
+response and then later in time another
+
+1105
+01:07:01.199 --> 01:07:02.730
+client sends out a request and I get a
+
+1106
+01:07:02.730 --> 01:07:04.889
+response those two requests are ordered
+
+1107
+01:07:04.889 --> 01:07:07.769
+because one of them's started after the
+
+1108
+01:07:07.769 --> 01:07:08.940
+other one finished
+
+1109
+01:07:08.940 --> 01:07:12.300
+so it's linearizable history is
+
+1110
+01:07:12.300 --> 01:07:13.860
+linearizable if there exists an order of
+
+1111
+01:07:13.860 --> 01:07:15.900
+the operations in the history that
+
+1112
+01:07:15.900 --> 01:07:23.250
+matches real-time for non concurrent
+
+1113
+01:07:23.250 --> 01:07:25.860
+requests that is for a request to didn't
+
+1114
+01:07:25.860 --> 01:07:42.269
+overlap in time and each read you can
+
+1115
+01:07:42.269 --> 01:07:44.489
+think of it as each read sees the value
+
+1116
+01:07:44.489 --> 01:07:46.739
+from the most immediately preceding
+
+1117
+01:07:46.739 --> 01:07:56.760
+right to the the same piece of data most
+
+1118
+01:07:56.760 --> 01:08:08.400
+recent right in the order all right this
+
+1119
+01:08:08.400 --> 01:08:10.829
+is the definition let me illustrate what
+
+1120
+01:08:10.829 --> 01:08:12.619
+it means by running through an example
+
+1121
+01:08:12.619 --> 01:08:15.210
+so first of all the history is a record
+
+1122
+01:08:15.210 --> 01:08:16.619
+of client operations so this is a
+
+1123
+01:08:16.619 --> 01:08:18.510
+definition that you can apply from
+
+1124
+01:08:18.510 --> 01:08:20.579
+outside this definition doesn't appeal
+
+1125
+01:08:20.579 --> 01:08:23.430
+in any way to what happens inside the
+
+1126
+01:08:23.430 --> 01:08:24.539
+implementation or how the implementation
+
+1127
+01:08:24.539 --> 01:08:27.180
+works it's something that we can if we
+
+1128
+01:08:32.460 --> 01:08:34.289
+answer the question was that execution
+
+1129
+01:08:34.289 --> 01:08:42.409
+that we observe linearizable so let me
+
+1130
+01:08:44.829 --> 01:08:47.600
+let me write out of history and talk
+
+1131
+01:08:47.600 --> 01:08:51.159
+about why it is or isn't linearizable
+
+1132
+01:08:53.529 --> 01:09:01.699
+all right so here's an example the new
+
+1133
+01:09:01.699 --> 01:09:03.380
+eyes ability talks about operations that
+
+1134
+01:09:03.380 --> 01:09:05.539
+start at one point and end at another
+
+1135
+01:09:05.539 --> 01:09:07.250
+and so this corresponds to the time at
+
+1136
+01:09:07.250 --> 01:09:10.279
+which a client sends a request and then
+
+1137
+01:09:10.279 --> 01:09:13.970
+later receives a reply so let us suppose
+
+1138
+01:09:13.970 --> 01:09:16.100
+that our history says that at at some
+
+1139
+01:09:16.100 --> 01:09:19.189
+particular time this time some client
+
+1140
+01:09:19.189 --> 01:09:22.159
+sent a write request for the data item
+
+1141
+01:09:22.159 --> 01:09:24.579
+named X and asked for it to be set to 1
+
+1142
+01:09:24.579 --> 01:09:28.670
+and then time passed and at the second
+
+1143
+01:09:28.670 --> 01:09:30.170
+vertical bar is when that client got a
+
+1144
+01:09:30.170 --> 01:09:31.909
+reply through send a request at this
+
+1145
+01:09:31.909 --> 01:09:33.289
+point you know time pass who knows
+
+1146
+01:09:33.289 --> 01:09:34.699
+what's happening when the client got a
+
+1147
+01:09:34.699 --> 01:09:37.729
+reply there and then later in time that
+
+1148
+01:09:40.279 --> 01:09:43.100
+sends a write request again for item X
+
+1149
+01:09:43.100 --> 01:09:45.470
+and value 2 and gets a response to that
+
+1150
+01:09:45.470 --> 01:09:52.369
+right meanwhile some client sends a read
+
+1151
+01:09:52.369 --> 01:09:56.989
+for X and gets value 2 and sent the
+
+1152
+01:09:56.989 --> 01:09:58.819
+request there and got the response with
+
+1153
+01:09:58.819 --> 01:10:00.890
+value 2 there and there's another
+
+1154
+01:10:00.890 --> 01:10:03.319
+request that we observed it's a part of
+
+1155
+01:10:03.319 --> 01:10:07.279
+the history request was sent to read
+
+1156
+01:10:07.279 --> 01:10:12.829
+value X and it got value 1 back and so
+
+1157
+01:10:12.829 --> 01:10:14.750
+when we have a history like this you
+
+1158
+01:10:14.750 --> 01:10:16.159
+know the question were that you asked
+
+1159
+01:10:16.159 --> 01:10:17.689
+about this history is is this a
+
+1160
+01:10:17.689 --> 01:10:20.180
+linearizable history that is did the
+
+1161
+01:10:20.180 --> 01:10:22.310
+machinery did the service did the system
+
+1162
+01:10:22.310 --> 01:10:23.930
+that produced this history and was that
+
+1163
+01:10:23.930 --> 01:10:28.430
+a linearizable system or did it produce
+
+1164
+01:10:28.430 --> 01:10:30.380
+a linearizable history in this case if
+
+1165
+01:10:30.380 --> 01:10:31.789
+this history is not linear inaudible
+
+1166
+01:10:31.789 --> 01:10:36.560
+then then Lisa we're talking about I
+
+1167
+01:10:36.560 --> 01:10:38.750
+have 3 we know we have a problem there
+
+1168
+01:10:38.750 --> 01:10:42.260
+must be some some bug ok so we need to
+
+1169
+01:10:42.260 --> 01:10:43.460
+analyze this to figure out if it's
+
+1170
+01:10:43.460 --> 01:10:45.979
+linearizable there's linear linearize
+
+1171
+01:10:45.979 --> 01:10:48.829
+ability requires us to produce an order
+
+1172
+01:10:48.829 --> 01:10:52.399
+you know one by one order of the four
+
+1173
+01:10:52.399 --> 01:10:54.800
+operations in that history so we know
+
+1174
+01:10:54.800 --> 01:10:55.850
+we're looking for an order and there's
+
+1175
+01:11:03.890 --> 01:11:07.640
+before another started then the one that
+
+1176
+01:11:07.640 --> 01:11:08.899
+finished first has to come first in the
+
+1177
+01:11:08.899 --> 01:11:13.789
+history the other is if some read sees a
+
+1178
+01:11:13.789 --> 01:11:17.930
+particular written value then the read
+
+1179
+01:11:17.930 --> 01:11:20.920
+must come after the write in the order
+
+1180
+01:11:24.380 --> 01:11:26.649
+entries the two rights and the two leads
+
+1181
+01:11:31.340 --> 01:11:33.800
+and then our order is gonna have to obey
+
+1182
+01:11:33.800 --> 01:11:36.439
+these constraints so one constraint is
+
+1183
+01:11:36.439 --> 01:11:39.199
+that this write finished before this
+
+1184
+01:11:39.199 --> 01:11:41.270
+write started and therefore one of the
+
+1185
+01:11:41.270 --> 01:11:44.420
+ordering constraints is that this write
+
+1186
+01:11:44.420 --> 01:11:47.479
+must appear in the total order before
+
+1187
+01:11:47.479 --> 01:11:51.289
+this write this read saw the value of
+
+1188
+01:11:51.289 --> 01:11:56.869
+two so in the total order the most
+
+1189
+01:12:00.739 --> 01:12:03.609
+the most recent right so that means that
+
+1190
+01:12:03.609 --> 01:12:06.319
+in the total order we must see the right
+
+1191
+01:12:06.319 --> 01:12:08.930
+of X - 2 and then after it the read of X
+
+1192
+01:12:08.930 --> 01:12:19.670
+it yields - and this this read of X of 1
+
+1193
+01:12:29.239 --> 01:12:32.750
+also must become for this right and
+
+1194
+01:12:32.750 --> 01:12:35.479
+maybe there's some other restrictions -
+
+1195
+01:12:35.479 --> 01:12:37.909
+anyway we can take these we can take
+
+1196
+01:12:37.909 --> 01:12:39.260
+this set of arrows and flatten it out
+
+1197
+01:12:56.510 --> 01:13:00.649
+right of x - 2 and the read of x that
+
+1198
+01:13:00.649 --> 01:13:03.189
+yields 2
+
+1199
+01:13:03.920 --> 01:13:06.390
+alright so the fact that there is this
+
+1200
+01:13:06.390 --> 01:13:07.920
+order that does obey the ordering
+
+1201
+01:13:07.920 --> 01:13:09.449
+constraints shows that this history is
+
+1202
+01:13:09.449 --> 01:13:13.979
+linearize ability and doesn't you know
+
+1203
+01:13:13.979 --> 01:13:15.300
+if we're worried about the system that
+
+1204
+01:13:15.300 --> 01:13:17.939
+produced this history whether it's a but
+
+1205
+01:13:17.939 --> 01:13:20.609
+that system is linearizable then this
+
+1206
+01:13:20.609 --> 01:13:22.109
+particular example we saw it doesn't
+
+1207
+01:13:22.109 --> 01:13:24.659
+contradict the presumption that the
+
+1208
+01:13:45.359 --> 01:13:48.149
+know read of X the value it sees must be
+
+1209
+01:13:48.149 --> 01:13:51.600
+them value written by the most the most
+
+1210
+01:13:51.600 --> 01:13:56.329
+recent proceeding right in the order so
+
+1211
+01:13:56.329 --> 01:13:58.920
+you know in this case in this case we're
+
+1212
+01:13:58.920 --> 01:14:00.239
+totally ok with this order because this
+
+1213
+01:14:00.239 --> 01:14:03.449
+read the value it saw is indeed the
+
+1214
+01:14:03.449 --> 01:14:04.770
+value written by the most recent write
+
+1215
+01:14:04.770 --> 01:14:08.250
+in this order and this read the value it
+
+1216
+01:14:08.250 --> 01:14:12.630
+sighs I mean in informally it's that
+
+1217
+01:14:12.630 --> 01:14:15.420
+reads can't real should not be yielding
+
+1218
+01:14:15.420 --> 01:14:17.939
+stale data if I write something in Rita
+
+1219
+01:14:21.869 --> 01:14:24.229
+notion that
+
+1220
+01:14:27.529 --> 01:14:34.130
+oh yes oh yeah yeah all right let me let
+
+1221
+01:14:34.130 --> 01:14:40.430
+me he's right up example that's not
+
+1222
+01:14:40.430 --> 01:14:44.810
+indeed linearizable so example two let's
+
+1223
+01:14:44.810 --> 01:14:48.109
+suppose our history is we had a right of
+
+1224
+01:14:48.109 --> 01:14:57.880
+X value one right back with value two
+
+1225
+01:15:16.640 --> 01:15:20.119
+out the arrows and so we know what the
+
+1226
+01:15:20.119 --> 01:15:21.920
+constraints are on any total order we
+
+1227
+01:15:21.920 --> 01:15:26.119
+might find the right of X to one because
+
+1228
+01:15:26.119 --> 01:15:28.579
+of time because it finished in real time
+
+1229
+01:15:28.579 --> 01:15:31.130
+before the right x to started and must
+
+1230
+01:15:31.130 --> 01:15:36.199
+come before in any satisfying order we
+
+1231
+01:15:36.199 --> 01:15:38.510
+produce the right of Ecsta two has to
+
+1232
+01:15:46.840 --> 01:15:49.399
+the read of X had to finished before the
+
+1233
+01:15:49.399 --> 01:15:51.409
+read of X to one started so we have this
+
+1234
+01:15:51.409 --> 01:16:00.260
+arrow and the read of X to one because
+
+1235
+01:16:00.260 --> 01:16:03.829
+it saw value one has to come after the
+
+1236
+01:16:03.829 --> 01:16:06.140
+right of X - 1 and more crucially before
+
+1237
+01:16:06.140 --> 01:16:09.770
+the right of X 2 - right so we can't
+
+1238
+01:16:09.770 --> 01:16:12.229
+have this read of X yielding one if it's
+
+1239
+01:16:12.229 --> 01:16:14.239
+immediately preceded by I'll write out X
+
+1240
+01:16:14.239 --> 01:16:18.250
+- 2 so we also have this arrow like this
+
+1241
+01:16:27.109 --> 01:16:29.149
+obey all these constraints and therefore
+
+1242
+01:16:29.149 --> 01:16:35.180
+this history is not linearizable and so
+
+1243
+01:16:35.180 --> 01:16:37.659
+the system that produced it is
+
+1244
+01:16:37.659 --> 01:16:42.880
+is not a linearizable system you know
+
+1245
+01:16:42.880 --> 01:16:44.319
+would be linearizable the history was
+
+1246
+01:16:44.319 --> 01:16:47.739
+missing any one of these three and I
+
+1247
+01:16:47.739 --> 01:17:05.770
+would break the cycle yes maybe I'm not
+
+1248
+01:17:05.770 --> 01:17:08.619
+sure because suppose or I don't know how
+
+1249
+01:17:08.619 --> 01:17:11.229
+to incorporate very strange things like
+
+1250
+01:17:11.229 --> 01:17:16.869
+supposing somebody red 27 you know it
+
+1251
+01:17:16.869 --> 01:17:18.909
+doesn't really if there's no right of 27
+
+1252
+01:17:18.909 --> 01:17:22.359
+a read of 27 doesn't at least the way
+
+1253
+01:17:22.359 --> 01:17:23.710
+I've written out the rules doesn't sort
+
+1254
+01:17:23.710 --> 01:17:26.619
+of well there may be some sort of anti
+
+1255
+01:17:26.619 --> 01:17:29.199
+dependency that you would construct okay
+
+1256
+01:17:29.199 --> 01:17:33.130
+um I will continue this discussion next
+
+1257
+01:17:33.100 --> 01:17:33.230
+week
+
