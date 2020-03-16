@@ -3,23 +3,23 @@ WEBVTT
 1
 00:00:00.800 --> 00:00:05.209
 all right let's get started
-
+   ok 开始上课了
 2
 00:00:05.209 --> 00:00:11.820
 this is 6.824 distributed systems so
-
+  这是分布式系统课程6.824
 3
 00:00:11.820 --> 00:00:13.230
 I'd like to start with just a brief
-
+我简短的介绍一下
 4
 00:00:13.230 --> 00:00:14.640
 explanation of what I think a
-
+    我认为的分布式系统
 5
 00:00:14.640 --> 00:00:18.960
 distributed system is you know the core
-
+一连串的互相协昨的电脑，他们是通过网络来进行彼此通信
 6
 00:00:18.960 --> 00:00:21.629
 of it is a set of cooperating computers
@@ -31,11 +31,11 @@ that are communicating with each other
 8
 00:00:23.190 --> 00:00:26.190
 over networked to get some coherent TAsk
-
+然后完成一些具有一致性的任务
 9
 00:00:26.190 --> 00:00:29.730
 done and so the kinds of examples that
-
+所以我们会聚焦于一些例子如
 10
 00:00:29.730 --> 00:00:31.530
 we'll be focusing on in this class are
@@ -43,19 +43,19 @@ we'll be focusing on in this class are
 11
 00:00:31.530 --> 00:00:34.969
 things like storage for big websites or
-
+大型网站的数据存储
 12
 00:00:34.969 --> 00:00:38.659
 big data computations such as MapReduce
-
+大数据计算如mapreduce
 13
 00:00:38.659 --> 00:00:41.759
 and also somewhat more exotic things
-
+以及一些其他的
 14
 00:00:41.759 --> 00:00:43.950
 like peer-to-peer file sharing so
-
+点对点的文件共享
 15
 00:00:43.950 --> 00:00:45.869
 they're all just examples the kinds of
@@ -87,7 +87,7 @@ more than one computer to get its job
 22
 00:00:57.570 --> 00:00:59.579
 done or it's sort of inherently needs to
-
+这是一种内在的需求
 23
 00:01:06.299 --> 00:01:08.189
 all before I even talk about distributed
