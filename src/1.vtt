@@ -19,7 +19,7 @@ explanation of what I think a
 5
 00:00:14.640 --> 00:00:18.960
 distributed system is you know the core
-一连串的互相协昨的电脑，他们是通过网络来进行彼此通信
+一连串的互相协昨的计算机，他们是通过网络来进行彼此通信
 6
 00:00:18.960 --> 00:00:21.629
 of it is a set of cooperating computers
@@ -59,7 +59,7 @@ like peer-to-peer file sharing so
 15
 00:00:43.950 --> 00:00:45.869
 they're all just examples the kinds of
-
+它们是我们要看的一些案例
 16
 00:00:45.869 --> 00:00:48.329
 case studies we'll look at and the
@@ -67,71 +67,72 @@ case studies we'll look at and the
 17
 00:00:48.329 --> 00:00:49.799
 reason why all this is important is that
-
+这些很重要的原因就是
 18
 00:00:49.799 --> 00:00:51.600
 a lot of critical infrastructure out
-
+许多关键的基础设施都是
 19
 00:00:51.600 --> 00:00:53.490
 there is built out of distributed
-
+基于分布式系统构建的
 20
 00:00:53.490 --> 00:00:56.250
 systems infrastructure that requires
-
+这些基础的设施需要
 21
 00:00:56.250 --> 00:00:57.570
 more than one computer to get its job
-
+很多计算机去完成工作
 22
 00:00:57.570 --> 00:00:59.579
 done or it's sort of inherently needs to
-这是一种内在的需求
+或者说 这是一种内在的需求需要被散布
 23
 00:01:06.299 --> 00:01:08.189
 all before I even talk about distributed
-
+讨论分布式系统
 24
 00:01:08.189 --> 00:01:10.500
 systems sort of remind you that you know
-
+就是想告诉你
 25
 00:01:10.500 --> 00:01:12.420
 if you're designing a system redesigning
-
+如果你要设计一个系统
 26
 00:01:12.420 --> 00:01:14.280
 you need to solve some problem if you
-
+或者设计去解决一些问题   如果你
 27
 00:01:14.280 --> 00:01:16.409
 can possibly solve it on a single
-
+可以在一台计算机上解决这些问题
 28
 00:01:16.409 --> 00:01:18.569
 computer you know without building a
-
+而不需要构建一个分布式系统  友们多的任务都可以再单节点上做
+而且总是比分布式的简单
 29
 00:01:29.219 --> 00:01:30.780
 know you should try everything else
-
+所以你应该尽力去做
 30
 00:01:30.780 --> 00:01:32.400
 before you try building distributed
-
+  再建立分布式的高性能的
 31
 00:01:41.640 --> 00:01:43.349
 high-performance and the way to think
-
+他们需要高性能
 32
 00:01:43.349 --> 00:01:45.180
 about that is they want to get achieve
-
+他们想实现
 33
 00:01:45.180 --> 00:01:50.519
 some sort of parallelism lots of CPUs
-
+一些cpu、内存、磁盘的的并行使用
 34
 00:01:50.519 --> 00:01:52.409
 lots of memories lots of disk arms
@@ -139,47 +140,47 @@ lots of memories lots of disk arms
 35
 00:01:52.409 --> 00:01:56.579
 moving in parallel another reason why
-
+ 另一个原因 人们为什么
 36
 00:01:56.579 --> 00:01:58.290
 people build this stuff is to be able to
-
+建立分布式主要是能够容错  以及
 37
 00:02:05.310 --> 00:02:07.900
 have two computers do the exact same
-
+有两台电脑做完全一样的事情
 38
 00:02:07.900 --> 00:02:09.580
 thing if one of them fails you can cut
-
+如果 一个失败了 你可以切换到
 39
 00:02:09.580 --> 00:02:12.610
 over to the other one another is that
-
+ 另外一个上
 40
 00:02:17.560 --> 00:02:19.419
 do interbank transfers of money or
-
+你想做银行间的金钱交易或者其他
 41
 00:02:19.419 --> 00:02:21.819
 something well you know bank a has this
-
+well 银行a 有一个
 42
 00:02:21.819 --> 00:02:23.979
 computer in New York City and Bank B as
-
+电脑在纽约   银行B
 43
 00:02:23.979 --> 00:02:26.110
 this computer in London you know you
-
-44
+在伦敦     你知道
+44 
 00:02:26.110 --> 00:02:27.789
 just have to have some way for them to
-
+这需要 有一些方法 
 45
 00:02:27.789 --> 00:02:29.710
 talk to each other and cooperate in
-
+去让他们彼此通信
 46
 00:02:29.710 --> 00:02:31.330
 order to carry that out so there's some
