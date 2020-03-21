@@ -1,0 +1,7052 @@
+﻿1
+00:00:00,540 --> 00:00:04,849
+all right everybody let's get started
+
+2
+00:00:05,359 --> 00:00:10,419
+today the paper four days I'm is aunt
+
+3
+00:00:10,619 --> 00:00:12,250
+Aurora paper which is all about how to
+
+4
+00:00:12,449 --> 00:00:17,320
+get a high-performance reliable database
+
+5
+00:00:17,519 --> 00:00:19,449
+going as a piece of cloud infrastructure
+
+6
+00:00:19,649 --> 00:00:22,600
+and itself built out of infrastructure
+
+7
+00:00:22,800 --> 00:00:28,900
+that Amazon itself makes available so
+
+8
+00:00:29,100 --> 00:00:30,010
+the reason why we're reading this paper
+
+9
+00:00:30,210 --> 00:00:31,898
+is that first of all it's a very
+
+10
+00:00:32,098 --> 00:00:34,089
+successful recent cloud service from
+
+11
+00:00:34,289 --> 00:00:38,279
+Amazon a lot of their customers use it
+
+12
+00:00:38,479 --> 00:00:41,259
+it shows sort of in its own way an
+
+13
+00:00:41,460 --> 00:00:44,619
+example of a very big payoff from clever
+
+14
+00:00:44,820 --> 00:00:46,329
+design table one which sort of
+
+15
+00:00:46,530 --> 00:00:48,179
+summarizes the performance shows that
+
+16
+00:00:48,380 --> 00:00:51,009
+relative to some other system which is
+
+17
+00:00:51,210 --> 00:00:53,229
+not very well explained the paper claims
+
+18
+00:00:53,429 --> 00:00:55,570
+to get a thirty five times speed up in
+
+19
+00:00:55,770 --> 00:00:57,279
+transaction throughput which is
+
+20
+00:00:57,479 --> 00:01:00,128
+extremely impressive this paper also
+
+21
+00:01:00,329 --> 00:01:02,948
+kind of explores the limits of how well
+
+22
+00:01:03,149 --> 00:01:04,480
+you can do for performance and fault
+
+23
+00:01:04,680 --> 00:01:06,549
+tolerance using general-purpose storage
+
+24
+00:01:06,750 --> 00:01:08,109
+because one of the themes of the papers
+
+25
+00:01:08,310 --> 00:01:10,269
+they basically abandoned general-purpose
+
+26
+00:01:10,469 --> 00:01:12,310
+storage they switch from a design in
+
+27
+00:01:12,510 --> 00:01:14,049
+which they were using their Amazon's own
+
+28
+00:01:14,250 --> 00:01:15,840
+general-purpose storage infrastructure
+
+29
+00:01:16,040 --> 00:01:17,769
+decided it was not good enough and
+
+30
+00:01:17,969 --> 00:01:19,209
+basically built totally
+
+31
+00:01:19,409 --> 00:01:22,119
+application-specific storage
+
+32
+00:01:22,319 --> 00:01:23,739
+furthermore the paper has a lot of
+
+33
+00:01:23,939 --> 00:01:25,390
+little tidbits about what turned out to
+
+34
+00:01:25,590 --> 00:01:28,899
+be important in this and the kind of
+
+35
+00:01:29,099 --> 00:01:32,289
+cloud infrastructure world so before
+
+36
+00:01:32,489 --> 00:01:34,810
+talking about aurora i want to spend a
+
+37
+00:01:35,010 --> 00:01:36,310
+bit of time kind of going over the back
+
+38
+00:01:36,510 --> 00:01:38,528
+history or what my impression is about
+
+39
+00:01:38,728 --> 00:01:41,069
+the story that led up to the design of
+
+40
+00:01:41,269 --> 00:01:43,629
+aurora because it's you know the sort of
+
+41
+00:01:43,829 --> 00:01:47,109
+m f-- way that amazon has in mind that
+
+42
+00:01:47,310 --> 00:01:49,750
+you ought to build that their cloud
+
+43
+00:01:49,950 --> 00:01:51,609
+customers ought to build databases on
+
+44
+00:01:51,810 --> 00:01:54,939
+amazon's infrastructure so in the
+
+45
+00:01:55,140 --> 00:02:02,649
+beginning amazon had basically their
+
+46
+00:02:02,849 --> 00:02:05,168
+very first offering cloud offering to
+
+47
+00:02:05,368 --> 00:02:06,459
+support people who wanted to build
+
+48
+00:02:06,659 --> 00:02:09,219
+websites but using Amazon's hardware and
+
+49
+00:02:09,419 --> 00:02:11,259
+in Amazon's machine room their first
+
+50
+00:02:11,459 --> 00:02:14,700
+offering was something called ec2
+
+51
+00:02:14,900 --> 00:02:19,899
+for elastic cloud apparently too and the
+
+52
+00:02:20,098 --> 00:02:21,550
+idea here is that Amazon had big machine
+
+53
+00:02:21,750 --> 00:02:23,320
+rooms full of servers and they ran
+
+54
+00:02:23,520 --> 00:02:24,820
+virtual machine monitors on their
+
+55
+00:02:25,020 --> 00:02:26,530
+servers and they'd rent out virtual
+
+56
+00:02:26,729 --> 00:02:30,219
+machines to their customers and their
+
+57
+00:02:30,419 --> 00:02:31,990
+customers would then you know rent a
+
+58
+00:02:32,189 --> 00:02:33,820
+bunch of virtual machines and run web
+
+59
+00:02:34,020 --> 00:02:35,830
+servers and databases and whatever ever
+
+60
+00:02:36,030 --> 00:02:39,130
+all else they needed to run inside these
+
+61
+00:02:39,330 --> 00:02:42,300
+ec2 instances so the picture of one
+
+62
+00:02:42,500 --> 00:02:47,789
+physical server looked like this Amazon
+
+63
+00:02:47,989 --> 00:02:50,319
+we control the virtual machine monitor
+
+64
+00:02:50,519 --> 00:02:52,810
+on this hardware server and then there'd
+
+65
+00:02:53,009 --> 00:02:54,610
+be a bunch of guests a bunch of ec2
+
+66
+00:02:54,810 --> 00:02:57,520
+instances each one rented out to a
+
+67
+00:02:57,719 --> 00:02:59,530
+different cloud customer each of these
+
+68
+00:02:59,729 --> 00:03:00,849
+would just run a standard operating
+
+69
+00:03:01,049 --> 00:03:06,789
+system like Linux and then you know a
+
+70
+00:03:06,989 --> 00:03:10,860
+web server or maybe a database server
+
+71
+00:03:11,060 --> 00:03:13,868
+and these were relatively cheap
+
+72
+00:03:14,068 --> 00:03:16,900
+relatively easy to set up and as a very
+
+73
+00:03:17,099 --> 00:03:22,090
+successful service so one little detail
+
+74
+00:03:22,289 --> 00:03:23,740
+that's extremely important for us is
+
+75
+00:03:23,939 --> 00:03:28,300
+that initially the way you get storage
+
+76
+00:03:28,500 --> 00:03:29,980
+the way you've got storage if you rented
+
+77
+00:03:30,180 --> 00:03:33,069
+an ec2 instance was that every one of
+
+78
+00:03:33,269 --> 00:03:35,280
+their servers had a disk attached a
+
+79
+00:03:35,479 --> 00:03:38,230
+physical disk attached and each one of
+
+80
+00:03:38,430 --> 00:03:41,200
+these instances that they rented to
+
+81
+00:03:41,400 --> 00:03:43,270
+their customers will get us you know a
+
+82
+00:03:43,469 --> 00:03:46,689
+slice of the disk so they said locally
+
+83
+00:03:46,889 --> 00:03:48,759
+attached storage and you got a bit of
+
+84
+00:03:48,959 --> 00:03:50,230
+locally attached storage which itself
+
+85
+00:03:50,430 --> 00:03:51,909
+just look like a hard drive an emulated
+
+86
+00:03:52,109 --> 00:03:56,810
+hard drive to the virtual machine guests
+
+87
+00:03:56,870 --> 00:04:00,280
+ec2 is like perfect for web servers for
+
+88
+00:04:00,479 --> 00:04:02,020
+stateless web servers you know your
+
+89
+00:04:02,219 --> 00:04:04,000
+customers with their web browsers would
+
+90
+00:04:04,199 --> 00:04:07,030
+connect to a bunch of rented ec2
+
+91
+00:04:07,229 --> 00:04:10,719
+instances that ran a web server and if
+
+92
+00:04:10,919 --> 00:04:12,099
+you added all of a sudden more customers
+
+93
+00:04:12,299 --> 00:04:13,990
+you could just instantly rent more ec2
+
+94
+00:04:14,189 --> 00:04:15,340
+instances from
+
+95
+00:04:15,539 --> 00:04:17,740
+Amazon and fire up web servers on them
+
+96
+00:04:17,939 --> 00:04:19,838
+and sort of an easy way to scale up your
+
+97
+00:04:20,038 --> 00:04:23,079
+ability to handle web load so it was
+
+98
+00:04:23,279 --> 00:04:25,840
+good for web servers
+
+99
+00:04:26,040 --> 00:04:27,460
+but the other main thing that people ran
+
+100
+00:04:27,660 --> 00:04:30,310
+in ec2 instance this was databases
+
+101
+00:04:30,509 --> 00:04:32,079
+because usually a website is constructed
+
+102
+00:04:32,279 --> 00:04:34,600
+of a set of stateless web servers that
+
+103
+00:04:34,800 --> 00:04:37,300
+anytime they need to get out permanent
+
+104
+00:04:37,500 --> 00:04:40,389
+data go talk to a back-end database so
+
+105
+00:04:40,589 --> 00:04:43,389
+what you would get is is maybe a bunch
+
+106
+00:04:43,589 --> 00:04:47,860
+of client browsers in the outside world
+
+107
+00:04:48,060 --> 00:04:50,710
+outside of Amazon's web infrastructure
+
+108
+00:04:50,910 --> 00:04:56,470
+and then a number of ec2 web server
+
+109
+00:04:56,670 --> 00:04:58,270
+instances as many as you need it to run
+
+110
+00:04:58,470 --> 00:05:00,430
+the sort of logic of the website this
+
+111
+00:05:00,629 --> 00:05:05,110
+this is now inside Amazon and then also
+
+112
+00:05:05,310 --> 00:05:10,680
+some also typically one ec2 instance
+
+113
+00:05:10,879 --> 00:05:13,629
+running a database your web servers
+
+114
+00:05:13,829 --> 00:05:15,310
+would talk to your database instance and
+
+115
+00:05:15,509 --> 00:05:16,720
+ask it to read and write records in the
+
+116
+00:05:16,920 --> 00:05:19,689
+database unfortunately ec2 wasn't
+
+117
+00:05:19,889 --> 00:05:22,360
+perfect was it nearly as well-suited to
+
+118
+00:05:22,560 --> 00:05:24,069
+running a database as it was to running
+
+119
+00:05:24,269 --> 00:05:25,689
+web servers and the most immediate
+
+120
+00:05:25,889 --> 00:05:29,620
+reason is that the storage or the sort
+
+121
+00:05:29,819 --> 00:05:32,350
+of main easy way to get storage for your
+
+122
+00:05:32,550 --> 00:05:34,900
+ec2 database instance was on the locally
+
+123
+00:05:35,100 --> 00:05:39,400
+attached disk attached to whatever a
+
+124
+00:05:39,600 --> 00:05:41,470
+piece of hardware your database instance
+
+125
+00:05:41,670 --> 00:05:43,870
+was currently running on in fact
+
+126
+00:05:44,069 --> 00:05:46,540
+hardware crashed then you also lost
+
+127
+00:05:46,740 --> 00:05:48,100
+access to whatever what is on its hard
+
+128
+00:05:48,300 --> 00:05:51,550
+drive so if it's a hardware that it was
+
+129
+00:05:51,750 --> 00:05:54,009
+actually implementing a web server
+
+130
+00:05:54,209 --> 00:05:55,389
+crashed no problem at all because
+
+131
+00:05:55,589 --> 00:05:57,460
+there's really keeps no state itself you
+
+132
+00:05:57,660 --> 00:05:59,079
+just fire up a new web server on a new
+
+133
+00:05:59,279 --> 00:06:01,810
+ec2 instance if the ec2 instance it's a
+
+134
+00:06:02,009 --> 00:06:04,540
+hardware running it crashes have become
+
+135
+00:06:04,740 --> 00:06:06,009
+unavailable you have a serious problem
+
+136
+00:06:06,209 --> 00:06:08,740
+if the data is stored on the locally
+
+137
+00:06:08,939 --> 00:06:12,850
+attached disk so initially at least
+
+138
+00:06:13,050 --> 00:06:14,829
+there wasn't sort of a lot of help for
+
+139
+00:06:15,029 --> 00:06:16,930
+doing this one thing that did work out
+
+140
+00:06:17,129 --> 00:06:18,850
+well is that Amazon did provide this
+
+141
+00:06:19,050 --> 00:06:22,420
+sort of large scheme for storing large
+
+142
+00:06:22,620 --> 00:06:24,220
+chunks of data called s3 and you could
+
+143
+00:06:24,420 --> 00:06:25,750
+take snapshots you could take Prius
+
+144
+00:06:25,949 --> 00:06:27,520
+periodic snapshots if you need a basis
+
+145
+00:06:27,720 --> 00:06:30,670
+state and stored in s3 and use that for
+
+146
+00:06:30,870 --> 00:06:34,660
+sort of backup disaster recovery but you
+
+147
+00:06:34,860 --> 00:06:36,670
+know that style of periodic snapshots
+
+148
+00:06:36,870 --> 00:06:38,259
+means you're gonna lose updates that
+
+149
+00:06:38,459 --> 00:06:39,069
+happen
+
+150
+00:06:39,269 --> 00:06:42,879
+between the periodic backups all right
+
+151
+00:06:43,079 --> 00:06:45,189
+so the next thing that came along that's
+
+152
+00:06:45,389 --> 00:06:47,439
+that's relevant to the sort of Aurora
+
+153
+00:06:47,639 --> 00:06:50,920
+database story is that in order to
+
+154
+00:06:51,120 --> 00:06:54,970
+provide their customers with disks for
+
+155
+00:06:55,170 --> 00:06:57,100
+their ec2 instances that didn't go away
+
+156
+00:06:57,300 --> 00:06:59,170
+if there was a failure that is more sort
+
+157
+00:06:59,370 --> 00:07:01,720
+of fault tolerant long-term storage was
+
+158
+00:07:01,920 --> 00:07:04,270
+guaranteed to be there Amazon introduced
+
+159
+00:07:04,470 --> 00:07:08,079
+the service called EBS and this stands
+
+160
+00:07:08,279 --> 00:07:09,639
+for elastic block store
+
+161
+00:07:09,839 --> 00:07:12,340
+so with EBS is is a service that looks
+
+162
+00:07:12,540 --> 00:07:16,329
+to an ec2 instances it looks to one of
+
+163
+00:07:16,529 --> 00:07:17,740
+these instances one of these guest
+
+164
+00:07:17,939 --> 00:07:19,509
+virtual machines just as if it were a
+
+165
+00:07:19,709 --> 00:07:21,790
+hard drive an ordinary way you could
+
+166
+00:07:21,990 --> 00:07:23,949
+format it as a hard drive but a file
+
+167
+00:07:24,149 --> 00:07:26,920
+system like ext3 or whatever Linux file
+
+168
+00:07:27,120 --> 00:07:28,689
+system you like on this on this thing
+
+169
+00:07:28,889 --> 00:07:30,430
+that looks to be guest just like a hard
+
+170
+00:07:30,629 --> 00:07:31,720
+drive but the way it's actually
+
+171
+00:07:31,920 --> 00:07:35,079
+implemented is as a replicated pair of
+
+172
+00:07:35,279 --> 00:07:40,689
+storage servers so this is the local
+
+173
+00:07:40,889 --> 00:07:43,319
+this is one of local storage with Mike
+
+174
+00:07:43,519 --> 00:07:47,350
+if when EBS came out then you could you
+
+175
+00:07:47,550 --> 00:07:49,389
+could rent an e BS volume which this
+
+176
+00:07:49,589 --> 00:07:50,470
+thing that looks just like an ordinary
+
+177
+00:07:50,670 --> 00:07:52,930
+hard drive but it's actually implemented
+
+178
+00:07:53,129 --> 00:07:58,889
+as a pair so these are EBS servers a
+
+179
+00:07:59,089 --> 00:08:03,639
+pair of EBS servers each with an
+
+180
+00:08:03,839 --> 00:08:09,160
+attached hard drive so if your software
+
+181
+00:08:09,360 --> 00:08:10,720
+here maybe you're running a database now
+
+182
+00:08:10,920 --> 00:08:12,879
+and your databases mount's one of these
+
+183
+00:08:13,079 --> 00:08:14,920
+EBS volumes as its storage when the
+
+184
+00:08:15,120 --> 00:08:16,150
+database server doesn't write what that
+
+185
+00:08:16,350 --> 00:08:17,920
+actually means is that the right to send
+
+186
+00:08:18,120 --> 00:08:19,629
+out over the network and using chain
+
+187
+00:08:19,829 --> 00:08:21,100
+replication which we talked about last
+
+188
+00:08:21,300 --> 00:08:23,829
+week you're right is you know first
+
+189
+00:08:24,029 --> 00:08:27,250
+written to the EBS server one on the
+
+190
+00:08:27,449 --> 00:08:28,770
+first CBS server that's backing your
+
+191
+00:08:28,970 --> 00:08:30,759
+volume and then the second one and
+
+192
+00:08:30,959 --> 00:08:33,129
+finally you get the reply and similarly
+
+193
+00:08:33,330 --> 00:08:35,559
+when you do a read I guess some chain
+
+194
+00:08:35,759 --> 00:08:37,179
+replication you'll be the last of the
+
+195
+00:08:37,379 --> 00:08:41,589
+chain so now database is running on ec2
+
+196
+00:08:41,789 --> 00:08:44,049
+instances had available a storage system
+
+197
+00:08:44,250 --> 00:08:45,839
+that actually would survive the crash of
+
+198
+00:08:46,039 --> 00:08:48,459
+or the you know death of the hardware
+
+199
+00:08:48,659 --> 00:08:49,839
+that they were running on if this
+
+200
+00:08:50,039 --> 00:08:53,229
+physical server died you could just get
+
+201
+00:08:53,429 --> 00:08:54,969
+another ec2 instance fire up your
+
+202
+00:08:55,169 --> 00:08:57,909
+database and have it attached to the
+
+203
+00:08:58,110 --> 00:09:00,909
+same old EBS volume that the sort of
+
+204
+00:09:01,110 --> 00:09:03,339
+previous version of your database was
+
+205
+00:09:03,539 --> 00:09:04,599
+attached to and it would see all the old
+
+206
+00:09:04,799 --> 00:09:06,909
+data just as it had been left off by the
+
+207
+00:09:07,110 --> 00:09:10,299
+previous database just like you moved a
+
+208
+00:09:10,500 --> 00:09:11,559
+hard drive from one machine to another
+
+209
+00:09:11,759 --> 00:09:14,709
+so EBS was like really a good deal for
+
+210
+00:09:14,909 --> 00:09:16,029
+people who need it to keep permanent
+
+211
+00:09:16,230 --> 00:09:26,649
+state like people running databases one
+
+212
+00:09:26,850 --> 00:09:29,319
+thing to that is sort of important for
+
+213
+00:09:29,519 --> 00:09:32,979
+us about EBS is that it's really it's
+
+214
+00:09:33,179 --> 00:09:36,059
+not a system for sharing at any one time
+
+215
+00:09:36,259 --> 00:09:41,139
+only one ec2 instance only one virtual
+
+216
+00:09:41,339 --> 00:09:43,569
+machine can mount a given EBS volume so
+
+217
+00:09:43,769 --> 00:09:45,099
+the EBS volumes are implemented on a
+
+218
+00:09:45,299 --> 00:09:47,529
+huge fleet of you know hundreds or
+
+219
+00:09:47,730 --> 00:09:49,419
+whatever storage servers with disks at
+
+220
+00:09:49,620 --> 00:09:52,209
+Amazon and they're all you know
+
+221
+00:09:52,409 --> 00:09:54,969
+everybody's EBS volumes are stored on
+
+222
+00:09:55,169 --> 00:09:58,539
+this big pool of servers but each one of
+
+223
+00:09:58,740 --> 00:10:00,879
+each PPS volume can only be used by only
+
+224
+00:10:01,080 --> 00:10:08,270
+one ec2 instance only one customer all
+
+225
+00:10:08,509 --> 00:10:13,089
+right still EBS was a big step up but it
+
+226
+00:10:13,289 --> 00:10:17,979
+had still has some problems so there's
+
+227
+00:10:18,179 --> 00:10:19,029
+still some things that are not quite as
+
+228
+00:10:19,230 --> 00:10:22,629
+perfect as it could be one is that if
+
+229
+00:10:22,830 --> 00:10:24,549
+you run a database on EBS it ends up
+
+230
+00:10:24,750 --> 00:10:27,549
+sending large volumes of data across the
+
+231
+00:10:27,750 --> 00:10:31,539
+network and this is uh we're now
+
+232
+00:10:31,740 --> 00:10:33,250
+starting to sort of sneak up on figure
+
+233
+00:10:33,450 --> 00:10:36,549
+two in the the paper where they start
+
+234
+00:10:36,750 --> 00:10:38,469
+complaining about how many just how many
+
+235
+00:10:38,669 --> 00:10:40,750
+writes it takes if you run a database on
+
+236
+00:10:40,950 --> 00:10:45,459
+top of a network storage system so
+
+237
+00:10:45,659 --> 00:10:47,799
+there's the database on EBS ended up
+
+238
+00:10:48,000 --> 00:10:50,258
+generating a lot of network traffic and
+
+239
+00:10:50,458 --> 00:10:53,019
+one of the kind of things in the paper
+
+240
+00:10:53,220 --> 00:10:55,689
+that the paper implies is that they're
+
+241
+00:10:55,889 --> 00:10:59,709
+as much network limited as they are CPU
+
+242
+00:10:59,909 --> 00:11:01,569
+or storage limited that is they pay a
+
+243
+00:11:01,769 --> 00:11:03,609
+huge amount of attention to reducing the
+
+244
+00:11:03,809 --> 00:11:05,229
+Aurora paper sends a huge amount of
+
+245
+00:11:05,429 --> 00:11:07,059
+attention for reducing the network
+
+246
+00:11:07,259 --> 00:11:09,519
+that the database generates and seems to
+
+247
+00:11:09,720 --> 00:11:11,859
+be worrying less about how much CPU time
+
+248
+00:11:12,059 --> 00:11:15,659
+or disk space is being consumed that's a
+
+249
+00:11:15,860 --> 00:11:17,949
+sort of a hint at what they think is
+
+250
+00:11:18,149 --> 00:11:20,439
+important the other problem with EBS is
+
+251
+00:11:20,639 --> 00:11:22,509
+not very fault tolerant it turns out
+
+252
+00:11:22,710 --> 00:11:25,120
+that for performance reasons they I'm
+
+253
+00:11:25,320 --> 00:11:26,769
+done would always put both of the EBS
+
+254
+00:11:26,970 --> 00:11:29,289
+both of the replicas of your EBS volume
+
+255
+00:11:29,490 --> 00:11:32,529
+in the same data center and so we have a
+
+256
+00:11:32,730 --> 00:11:34,449
+single server crashed if you know one of
+
+257
+00:11:34,649 --> 00:11:35,829
+the two EBS servers that you're using
+
+258
+00:11:36,029 --> 00:11:37,240
+crashed it's okay because you switch to
+
+259
+00:11:37,440 --> 00:11:38,979
+the other one but there was just no
+
+260
+00:11:39,179 --> 00:11:40,449
+story at all for what happens if an
+
+261
+00:11:40,649 --> 00:11:50,039
+entire data center went down and and
+
+262
+00:11:50,240 --> 00:11:53,379
+apparently a lot of customers really
+
+263
+00:11:53,580 --> 00:11:55,059
+wanted a story that would allow their
+
+264
+00:11:55,259 --> 00:11:57,639
+data to survive an outage of an entire
+
+265
+00:11:57,840 --> 00:12:00,009
+data center maybe it lost his network
+
+266
+00:12:00,210 --> 00:12:01,719
+connection it was a fire in the building
+
+267
+00:12:01,919 --> 00:12:04,329
+or a power failure to the whole building
+
+268
+00:12:04,529 --> 00:12:05,529
+or something people really wanted to
+
+269
+00:12:05,730 --> 00:12:06,909
+have at least the option if they're
+
+270
+00:12:07,110 --> 00:12:09,129
+willing to pay more of having their data
+
+271
+00:12:09,330 --> 00:12:10,389
+stored in a way they hid they could
+
+272
+00:12:10,590 --> 00:12:13,659
+still get at it I'm even if one data
+
+273
+00:12:13,860 --> 00:12:20,189
+center goes down and the way that Amazon
+
+274
+00:12:20,389 --> 00:12:25,269
+described this there is that both an
+
+275
+00:12:25,470 --> 00:12:29,740
+instance and its EBS to EBS replicas are
+
+276
+00:12:29,940 --> 00:12:32,159
+in the same ability veil ability zone
+
+277
+00:12:32,360 --> 00:12:34,539
+and an Amazon jargon an availability
+
+278
+00:12:34,740 --> 00:12:36,699
+zone is a particular data center and the
+
+279
+00:12:36,899 --> 00:12:38,589
+way they structure their data centers is
+
+280
+00:12:38,789 --> 00:12:41,969
+that there's usually multiple
+
+281
+00:12:42,169 --> 00:12:44,559
+independent data centers in more or less
+
+282
+00:12:44,759 --> 00:12:46,479
+the same city or relatively close to
+
+283
+00:12:46,679 --> 00:12:49,809
+each other and all the multiple
+
+284
+00:12:50,009 --> 00:12:52,359
+availability zones maybe two or three
+
+285
+00:12:52,559 --> 00:12:53,979
+that are near by each other are all
+
+286
+00:12:54,179 --> 00:12:56,139
+connected by redundant high speed
+
+287
+00:12:56,340 --> 00:12:58,089
+networks so there's always payers or
+
+288
+00:12:58,289 --> 00:13:00,159
+triples of nearby availability
+
+289
+00:13:00,360 --> 00:13:01,539
+availability centers and we'll see the
+
+290
+00:13:01,740 --> 00:13:03,159
+buy that's important in a little bit but
+
+291
+00:13:03,360 --> 00:13:05,559
+at least for EBS in order to keep the
+
+292
+00:13:05,759 --> 00:13:07,839
+sort of costs of using chain replication
+
+293
+00:13:08,039 --> 00:13:12,009
+down they required the two replicas to
+
+294
+00:13:12,210 --> 00:13:15,740
+be in the same availability zone
+
+295
+00:13:16,730 --> 00:13:21,699
+all right um before I dive into more
+
+296
+00:13:21,899 --> 00:13:27,429
+into how Aurora actually works it turns
+
+297
+00:13:27,629 --> 00:13:30,969
+out that the details of the design in
+
+298
+00:13:31,169 --> 00:13:32,379
+order to understand them we first have
+
+299
+00:13:32,580 --> 00:13:34,449
+to know a fair amount about the sort of
+
+300
+00:13:34,649 --> 00:13:36,250
+design of typical databases because what
+
+301
+00:13:36,450 --> 00:13:40,029
+they taken is sort of the main machinery
+
+302
+00:13:40,230 --> 00:13:42,159
+of a database my sequel as it happens
+
+303
+00:13:42,360 --> 00:13:44,740
+and split it up in an interesting way so
+
+304
+00:13:44,940 --> 00:13:46,449
+we need to know sort of what it but it
+
+305
+00:13:46,649 --> 00:13:48,189
+is a database does so we can understand
+
+306
+00:13:48,389 --> 00:13:50,679
+how they split it up so this is really a
+
+307
+00:13:50,879 --> 00:13:57,939
+kind of database tutorial really
+
+308
+00:13:58,139 --> 00:14:01,559
+focusing on what it takes to implement
+
+309
+00:14:01,759 --> 00:14:03,909
+transactions crashed recoverable
+
+310
+00:14:04,110 --> 00:14:06,009
+transactions so what I really care about
+
+311
+00:14:06,210 --> 00:14:14,229
+is transactions and crash recovery and
+
+312
+00:14:14,429 --> 00:14:16,870
+there's a lot else going on in databases
+
+313
+00:14:17,070 --> 00:14:18,759
+but this is really the part that matters
+
+314
+00:14:18,960 --> 00:14:22,120
+for this paper so first what's a
+
+315
+00:14:22,320 --> 00:14:24,069
+transaction you know transaction is just
+
+316
+00:14:24,269 --> 00:14:26,799
+a way of wrapping multiple operations on
+
+317
+00:14:27,000 --> 00:14:28,509
+maybe different pieces of data and
+
+318
+00:14:28,710 --> 00:14:31,179
+declare in that that that's entire
+
+319
+00:14:31,379 --> 00:14:33,219
+sequence of operations should appear a
+
+320
+00:14:33,419 --> 00:14:35,769
+Tomic to anyone else who's reading or
+
+321
+00:14:35,970 --> 00:14:38,549
+writing the data so you might see
+
+322
+00:14:38,750 --> 00:14:40,599
+transposing we're running a bank and we
+
+323
+00:14:40,799 --> 00:14:42,909
+want to do transfers between different
+
+324
+00:14:43,110 --> 00:14:46,209
+accounts maybe you would say well we
+
+325
+00:14:46,409 --> 00:14:48,399
+would see code or you know see a
+
+326
+00:14:48,600 --> 00:14:50,019
+transaction looks like this is you have
+
+327
+00:14:50,220 --> 00:14:51,759
+to clear the beginning of the sequence
+
+328
+00:14:51,960 --> 00:14:53,679
+of instructions that you want to be
+
+329
+00:14:53,879 --> 00:14:55,689
+atomic in the in transaction maybe we're
+
+330
+00:14:55,889 --> 00:14:59,049
+going to transfer money from account Y
+
+331
+00:14:59,250 --> 00:15:02,379
+to account X so we might see where I'll
+
+332
+00:15:02,580 --> 00:15:04,990
+just pretend X is a bank balance Jordan
+
+333
+00:15:05,190 --> 00:15:06,219
+the database you might see the
+
+334
+00:15:06,419 --> 00:15:08,409
+transaction looks like oh can I add $10
+
+335
+00:15:08,610 --> 00:15:11,389
+to X's account and
+
+336
+00:15:11,589 --> 00:15:13,828
+deduct the same ten dollars from my
+
+337
+00:15:14,028 --> 00:15:16,229
+account and that's the end of the
+
+338
+00:15:16,429 --> 00:15:17,008
+transaction
+
+339
+00:15:17,208 --> 00:15:19,740
+I want the database to just do them both
+
+340
+00:15:19,940 --> 00:15:21,748
+without allowing anybody else to sneak
+
+341
+00:15:21,948 --> 00:15:23,818
+in and see the state between these two
+
+342
+00:15:24,019 --> 00:15:27,029
+statements and also with respect to
+
+343
+00:15:27,230 --> 00:15:29,370
+crashes if there's a crash at this point
+
+344
+00:15:29,570 --> 00:15:30,870
+somewhere in here we're going to make
+
+345
+00:15:31,070 --> 00:15:32,519
+sure that after the crash and recovery
+
+346
+00:15:32,720 --> 00:15:34,649
+that either the entire transactions
+
+347
+00:15:34,850 --> 00:15:36,269
+worth the modifications are visible or
+
+348
+00:15:36,470 --> 00:15:39,899
+none of them are so that's the effect we
+
+349
+00:15:40,100 --> 00:15:41,188
+want from transactions there's
+
+350
+00:15:41,389 --> 00:15:44,159
+additionally people expect database
+
+351
+00:15:44,360 --> 00:15:46,438
+users expect that the database will tell
+
+352
+00:15:46,639 --> 00:15:48,628
+them tell the client that submitted the
+
+353
+00:15:48,828 --> 00:15:50,998
+transaction whether the transaction
+
+354
+00:15:51,198 --> 00:15:52,679
+really finished and committed or not and
+
+355
+00:15:52,879 --> 00:15:55,128
+if a transaction is committed we expect
+
+356
+00:15:55,328 --> 00:15:57,839
+clients expect that the transaction will
+
+357
+00:15:58,039 --> 00:15:59,789
+be permanent will be durable still there
+
+358
+00:15:59,990 --> 00:16:01,799
+even if the database should crash and
+
+359
+00:16:02,000 --> 00:16:05,519
+reboot um one thing it's a bit important
+
+360
+00:16:05,720 --> 00:16:07,919
+is that the usual way these are
+
+361
+00:16:08,120 --> 00:16:09,809
+implemented is that the transaction
+
+362
+00:16:10,009 --> 00:16:12,599
+locks each piece of data before it uses
+
+363
+00:16:12,799 --> 00:16:15,779
+it so you can view the they're being
+
+364
+00:16:15,980 --> 00:16:20,639
+locks x and y for the duration of the
+
+365
+00:16:20,839 --> 00:16:22,289
+transaction and these are only released
+
+366
+00:16:22,490 --> 00:16:24,359
+after the transaction finally commits
+
+367
+00:16:24,559 --> 00:16:29,008
+that is known to be permanent this is
+
+368
+00:16:29,208 --> 00:16:31,649
+important if you for some of the things
+
+369
+00:16:31,850 --> 00:16:33,059
+that you have to if you some of the
+
+370
+00:16:33,259 --> 00:16:34,859
+details in the paper really only makes
+
+371
+00:16:35,059 --> 00:16:36,240
+sense if you realize that the database
+
+372
+00:16:36,440 --> 00:16:38,519
+is actually locking out other access to
+
+373
+00:16:38,720 --> 00:16:40,019
+the data during the life of a
+
+374
+00:16:40,220 --> 00:16:43,139
+transaction so how this actually
+
+375
+00:16:43,339 --> 00:16:47,620
+implemented it turns out the database
+
+376
+00:16:48,698 --> 00:16:52,859
+consists of at least for the simple
+
+377
+00:16:53,059 --> 00:16:55,049
+database model where the databases are
+
+378
+00:16:55,250 --> 00:16:56,549
+typically written to run on a single
+
+379
+00:16:56,750 --> 00:16:57,990
+server with you know some storage
+
+380
+00:16:58,190 --> 00:17:00,059
+directly attached and a game that the
+
+381
+00:17:00,259 --> 00:17:01,349
+Aurora paper is playing is sort of
+
+382
+00:17:01,549 --> 00:17:05,128
+moving that software only modestly
+
+383
+00:17:05,328 --> 00:17:07,138
+revised in order to run on a much more
+
+384
+00:17:07,338 --> 00:17:09,358
+complex network system but the starting
+
+385
+00:17:09,558 --> 00:17:11,190
+point is we just assume we have a
+
+386
+00:17:11,390 --> 00:17:16,319
+database with a attached to a disk the
+
+387
+00:17:16,519 --> 00:17:18,618
+on disk structure that stores these
+
+388
+00:17:18,818 --> 00:17:21,358
+records is some kind of indexing
+
+389
+00:17:21,558 --> 00:17:23,990
+structure like a b-tree maybe so
+
+390
+00:17:24,190 --> 00:17:25,759
+there's a sort of pages with the paper
+
+391
+00:17:25,960 --> 00:17:27,619
+calls data pages that holds us you know
+
+392
+00:17:27,819 --> 00:17:32,059
+real data of the of the database you
+
+393
+00:17:32,259 --> 00:17:34,430
+know maybe this is excess balances and
+
+394
+00:17:34,630 --> 00:17:36,379
+this is wise balance these data pages
+
+395
+00:17:36,579 --> 00:17:40,059
+typically hold lots and lots of records
+
+396
+00:17:40,259 --> 00:17:42,139
+whereas X and y are typically just a
+
+397
+00:17:42,339 --> 00:17:44,119
+couple bites on some page in the
+
+398
+00:17:44,319 --> 00:17:46,539
+database so on the disk there's the
+
+399
+00:17:46,740 --> 00:17:49,789
+actual data plus on the disk there's
+
+400
+00:17:49,990 --> 00:17:55,460
+also a right ahead log or wal and the
+
+401
+00:17:55,660 --> 00:17:57,200
+right ahead logs are a critical part of
+
+402
+00:17:57,400 --> 00:17:59,809
+why the system is gonna be fault
+
+403
+00:18:00,009 --> 00:18:02,809
+tolerant inside the database server
+
+404
+00:18:03,009 --> 00:18:05,329
+there's the database software the
+
+405
+00:18:05,529 --> 00:18:08,029
+database typically has a cache of pages
+
+406
+00:18:08,230 --> 00:18:10,849
+that it's read from the disk that it's
+
+407
+00:18:11,049 --> 00:18:13,009
+recently used when you execute a
+
+408
+00:18:13,210 --> 00:18:15,049
+transaction what that actually executes
+
+409
+00:18:15,250 --> 00:18:16,789
+these statements what that really means
+
+410
+00:18:16,990 --> 00:18:19,129
+is you know what x equals x plus 10
+
+411
+00:18:19,329 --> 00:18:21,680
+turns into the runtime is that the
+
+412
+00:18:21,880 --> 00:18:23,599
+database reads the current page holding
+
+413
+00:18:23,799 --> 00:18:27,319
+X from the disk and adds 10 to it but so
+
+414
+00:18:27,519 --> 00:18:29,720
+far until the transaction commits it
+
+415
+00:18:29,920 --> 00:18:31,279
+only makes the modifications in the
+
+416
+00:18:31,480 --> 00:18:33,829
+local cache not on the disk because we
+
+417
+00:18:34,029 --> 00:18:34,879
+don't want to expose we don't want to
+
+418
+00:18:35,079 --> 00:18:36,829
+write on the disk yet and the part
+
+419
+00:18:37,029 --> 00:18:42,720
+possibly expose a partial transaction so
+
+420
+00:18:42,990 --> 00:18:45,980
+while then when the database but before
+
+421
+00:18:46,180 --> 00:18:47,779
+because the database wants to sort of
+
+422
+00:18:47,980 --> 00:18:50,389
+pre to clear the complete transaction so
+
+423
+00:18:50,589 --> 00:18:52,940
+it's available to the software after a
+
+424
+00:18:53,140 --> 00:18:56,089
+crash and during recovery before the
+
+425
+00:18:56,289 --> 00:18:57,710
+database is allowed to modify the real
+
+426
+00:18:57,910 --> 00:18:59,750
+data pages on disk its first required to
+
+427
+00:18:59,950 --> 00:19:03,759
+add log entries that describe the
+
+428
+00:19:03,960 --> 00:19:06,200
+transaction so it has to in order before
+
+429
+00:19:06,400 --> 00:19:07,669
+it can commit the transaction it needs
+
+430
+00:19:07,869 --> 00:19:09,109
+to put a complete set of log ahead
+
+431
+00:19:09,309 --> 00:19:11,509
+entries in the right ahead log on disk
+
+432
+00:19:11,710 --> 00:19:13,519
+I'm describing all the data bases
+
+433
+00:19:13,720 --> 00:19:15,740
+modification so let's suppose here that
+
+434
+00:19:15,940 --> 00:19:20,539
+x and y start out as say 500 and y
+
+435
+00:19:20,740 --> 00:19:23,839
+starts out as 750 and we want to execute
+
+436
+00:19:24,039 --> 00:19:26,629
+this transaction before committing and
+
+437
+00:19:26,829 --> 00:19:28,970
+before writing the pages the database is
+
+438
+00:19:29,170 --> 00:19:31,549
+going to add at least typically 3 log
+
+439
+00:19:31,750 --> 00:19:34,279
+records 1 this that says well as part of
+
+440
+00:19:34,480 --> 00:19:37,180
+this transaction I'm modifying X
+
+441
+00:19:37,380 --> 00:19:43,329
+and it's old value is 500 make more room
+
+442
+00:19:43,529 --> 00:19:50,049
+here this is the on dis log so each log
+
+443
+00:19:50,250 --> 00:19:52,149
+entry might say here's the value I'm
+
+444
+00:19:52,349 --> 00:19:56,529
+modifying here's the old value and we're
+
+445
+00:19:56,730 --> 00:19:58,480
+adding and here's the new value say five
+
+446
+00:19:58,680 --> 00:20:01,869
+ten so that's one log record another 4y
+
+447
+00:20:02,069 --> 00:20:04,599
+may be old value is 750 we're
+
+448
+00:20:04,799 --> 00:20:07,210
+subtracting 10 so the new value is 740
+
+449
+00:20:07,410 --> 00:20:11,109
+and then when the database if it
+
+450
+00:20:11,309 --> 00:20:12,609
+actually manages to get to the end of
+
+451
+00:20:12,809 --> 00:20:14,200
+the transaction before crashing its
+
+452
+00:20:14,400 --> 00:20:18,250
+gonna write a commit record saying and
+
+453
+00:20:18,450 --> 00:20:20,109
+typically these are all tagged with some
+
+454
+00:20:20,309 --> 00:20:23,019
+sort with a transaction ID so that the
+
+455
+00:20:23,220 --> 00:20:24,730
+recovery software eventually will know
+
+456
+00:20:24,930 --> 00:20:27,460
+how this commit record refers to these
+
+457
+00:20:27,660 --> 00:20:32,420
+log records yes
+
+458
+00:20:36,589 --> 00:20:38,769
+in a simple database will be enough to
+
+459
+00:20:38,970 --> 00:20:41,409
+just store the new values and say well
+
+460
+00:20:41,609 --> 00:20:43,779
+it is a crash we're gonna just reapply
+
+461
+00:20:43,980 --> 00:20:47,039
+all the new values the reason most
+
+462
+00:20:47,240 --> 00:20:50,649
+serious databases store the old as well
+
+463
+00:20:50,849 --> 00:20:52,180
+as a new value is to give them freedom
+
+464
+00:20:52,380 --> 00:20:56,230
+to even for a long-running traction for
+
+465
+00:20:56,430 --> 00:20:57,639
+a long-running transaction even before
+
+466
+00:20:57,839 --> 00:20:59,409
+the transaction is finished it gives the
+
+467
+00:20:59,609 --> 00:21:00,700
+database the freedom to write the
+
+468
+00:21:00,900 --> 00:21:04,289
+updated page to disk with the new value
+
+469
+00:21:04,490 --> 00:21:07,149
+740 let's say from the from an
+
+470
+00:21:07,349 --> 00:21:10,389
+uncompleted transaction as long as it's
+
+471
+00:21:10,589 --> 00:21:11,769
+written the log record to disk and then
+
+472
+00:21:11,970 --> 00:21:13,720
+if there's a crash before the commit the
+
+473
+00:21:13,920 --> 00:21:15,220
+recovery software always say aha well
+
+474
+00:21:15,420 --> 00:21:16,990
+this transaction never finished
+
+475
+00:21:17,190 --> 00:21:18,849
+therefore we have to undo all of its
+
+476
+00:21:19,049 --> 00:21:21,099
+changes and these values these old
+
+477
+00:21:21,299 --> 00:21:22,480
+values are the values you need in order
+
+478
+00:21:22,680 --> 00:21:24,129
+to undo a transaction that's been
+
+479
+00:21:24,329 --> 00:21:26,409
+partially written to the data pages so
+
+480
+00:21:26,609 --> 00:21:32,529
+the aurora indeed uses undo redo logging
+
+481
+00:21:32,730 --> 00:21:35,669
+to be able to undo partially applied
+
+482
+00:21:35,869 --> 00:21:40,000
+transactions okay so if the database
+
+483
+00:21:40,200 --> 00:21:42,039
+manages to get as far as getting the
+
+484
+00:21:42,240 --> 00:21:43,990
+transactions log records on the disk and
+
+485
+00:21:44,190 --> 00:21:46,230
+the commit record marking is finished
+
+486
+00:21:46,430 --> 00:21:48,789
+then it is entitled to apply to the
+
+487
+00:21:48,990 --> 00:21:49,960
+client we said the transactions
+
+488
+00:21:50,160 --> 00:21:51,700
+committed the database can reply to the
+
+489
+00:21:51,900 --> 00:21:53,649
+client and the client can be assured
+
+490
+00:21:53,849 --> 00:21:56,200
+that its transaction will be sort of
+
+491
+00:21:56,400 --> 00:21:59,769
+visible forever and now one of two
+
+492
+00:21:59,970 --> 00:22:01,119
+things happens the database server
+
+493
+00:22:01,319 --> 00:22:04,299
+doesn't crash then eventually so it's
+
+494
+00:22:04,500 --> 00:22:08,680
+modified in its cache these these X&Y
+
+495
+00:22:08,880 --> 00:22:12,819
+records to be 510 and 740 eventually the
+
+496
+00:22:13,019 --> 00:22:15,730
+database will write it's cached updated
+
+497
+00:22:15,930 --> 00:22:17,980
+blocks to their real places on the disk
+
+498
+00:22:18,180 --> 00:22:20,440
+over writing you know these be tree
+
+499
+00:22:20,640 --> 00:22:22,180
+nodes or something and then the database
+
+500
+00:22:22,380 --> 00:22:26,349
+can reuse this part of the log so
+
+501
+00:22:26,549 --> 00:22:27,789
+databases tend to be lazy about that
+
+502
+00:22:27,990 --> 00:22:30,039
+because they like to accumulate you know
+
+503
+00:22:30,240 --> 00:22:32,230
+maybe there'll be many updates to these
+
+504
+00:22:32,430 --> 00:22:34,619
+pages in the cache it's nice to
+
+505
+00:22:34,819 --> 00:22:36,849
+accumulate a lot of updates before being
+
+506
+00:22:37,049 --> 00:22:39,700
+forced to write the disk if the database
+
+507
+00:22:39,900 --> 00:22:41,319
+server crashes before writing the day
+
+508
+00:22:41,519 --> 00:22:43,569
+writing these pages to the disk so they
+
+509
+00:22:43,769 --> 00:22:46,960
+still have their old values then it's
+
+510
+00:22:47,160 --> 00:22:48,849
+guaranteed that the recovery software
+
+511
+00:22:49,049 --> 00:22:49,680
+when you restart that
+
+512
+00:22:49,880 --> 00:22:53,399
+debase scan the log see these records
+
+513
+00:22:53,599 --> 00:22:54,750
+for the transaction see that that
+
+514
+00:22:54,950 --> 00:22:58,349
+transaction was committed and apply the
+
+515
+00:22:58,549 --> 00:23:03,769
+new values to the to the stored data and
+
+516
+00:23:03,970 --> 00:23:06,869
+that's called a redo it basically does
+
+517
+00:23:07,069 --> 00:23:11,669
+all the rights in the transaction so
+
+518
+00:23:11,869 --> 00:23:15,059
+that's how transactional databases work
+
+519
+00:23:15,259 --> 00:23:18,240
+in a nutshell and so this is a sort of
+
+520
+00:23:18,440 --> 00:23:21,950
+very extremely abbreviated version of
+
+521
+00:23:22,150 --> 00:23:25,139
+how for example the my sequel database
+
+522
+00:23:25,339 --> 00:23:28,619
+works that an Aurora is based on this
+
+523
+00:23:28,819 --> 00:23:29,970
+open source software thing called
+
+524
+00:23:30,170 --> 00:23:32,339
+database called my sequel which does
+
+525
+00:23:32,539 --> 00:23:34,409
+crash recovery transaction and crash
+
+526
+00:23:34,609 --> 00:23:40,169
+recovery in much this way ok so the next
+
+527
+00:23:40,369 --> 00:23:44,490
+step in Amazon's development a better
+
+528
+00:23:44,690 --> 00:23:46,529
+and better database infrastructure for
+
+529
+00:23:46,730 --> 00:23:50,059
+its cloud customers is something called
+
+530
+00:23:50,259 --> 00:23:53,669
+RDS and I'm only talking about RDS
+
+531
+00:23:53,869 --> 00:23:55,440
+because it turns out that even though
+
+532
+00:23:55,640 --> 00:23:56,519
+the paper doesn't quite mention it
+
+533
+00:23:56,720 --> 00:23:58,680
+figure 2 in the paper is basically a
+
+534
+00:23:58,880 --> 00:24:01,349
+description of RDS so what's going on
+
+535
+00:24:01,549 --> 00:24:04,079
+and RDS is that it was a first attempt
+
+536
+00:24:04,279 --> 00:24:06,960
+to get a database that was replicated in
+
+537
+00:24:07,160 --> 00:24:09,240
+multiple availability zones so that if
+
+538
+00:24:09,440 --> 00:24:12,539
+an entire data center went down you
+
+539
+00:24:12,740 --> 00:24:14,159
+could get back your database contents
+
+540
+00:24:14,359 --> 00:24:16,649
+without missing any rights so that deal
+
+541
+00:24:16,849 --> 00:24:20,129
+with RDS is that there's one you have
+
+542
+00:24:20,329 --> 00:24:22,710
+one ec2 instance that's the database
+
+543
+00:24:22,910 --> 00:24:23,369
+server
+
+544
+00:24:23,569 --> 00:24:24,720
+you just have one you just want to
+
+545
+00:24:24,920 --> 00:24:28,289
+running one database it stores its data
+
+546
+00:24:28,490 --> 00:24:31,490
+pages and log just basically with this
+
+547
+00:24:31,690 --> 00:24:34,259
+instead of on the local disk its stores
+
+548
+00:24:34,460 --> 00:24:36,149
+them in EBS so whenever the database
+
+549
+00:24:36,349 --> 00:24:37,889
+does a log write or page write or
+
+550
+00:24:38,089 --> 00:24:40,769
+whatever those rights actually go to
+
+551
+00:24:40,970 --> 00:24:47,759
+these two EBS volumes EBS replicas in
+
+552
+00:24:47,960 --> 00:24:49,980
+addition so and so this is in one
+
+553
+00:24:50,180 --> 00:24:54,029
+availability zone in addition for every
+
+554
+00:24:54,230 --> 00:24:55,710
+write that the database software does
+
+555
+00:24:55,910 --> 00:24:57,899
+Amazon would transparently without the
+
+556
+00:24:58,099 --> 00:24:59,700
+database even realizing necessarily this
+
+557
+00:24:59,900 --> 00:25:03,690
+was happened also send those rights to
+
+558
+00:25:03,890 --> 00:25:05,819
+a special set up in a second
+
+559
+00:25:06,019 --> 00:25:07,559
+availability zone in a second machine
+
+560
+00:25:07,759 --> 00:25:12,990
+room - just going from figure 2 to
+
+561
+00:25:13,190 --> 00:25:14,759
+apparently a separate computer or ec2
+
+562
+00:25:14,960 --> 00:25:16,529
+instance or something whose job was just
+
+563
+00:25:16,730 --> 00:25:20,039
+a mirror writes that the main database
+
+564
+00:25:20,240 --> 00:25:22,409
+did so this other sort of mirroring
+
+565
+00:25:22,609 --> 00:25:24,899
+server would then just copy these rights
+
+566
+00:25:25,099 --> 00:25:30,779
+to a second pair of EBS servers and so
+
+567
+00:25:30,980 --> 00:25:32,970
+with this set up with this RDS set up
+
+568
+00:25:33,170 --> 00:25:35,849
+and that's what figure - every time the
+
+569
+00:25:36,049 --> 00:25:38,490
+database appends to the log or writes to
+
+570
+00:25:38,690 --> 00:25:42,839
+one of its pages it has to the data has
+
+571
+00:25:43,039 --> 00:25:44,549
+to be sent to these two replicas has to
+
+572
+00:25:44,750 --> 00:25:47,009
+be sent on the network connection across
+
+573
+00:25:47,210 --> 00:25:49,289
+the other availability zone on the other
+
+574
+00:25:49,490 --> 00:25:51,180
+side of town sent to this mirroring
+
+575
+00:25:51,380 --> 00:25:52,799
+server which would then send it to it's
+
+576
+00:25:53,000 --> 00:25:56,759
+two separate EBS replicas and then
+
+577
+00:25:56,960 --> 00:25:59,009
+finally this reply would come back and
+
+578
+00:25:59,210 --> 00:26:00,389
+then only then with the right be
+
+579
+00:26:00,589 --> 00:26:03,389
+finished with a DAT bc AHA my writes
+
+580
+00:26:03,589 --> 00:26:06,809
+finished I can you know count this log
+
+581
+00:26:07,009 --> 00:26:08,069
+record it was really being appendage of
+
+582
+00:26:08,269 --> 00:26:09,059
+the log or whatever
+
+583
+00:26:09,259 --> 00:26:13,349
+so this RDS arrangement gets you betcha
+
+584
+00:26:13,549 --> 00:26:14,759
+better fault tolerance because now you
+
+585
+00:26:14,960 --> 00:26:16,859
+have a complete up-to-date copy of the
+
+586
+00:26:17,059 --> 00:26:18,569
+database like seeing them all the very
+
+587
+00:26:18,769 --> 00:26:20,940
+latest writes in a separate availability
+
+588
+00:26:21,140 --> 00:26:23,460
+zone even if you know fire burns down
+
+589
+00:26:23,660 --> 00:26:25,950
+this entire data center boom you can
+
+590
+00:26:26,150 --> 00:26:28,470
+weaken you can run the database in a new
+
+591
+00:26:28,670 --> 00:26:30,659
+instance and the second availability
+
+592
+00:26:30,859 --> 00:26:36,639
+zone and lose no data at all yes
+
+593
+00:26:45,349 --> 00:26:48,668
+um I don't know how to answer that I
+
+594
+00:26:48,868 --> 00:26:50,858
+mean that is just not what they do and
+
+595
+00:26:51,058 --> 00:26:54,399
+my guess is that it would be that for
+
+596
+00:26:54,599 --> 00:26:56,078
+most EVs customers it would be too
+
+597
+00:26:56,278 --> 00:26:58,298
+painfully slow to forward every right
+
+598
+00:26:58,499 --> 00:27:02,198
+across two separate data center I'm not
+
+599
+00:27:02,398 --> 00:27:04,088
+really sure what's going on but I think
+
+600
+00:27:04,288 --> 00:27:06,338
+the main answers they don't do that and
+
+601
+00:27:06,538 --> 00:27:09,668
+this is sort of a a little bit of a
+
+602
+00:27:09,868 --> 00:27:11,678
+workaround for the way EBS works too
+
+603
+00:27:11,878 --> 00:27:14,438
+kind of tricky BS and actually producing
+
+604
+00:27:14,638 --> 00:27:16,808
+and sort of using the existing EBS
+
+605
+00:27:17,009 --> 00:27:20,709
+infrastructure unchanged I stableman
+
+606
+00:27:20,909 --> 00:27:24,068
+chose this turns out to be extremely
+
+607
+00:27:24,269 --> 00:27:28,658
+expensive or anyway it's expensive as
+
+608
+00:27:28,858 --> 00:27:29,229
+you might think
+
+609
+00:27:29,429 --> 00:27:30,729
+you know we're writing fairly large
+
+610
+00:27:30,929 --> 00:27:33,358
+volumes of data because you know even
+
+611
+00:27:33,558 --> 00:27:36,399
+this transaction which seems like it
+
+612
+00:27:36,599 --> 00:27:38,588
+just modifies two integers like maybe
+
+613
+00:27:38,788 --> 00:27:40,899
+eight bytes or I don't know what sixteen
+
+614
+00:27:41,099 --> 00:27:42,818
+who knows only a few bytes of data are
+
+615
+00:27:43,019 --> 00:27:44,858
+being modified here what that translates
+
+616
+00:27:45,058 --> 00:27:46,688
+to as far as the database reading and
+
+617
+00:27:46,888 --> 00:27:49,509
+writing the disk is I actually these log
+
+618
+00:27:49,710 --> 00:27:51,519
+records are that also quite small so
+
+619
+00:27:51,720 --> 00:27:52,959
+this these two log records might
+
+620
+00:27:53,159 --> 00:27:54,848
+themself only be dozens of bytes long so
+
+621
+00:27:55,048 --> 00:27:57,158
+that's nice but the reads and writes of
+
+622
+00:27:57,358 --> 00:27:58,750
+the actual data pages are likely to be
+
+623
+00:27:58,950 --> 00:28:01,808
+much much larger than just a couple of
+
+624
+00:28:02,009 --> 00:28:03,158
+dozen bytes because each of these pages
+
+625
+00:28:03,358 --> 00:28:05,318
+is going to be you know eight kilobytes
+
+626
+00:28:05,519 --> 00:28:07,928
+or 16 kilobytes or some relatively large
+
+627
+00:28:08,128 --> 00:28:09,848
+number the file system or disk block
+
+628
+00:28:10,048 --> 00:28:14,678
+size and it means that just to read and
+
+629
+00:28:14,878 --> 00:28:17,198
+write these two numbers when it comes
+
+630
+00:28:17,398 --> 00:28:19,358
+time to update the data pages there's a
+
+631
+00:28:19,558 --> 00:28:20,918
+lot of data being pushed around on to
+
+632
+00:28:21,118 --> 00:28:23,139
+the disk a locally attached disk now
+
+633
+00:28:23,339 --> 00:28:26,259
+it's reasonably fast but I guess what
+
+634
+00:28:26,460 --> 00:28:27,759
+they found is when they start sending
+
+635
+00:28:27,960 --> 00:28:30,668
+those big 8 kilobyte writes across the
+
+636
+00:28:30,868 --> 00:28:34,209
+network that that used up too much
+
+637
+00:28:34,409 --> 00:28:37,798
+network capacity to be supported and so
+
+638
+00:28:37,999 --> 00:28:39,879
+this arrangement this figure 2
+
+639
+00:28:40,079 --> 00:28:47,329
+arrangement evidently was too slow yes
+
+640
+00:28:51,209 --> 00:28:56,108
+so in this in this figure to set up the
+
+641
+00:28:56,308 --> 00:28:58,729
+you know unknown to the database server
+
+642
+00:28:58,929 --> 00:29:02,269
+every time it called write erode its EBS
+
+643
+00:29:02,469 --> 00:29:05,178
+disk a copy of every write went over
+
+644
+00:29:05,378 --> 00:29:08,148
+across availabilities zones and had to
+
+645
+00:29:08,348 --> 00:29:10,158
+be written to the was written to the
+
+646
+00:29:10,358 --> 00:29:12,379
+both of these EBS servers and then
+
+647
+00:29:12,579 --> 00:29:15,068
+acknowledged and only then did the write
+
+648
+00:29:15,269 --> 00:29:17,808
+appear to complete to the database so I
+
+649
+00:29:18,009 --> 00:29:19,638
+really had to wait for all the fall for
+
+650
+00:29:19,838 --> 00:29:22,068
+copies to be updated and for the data to
+
+651
+00:29:22,269 --> 00:29:24,038
+be sent on the link across to the other
+
+652
+00:29:24,239 --> 00:29:30,588
+availability zone and you know as far as
+
+653
+00:29:30,788 --> 00:29:32,948
+table one it's concerned that first
+
+654
+00:29:33,148 --> 00:29:37,978
+performance table the reason why the
+
+655
+00:29:39,088 --> 00:29:42,619
+reason why the slow the mirrored my
+
+656
+00:29:42,819 --> 00:29:45,378
+sequel line is much much slower than the
+
+657
+00:29:45,578 --> 00:29:47,688
+Aurora line is basically that it sends
+
+658
+00:29:47,888 --> 00:29:50,298
+huge amounts of data over these
+
+659
+00:29:50,499 --> 00:29:52,398
+relatively slow Network links and that
+
+660
+00:29:52,598 --> 00:29:53,898
+was the problem that was the performance
+
+661
+00:29:54,098 --> 00:29:55,729
+problem they're really trying to fix so
+
+662
+00:29:55,929 --> 00:29:57,558
+this is good for fault tolerance because
+
+663
+00:29:57,759 --> 00:29:58,878
+now we have a second copy and another
+
+664
+00:29:59,078 --> 00:30:01,848
+availability zone but it was bad news
+
+665
+00:30:02,048 --> 00:30:05,378
+for performance all right the way Aurora
+
+666
+00:30:05,578 --> 00:30:07,658
+and the next step after this is Aurora
+
+667
+00:30:07,858 --> 00:30:14,119
+and to set up there the high level view
+
+668
+00:30:14,319 --> 00:30:15,608
+is we still have a database server
+
+669
+00:30:15,808 --> 00:30:18,348
+although now it's running custom
+
+670
+00:30:18,548 --> 00:30:21,378
+software that Amazon supplies so I can
+
+671
+00:30:21,578 --> 00:30:23,778
+rent an Aurora server from Amazon but
+
+672
+00:30:23,979 --> 00:30:26,119
+it's not I'm not running my software on
+
+673
+00:30:26,319 --> 00:30:28,578
+it I'm renting a server running Amazon's
+
+674
+00:30:28,778 --> 00:30:32,058
+Aurora database software on it rent an
+
+675
+00:30:32,259 --> 00:30:35,358
+Aurora database server from them and
+
+676
+00:30:35,558 --> 00:30:38,298
+it's it's just one instance it sits in
+
+677
+00:30:38,499 --> 00:30:44,479
+some availability zone and there's two
+
+678
+00:30:44,679 --> 00:30:46,578
+interesting things about the way it's
+
+679
+00:30:46,778 --> 00:30:52,068
+set up first of all is that the data you
+
+680
+00:30:52,269 --> 00:30:54,490
+know it's replacement basically for EBS
+
+681
+00:30:54,690 --> 00:30:59,440
+involves six replicas now
+
+682
+00:30:59,640 --> 00:31:05,390
+- in each of three availability zones
+
+683
+00:31:09,680 --> 00:31:11,980
+for super fault tolerance and so every
+
+684
+00:31:12,180 --> 00:31:14,259
+time the database complicated we'll talk
+
+685
+00:31:14,460 --> 00:31:15,730
+but basically when the database writes
+
+686
+00:31:15,930 --> 00:31:19,379
+or reads when the database writes it's
+
+687
+00:31:19,579 --> 00:31:22,509
+we're not sure exactly how its managed
+
+688
+00:31:22,710 --> 00:31:24,700
+but it more or less needs to send a
+
+689
+00:31:24,900 --> 00:31:27,099
+write one way or another writes have to
+
+690
+00:31:27,299 --> 00:31:31,079
+get sent to all six of these replicas
+
+691
+00:31:31,279 --> 00:31:33,639
+the key to making and so this looks like
+
+692
+00:31:33,839 --> 00:31:35,169
+more replicas gosh you know why isn't it
+
+693
+00:31:35,369 --> 00:31:37,389
+slower why isn't it slower than this
+
+694
+00:31:37,589 --> 00:31:38,769
+previous scheme which only had four
+
+695
+00:31:38,970 --> 00:31:40,990
+replicas and the answer to that is that
+
+696
+00:31:41,190 --> 00:31:42,909
+what's being the only thing being
+
+697
+00:31:43,109 --> 00:31:44,649
+written over the network is the log
+
+698
+00:31:44,849 --> 00:31:46,990
+records so that's really the key to
+
+699
+00:31:47,190 --> 00:31:49,809
+success is that the data that goes over
+
+700
+00:31:50,009 --> 00:31:51,279
+these links in the sense of the replicas
+
+701
+00:31:51,480 --> 00:31:57,930
+it's just the log records log entries
+
+702
+00:31:58,130 --> 00:32:02,259
+and as you can see you know a log entry
+
+703
+00:32:02,460 --> 00:32:04,000
+here you know at least and this is a
+
+704
+00:32:04,200 --> 00:32:05,859
+simple example now it's not quite this
+
+705
+00:32:06,059 --> 00:32:08,019
+small but it's really not vastly more
+
+706
+00:32:08,220 --> 00:32:10,149
+than a couple of dozen bytes needed to
+
+707
+00:32:10,349 --> 00:32:11,710
+store the old value and the new value
+
+708
+00:32:11,910 --> 00:32:14,319
+for the piece of data we're writing so
+
+709
+00:32:14,519 --> 00:32:16,049
+the log entries tend to be quite small
+
+710
+00:32:16,250 --> 00:32:20,049
+whereas when the database you know we
+
+711
+00:32:20,250 --> 00:32:21,190
+had a database that thought it was
+
+712
+00:32:21,390 --> 00:32:22,899
+writing a local disk and it was updating
+
+713
+00:32:23,099 --> 00:32:24,700
+its data pages these tended to be
+
+714
+00:32:24,900 --> 00:32:26,740
+enormous like doesn't really say in the
+
+715
+00:32:26,940 --> 00:32:27,970
+paper I don't think that eight kilobytes
+
+716
+00:32:28,170 --> 00:32:31,299
+or more so this set up here was sending
+
+717
+00:32:31,500 --> 00:32:33,339
+for each transaction was sending
+
+718
+00:32:33,539 --> 00:32:36,369
+multiple 8 kilobyte pages across to the
+
+719
+00:32:36,569 --> 00:32:38,559
+replicas whereas this set up is just
+
+720
+00:32:38,759 --> 00:32:40,839
+sending these small log entries to more
+
+721
+00:32:41,039 --> 00:32:43,569
+replicas but the log entries are so very
+
+722
+00:32:43,769 --> 00:32:46,180
+much smaller than 8k pages that it's a
+
+723
+00:32:46,380 --> 00:32:51,000
+net performance win okay so that's one
+
+724
+00:32:51,200 --> 00:32:56,319
+this is like one of their big insights
+
+725
+00:32:56,519 --> 00:32:58,539
+is just in the log entries of course a
+
+726
+00:32:58,740 --> 00:33:00,279
+fallout from this is that their storage
+
+727
+00:33:00,480 --> 00:33:01,750
+system is now not very general purpose
+
+728
+00:33:01,950 --> 00:33:03,009
+this is a storage system that
+
+729
+00:33:03,210 --> 00:33:06,369
+understands what to do with my sequel
+
+730
+00:33:06,569 --> 00:33:09,099
+log entries right it's not just you know
+
+731
+00:33:09,299 --> 00:33:11,440
+EBS was a very general purpose just
+
+732
+00:33:11,640 --> 00:33:13,119
+emulated to disk you read them right
+
+733
+00:33:13,319 --> 00:33:15,279
+block's doesn't understand anything
+
+734
+00:33:15,480 --> 00:33:16,959
+about anything except for blocks this is
+
+735
+00:33:17,159 --> 00:33:19,240
+a storage system that really understands
+
+736
+00:33:19,440 --> 00:33:20,108
+that it's sitting underneath the
+
+737
+00:33:20,308 --> 00:33:22,990
+database so that's one thing they've
+
+738
+00:33:23,190 --> 00:33:24,879
+done is ditched general-purpose storage
+
+739
+00:33:25,079 --> 00:33:28,119
+and switched to a very application
+
+740
+00:33:28,319 --> 00:33:31,519
+specific storage system
+
+741
+00:33:31,528 --> 00:33:34,088
+the other big thing I'll also go into in
+
+742
+00:33:34,288 --> 00:33:36,328
+more detail is that they don't require
+
+743
+00:33:36,528 --> 00:33:40,509
+that the rights be acknowledged by all
+
+744
+00:33:40,710 --> 00:33:42,848
+six replicas in order for the database
+
+745
+00:33:43,048 --> 00:33:47,379
+server to continue instead the database
+
+746
+00:33:47,579 --> 00:33:49,448
+server can continue as long as a quorum
+
+747
+00:33:49,648 --> 00:33:51,459
+and which turns out to be for as long as
+
+748
+00:33:51,659 --> 00:33:54,369
+any four of these servers responds so if
+
+749
+00:33:54,569 --> 00:33:57,149
+one of these availability zones is
+
+750
+00:33:57,349 --> 00:33:59,769
+offline or maybe the network connection
+
+751
+00:33:59,970 --> 00:34:01,959
+to it is slow or maybe even just these
+
+752
+00:34:02,159 --> 00:34:04,149
+servers just happen to be slow doing
+
+753
+00:34:04,349 --> 00:34:05,289
+something else at the moment we're
+
+754
+00:34:05,490 --> 00:34:08,590
+trying to write the database server can
+
+755
+00:34:08,789 --> 00:34:12,070
+basically ignore the two slowest or the
+
+756
+00:34:12,269 --> 00:34:14,500
+two most dead of the server's when it's
+
+757
+00:34:14,699 --> 00:34:15,850
+doing it right so it only requires
+
+758
+00:34:16,050 --> 00:34:17,649
+acknowledgments from any four out of six
+
+759
+00:34:17,849 --> 00:34:19,629
+and then it can continue and so this
+
+760
+00:34:19,829 --> 00:34:25,179
+quorum scheme is the other big trick
+
+761
+00:34:25,378 --> 00:34:30,610
+they use to help them have more replicas
+
+762
+00:34:30,809 --> 00:34:33,159
+in more availability zones and yet not
+
+763
+00:34:33,358 --> 00:34:35,350
+pay a huge performance penalty because
+
+764
+00:34:35,550 --> 00:34:36,639
+they never have to wait for all of them
+
+765
+00:34:36,838 --> 00:34:39,490
+just the four fastest of the six
+
+766
+00:34:39,690 --> 00:34:45,550
+replicas so the rest of the lecture is
+
+767
+00:34:45,750 --> 00:34:47,500
+gonna be explaining first quorums and
+
+768
+00:34:47,699 --> 00:34:49,479
+then log entries and then this idea of
+
+769
+00:34:49,679 --> 00:34:52,810
+just sending log entries basically table
+
+770
+00:34:53,010 --> 00:34:54,369
+one summarizes the result if you look at
+
+771
+00:34:54,568 --> 00:34:56,649
+table one by switching from this
+
+772
+00:34:56,849 --> 00:34:58,600
+architecture in which they send the big
+
+773
+00:34:58,800 --> 00:35:02,769
+data pages to four places to this Aurora
+
+774
+00:35:02,969 --> 00:35:04,600
+schema sending just the log entries to
+
+775
+00:35:04,800 --> 00:35:08,379
+six replicas they get a amazing 35 times
+
+776
+00:35:08,579 --> 00:35:11,470
+performance increase over some other
+
+777
+00:35:11,670 --> 00:35:15,000
+system you know this system over here
+
+778
+00:35:15,199 --> 00:35:17,289
+but by playing these two tricks and
+
+779
+00:35:17,489 --> 00:35:18,960
+paper is not very good about explaining
+
+780
+00:35:19,159 --> 00:35:21,100
+how much of the performance is due to
+
+781
+00:35:21,300 --> 00:35:22,990
+quorums and how much is due to just
+
+782
+00:35:23,190 --> 00:35:24,970
+sending log entries but anyway you slice
+
+783
+00:35:25,170 --> 00:35:27,050
+it 35
+
+784
+00:35:27,250 --> 00:35:31,130
+times improvement performance is very
+
+785
+00:35:31,329 --> 00:35:32,810
+respectable and of course extremely
+
+786
+00:35:33,010 --> 00:35:34,460
+valuable to their customers and to them
+
+787
+00:35:34,659 --> 00:35:37,460
+and it's like transformative I am sure
+
+788
+00:35:37,659 --> 00:35:43,840
+for many of Amazon's customers all right
+
+789
+00:35:44,039 --> 00:35:46,490
+okay so the first thing I want to talk
+
+790
+00:35:46,690 --> 00:35:50,390
+about in in detail is their quorum
+
+791
+00:35:50,590 --> 00:35:51,860
+arrangement what they actually mean by
+
+792
+00:35:52,059 --> 00:35:54,980
+quorums so first of all the quorums is
+
+793
+00:35:55,179 --> 00:35:57,110
+all about the arrangement of
+
+794
+00:35:57,309 --> 00:35:59,090
+fault-tolerant of this fault-tolerant
+
+795
+00:35:59,289 --> 00:36:03,410
+storage so it's worth thinking a little
+
+796
+00:36:03,610 --> 00:36:05,090
+bit about what their fault tolerance
+
+797
+00:36:05,289 --> 00:36:09,560
+goals were so this is like fault
+
+798
+00:36:09,760 --> 00:36:15,620
+tolerance goals they wanted to be able
+
+799
+00:36:15,820 --> 00:36:18,769
+to do rights even if one reads and
+
+800
+00:36:18,969 --> 00:36:21,560
+writes even if one availability zone was
+
+801
+00:36:21,760 --> 00:36:25,870
+completely dead so they're gonna write
+
+802
+00:36:26,070 --> 00:36:37,789
+you know even with they wanted to be
+
+803
+00:36:37,989 --> 00:36:40,580
+able to read even if there was one dead
+
+804
+00:36:40,780 --> 00:36:43,400
+availability zone plus one other dead
+
+805
+00:36:43,599 --> 00:36:46,730
+server and the reason for this is that
+
+806
+00:36:46,929 --> 00:36:48,680
+an availability zone might be offline
+
+807
+00:36:48,880 --> 00:36:50,660
+for quite a while because maybe it's you
+
+808
+00:36:50,860 --> 00:36:52,580
+know was suffered from a flood or
+
+809
+00:36:52,780 --> 00:36:54,769
+something and while it's down for a
+
+810
+00:36:54,969 --> 00:36:56,360
+couple of days or a week or something
+
+811
+00:36:56,559 --> 00:36:58,220
+well people prepare the damage from the
+
+812
+00:36:58,420 --> 00:37:00,500
+flood we're now reliant on just you know
+
+813
+00:37:00,699 --> 00:37:01,460
+the servers and the other two
+
+814
+00:37:01,659 --> 00:37:03,350
+availability zones if one of them should
+
+815
+00:37:03,550 --> 00:37:05,630
+go down we still we don't want it to be
+
+816
+00:37:05,829 --> 00:37:09,050
+a disaster so they're going to be able
+
+817
+00:37:09,250 --> 00:37:10,880
+to write with one even with one dead
+
+818
+00:37:11,079 --> 00:37:12,890
+availability zone they furthermore they
+
+819
+00:37:13,090 --> 00:37:16,550
+wanted to be able to read with one dead
+
+820
+00:37:16,750 --> 00:37:19,340
+availability zone plus one other dead
+
+821
+00:37:19,539 --> 00:37:20,780
+server so they wanted to be able to
+
+822
+00:37:20,980 --> 00:37:23,360
+still read you know and get the correct
+
+823
+00:37:23,559 --> 00:37:26,300
+data even if there was one dead
+
+824
+00:37:26,500 --> 00:37:28,310
+availability zone plus one other server
+
+825
+00:37:28,510 --> 00:37:30,230
+and the live availability zones were
+
+826
+00:37:30,429 --> 00:37:34,310
+dead so you know they we have to sort of
+
+827
+00:37:34,510 --> 00:37:36,260
+take take it for granted that they know
+
+828
+00:37:36,460 --> 00:37:38,480
+what their they know their own business
+
+829
+00:37:38,679 --> 00:37:40,280
+and that this is really
+
+830
+00:37:40,480 --> 00:37:42,930
+you know kind of a sweet spot for how
+
+831
+00:37:43,130 --> 00:37:46,380
+fault-tolerant you want to be um and in
+
+832
+00:37:46,579 --> 00:37:47,670
+addition I already mentioned they want
+
+833
+00:37:47,869 --> 00:37:49,440
+to be able to taller to sur ride out
+
+834
+00:37:49,639 --> 00:37:55,350
+temporarily slow replicas I think from a
+
+835
+00:37:55,550 --> 00:37:58,740
+lot of sources it's clear that the if
+
+836
+00:37:58,940 --> 00:38:00,900
+you read and write EBS for example you
+
+837
+00:38:01,099 --> 00:38:03,090
+don't get consistently high performance
+
+838
+00:38:03,289 --> 00:38:04,410
+all the time sometimes there's little
+
+839
+00:38:04,610 --> 00:38:06,120
+glitches because maybe some part of the
+
+840
+00:38:06,320 --> 00:38:08,039
+network is overloaded or something is
+
+841
+00:38:08,239 --> 00:38:10,590
+doing a software upgrade or whatever and
+
+842
+00:38:10,789 --> 00:38:13,320
+it's temporarily slow so they want to be
+
+843
+00:38:13,519 --> 00:38:15,150
+able to just keep going despite
+
+844
+00:38:15,349 --> 00:38:21,150
+transient transiently slow or maybe
+
+845
+00:38:21,349 --> 00:38:27,570
+briefly unavailable storage servers and
+
+846
+00:38:27,769 --> 00:38:30,030
+a final requirement is that if something
+
+847
+00:38:30,230 --> 00:38:33,600
+if a storage server should fail it's a
+
+848
+00:38:33,800 --> 00:38:36,030
+bit of a race against time before the
+
+849
+00:38:36,230 --> 00:38:38,820
+next storage server fails sort of always
+
+850
+00:38:39,019 --> 00:38:42,720
+the case and it's not the statistics are
+
+851
+00:38:42,920 --> 00:38:44,250
+not as favorable as you might hope
+
+852
+00:38:44,449 --> 00:38:47,070
+because typically you buy basically
+
+853
+00:38:47,269 --> 00:38:50,460
+because server failure is often not
+
+854
+00:38:50,659 --> 00:38:52,800
+independent like the fact that one
+
+855
+00:38:53,000 --> 00:38:56,519
+server is down often means that there's
+
+856
+00:38:56,719 --> 00:38:58,140
+a much increased probability that
+
+857
+00:38:58,340 --> 00:39:00,210
+another one of your servers will soon go
+
+858
+00:39:00,409 --> 00:39:03,120
+down because it's identical Hardware may
+
+859
+00:39:03,320 --> 00:39:05,340
+be bought from the same company came off
+
+860
+00:39:05,539 --> 00:39:07,320
+the same production line one after
+
+861
+00:39:07,519 --> 00:39:09,450
+another and so a flaw and one of them is
+
+862
+00:39:09,650 --> 00:39:11,519
+extremely likely to be reflected in a
+
+863
+00:39:11,719 --> 00:39:14,370
+flaw and another one so people always
+
+864
+00:39:14,570 --> 00:39:15,900
+nervous off there's one failure boy
+
+865
+00:39:16,099 --> 00:39:17,130
+there could be a second failure very
+
+866
+00:39:17,329 --> 00:39:21,300
+soon and in a system like this well it
+
+867
+00:39:21,500 --> 00:39:24,269
+turns out in these quorum systems you
+
+868
+00:39:24,469 --> 00:39:25,830
+know you can only recover it's a little
+
+869
+00:39:26,030 --> 00:39:27,960
+bit like raft you can recover as long as
+
+870
+00:39:28,159 --> 00:39:31,260
+not too many of the replicas fail so
+
+871
+00:39:31,460 --> 00:39:35,070
+they really needed to have fast we
+
+872
+00:39:35,269 --> 00:39:36,930
+replicate them that is of one server
+
+873
+00:39:37,130 --> 00:39:38,670
+seems permanently dead we'd like to be
+
+874
+00:39:38,869 --> 00:39:40,980
+able to generate a new replica as fast
+
+875
+00:39:41,179 --> 00:39:42,960
+as possible from the remaining replicas
+
+876
+00:39:43,159 --> 00:39:46,989
+I mean a fast food replication
+
+877
+00:39:48,039 --> 00:39:50,099
+these are the main fault tolerance goals
+
+878
+00:39:50,298 --> 00:39:55,889
+the peeper lays out and by the way this
+
+879
+00:39:56,088 --> 00:39:57,659
+discussion is only about the storage
+
+880
+00:39:57,858 --> 00:39:59,940
+servers and you know what their failure
+
+881
+00:40:00,139 --> 00:40:01,230
+character is too excited you know the
+
+882
+00:40:01,429 --> 00:40:03,389
+failures how to recover and it's a
+
+883
+00:40:03,588 --> 00:40:05,190
+completely separate topic what to do if
+
+884
+00:40:05,389 --> 00:40:09,839
+the database server fails and Aurora has
+
+885
+00:40:10,039 --> 00:40:16,879
+a totally different set of machinery for
+
+886
+00:40:17,079 --> 00:40:18,809
+noticing a database servers fail
+
+887
+00:40:19,009 --> 00:40:20,789
+creating a new instance running in a new
+
+888
+00:40:20,989 --> 00:40:22,200
+database server on the new instance
+
+889
+00:40:22,400 --> 00:40:24,180
+which is intense it's not what I'm
+
+890
+00:40:24,380 --> 00:40:25,230
+talking about right now we'll talk about
+
+891
+00:40:25,429 --> 00:40:27,059
+it a little bit later on right now it's
+
+892
+00:40:27,259 --> 00:40:29,278
+just gonna build a storage system that's
+
+893
+00:40:29,478 --> 00:40:31,889
+a lot that's where the storage system is
+
+894
+00:40:32,088 --> 00:40:36,389
+fault tolerant okay so they use this
+
+895
+00:40:36,588 --> 00:40:43,740
+idea called quorums and for a little
+
+896
+00:40:43,940 --> 00:40:45,690
+while now I'm going to describe the sort
+
+897
+00:40:45,889 --> 00:40:48,839
+of classic quorum idea which is dates
+
+898
+00:40:49,039 --> 00:40:52,740
+back to the late 70s so this is quorum
+
+899
+00:40:52,940 --> 00:40:57,329
+replicate quorum replication I'm gonna
+
+900
+00:40:57,528 --> 00:40:58,889
+describe to you this or abstract quorum
+
+901
+00:40:59,088 --> 00:41:01,859
+idea they use a variant of what I'm
+
+902
+00:41:02,059 --> 00:41:05,099
+gonna explain and the idea of behind
+
+903
+00:41:05,298 --> 00:41:07,139
+quorum quorum systems is to be able to
+
+904
+00:41:07,338 --> 00:41:10,619
+build storage systems that provide fault
+
+905
+00:41:10,818 --> 00:41:12,889
+tolerance storage using replications and
+
+906
+00:41:13,088 --> 00:41:15,028
+guarantee that even if some of the
+
+907
+00:41:15,228 --> 00:41:17,909
+replicas fail your that reads will still
+
+908
+00:41:18,108 --> 00:41:22,230
+see the most recent writes and typically
+
+909
+00:41:22,429 --> 00:41:25,230
+quorum systems are sort of simple
+
+910
+00:41:25,429 --> 00:41:28,019
+readwrite systems put get systems and
+
+911
+00:41:28,219 --> 00:41:30,809
+they don't typically directly support
+
+912
+00:41:31,009 --> 00:41:32,940
+more complex operations just you can
+
+913
+00:41:33,139 --> 00:41:34,649
+read you could have objects you can read
+
+914
+00:41:34,849 --> 00:41:36,149
+an object or you can overwrite an entire
+
+915
+00:41:36,349 --> 00:41:38,159
+object and so the idea is you have n
+
+916
+00:41:38,358 --> 00:41:48,059
+replicas if you want to write or you
+
+917
+00:41:48,259 --> 00:41:49,499
+have to get you have to in order to
+
+918
+00:41:49,699 --> 00:41:50,940
+write you have to make sure your write
+
+919
+00:41:51,139 --> 00:41:53,730
+is acknowledged by W where W is less
+
+920
+00:41:53,929 --> 00:41:58,500
+than n of the replicas so W
+
+921
+00:41:58,699 --> 00:42:02,160
+right you have to send each right to
+
+922
+00:42:02,360 --> 00:42:04,320
+these W are the replicas and if you want
+
+923
+00:42:04,519 --> 00:42:07,350
+to do a read you have to get input read
+
+924
+00:42:07,550 --> 00:42:13,570
+information from at least our replicas
+
+925
+00:42:14,949 --> 00:42:20,039
+and so a typical setup that's so well
+
+926
+00:42:20,239 --> 00:42:23,760
+first of all the key thing here is that
+
+927
+00:42:23,960 --> 00:42:27,420
+W and our have to be set relative to end
+
+928
+00:42:27,619 --> 00:42:30,870
+so that any quorum of W servers that you
+
+929
+00:42:31,070 --> 00:42:33,180
+manage to send a right to must
+
+930
+00:42:33,380 --> 00:42:36,060
+necessarily overlap with any quorum of
+
+931
+00:42:36,260 --> 00:42:38,700
+our servers that any future reader might
+
+932
+00:42:38,900 --> 00:42:41,930
+read from and so what that means is that
+
+933
+00:42:42,130 --> 00:42:49,830
+our plus W has to be greater than n so
+
+934
+00:42:50,030 --> 00:42:52,769
+that any W servers must overlap in at
+
+935
+00:42:52,969 --> 00:42:58,730
+least one server with any our servers
+
+936
+00:42:58,929 --> 00:43:01,170
+and so you might have three we can
+
+937
+00:43:01,369 --> 00:43:05,690
+imagine there's three servers s1 s2 s3
+
+938
+00:43:05,889 --> 00:43:07,860
+each of them holds I say we just have
+
+939
+00:43:08,059 --> 00:43:09,930
+one object that we're updating we send
+
+940
+00:43:10,130 --> 00:43:11,400
+out a write maybe we want to set the
+
+941
+00:43:11,599 --> 00:43:15,630
+value of our object to 23 well in order
+
+942
+00:43:15,829 --> 00:43:17,160
+to do a write we need to get our new
+
+943
+00:43:17,360 --> 00:43:22,320
+value on to at least W of the of the
+
+944
+00:43:22,519 --> 00:43:24,600
+replicas let's say for this system that
+
+945
+00:43:24,800 --> 00:43:29,100
+R and W are both equals 2 and n is equal
+
+946
+00:43:29,300 --> 00:43:32,220
+to 3 that's the setup to do a write we
+
+947
+00:43:32,420 --> 00:43:34,980
+need to get our new value onto a quorum
+
+948
+00:43:35,179 --> 00:43:37,830
+onto a beast to the server so maybe we
+
+949
+00:43:38,030 --> 00:43:40,560
+get our right onto these two so they
+
+950
+00:43:40,760 --> 00:43:43,080
+both now know that the value of the of
+
+951
+00:43:43,280 --> 00:43:47,550
+our data object is 23 if somebody comes
+
+952
+00:43:47,750 --> 00:43:50,940
+along and reads or read it also requires
+
+953
+00:43:51,139 --> 00:43:52,950
+that the reader check with at least a
+
+954
+00:43:53,150 --> 00:43:55,500
+read quorum of the servers so that's
+
+955
+00:43:55,699 --> 00:43:58,620
+also 2 in this set up so you know that
+
+956
+00:43:58,820 --> 00:44:00,450
+quorum could include a server that
+
+957
+00:44:00,650 --> 00:44:02,310
+didn't see the right but it has to
+
+958
+00:44:02,510 --> 00:44:03,630
+include at least one other in order to
+
+959
+00:44:03,829 --> 00:44:07,289
+get to so that means the any future read
+
+960
+00:44:07,489 --> 00:44:09,300
+must for example consult both this
+
+961
+00:44:09,500 --> 00:44:11,070
+server that didn't see the write plus at
+
+962
+00:44:11,269 --> 00:44:12,180
+least one that did
+
+963
+00:44:12,380 --> 00:44:14,399
+that is a requirement of right form must
+
+964
+00:44:14,599 --> 00:44:17,159
+overlap in at least one server so any
+
+965
+00:44:17,358 --> 00:44:20,309
+read must consult a server that saw any
+
+966
+00:44:20,509 --> 00:44:31,318
+previous right now what's cool about
+
+967
+00:44:31,518 --> 00:44:34,230
+this well actually there's still one
+
+968
+00:44:34,429 --> 00:44:37,950
+critical missing piece here the reader
+
+969
+00:44:38,150 --> 00:44:40,829
+is gonna get back our results possibly
+
+970
+00:44:41,028 --> 00:44:44,159
+are different results because and the
+
+971
+00:44:44,358 --> 00:44:46,470
+question is how does a reader know which
+
+972
+00:44:46,670 --> 00:44:48,480
+of the our results it got back from the
+
+973
+00:44:48,679 --> 00:44:50,849
+our servers in its forum which one
+
+974
+00:44:51,048 --> 00:44:54,788
+actually uses the correct value
+
+975
+00:44:55,028 --> 00:44:56,879
+something that doesn't work is voting
+
+976
+00:44:57,079 --> 00:44:59,519
+like just voting by popularity of the
+
+977
+00:44:59,719 --> 00:45:01,470
+different values it gets back it turns
+
+978
+00:45:01,670 --> 00:45:03,419
+out not to work because we're only
+
+979
+00:45:03,619 --> 00:45:05,430
+guaranteed that our reader overlaps of
+
+980
+00:45:05,630 --> 00:45:07,200
+the writer in at most one server so that
+
+981
+00:45:07,400 --> 00:45:09,419
+could mean that the correct value is
+
+982
+00:45:09,619 --> 00:45:11,220
+only represented by one of the servers
+
+983
+00:45:11,420 --> 00:45:15,389
+that the reader consulted and you know
+
+984
+00:45:15,588 --> 00:45:17,309
+in a system with say six replicas you
+
+985
+00:45:17,509 --> 00:45:19,619
+know you might have Reaper might be four
+
+986
+00:45:19,818 --> 00:45:23,190
+you might get back for answers and only
+
+987
+00:45:23,389 --> 00:45:26,579
+one of them is the answer that is the
+
+988
+00:45:26,778 --> 00:45:28,800
+correct answer from the server in which
+
+989
+00:45:29,000 --> 00:45:31,318
+you overlap with the previous right so
+
+990
+00:45:31,518 --> 00:45:32,879
+you can't use voting and instead these
+
+991
+00:45:33,079 --> 00:45:35,550
+quorum systems need version numbers so
+
+992
+00:45:35,750 --> 00:45:38,309
+every right every time you do a right
+
+993
+00:45:38,509 --> 00:45:40,289
+you need to accompany your new value
+
+994
+00:45:40,489 --> 00:45:42,659
+with you know an increasing version
+
+995
+00:45:42,858 --> 00:45:45,480
+number and then the reader it gets back
+
+996
+00:45:45,679 --> 00:45:46,829
+a bunch of different values from the
+
+997
+00:45:47,028 --> 00:45:48,419
+read quorum and it can just use them
+
+998
+00:45:48,619 --> 00:45:51,119
+only the highest version number I'm said
+
+999
+00:45:51,318 --> 00:45:53,190
+that means that this 21 here
+
+1000
+00:45:53,389 --> 00:45:57,589
+you know maybe s2 had a old value of 20
+
+1001
+00:45:57,789 --> 00:45:59,669
+each of these needs to be tagged with a
+
+1002
+00:45:59,869 --> 00:46:01,289
+version number so maybe this is version
+
+1003
+00:46:01,489 --> 00:46:03,180
+number three this was also version
+
+1004
+00:46:03,380 --> 00:46:04,409
+number three because it came from the
+
+1005
+00:46:04,608 --> 00:46:06,510
+same original right and we're imagining
+
+1006
+00:46:06,710 --> 00:46:08,280
+that this server that didn't see the
+
+1007
+00:46:08,480 --> 00:46:09,780
+right is gonna have version number two
+
+1008
+00:46:09,980 --> 00:46:11,250
+then the reader gets back these two
+
+1009
+00:46:11,449 --> 00:46:13,318
+values these two version numbers fix the
+
+1010
+00:46:13,518 --> 00:46:14,849
+version were the highest the value with
+
+1011
+00:46:15,048 --> 00:46:17,818
+the highest version number and in Aurora
+
+1012
+00:46:18,018 --> 00:46:23,280
+this was essentially about well never
+
+1013
+00:46:23,480 --> 00:46:26,528
+mind about Aurora for a moment
+
+1014
+00:46:28,570 --> 00:46:33,150
+okay furthermore if you can't talk to if
+
+1015
+00:46:33,349 --> 00:46:35,519
+you can't actually contact a quorum or a
+
+1016
+00:46:35,719 --> 00:46:37,289
+read or write you really just have to
+
+1017
+00:46:37,489 --> 00:46:40,800
+keep trying those are the rules so keep
+
+1018
+00:46:41,000 --> 00:46:45,000
+trying until the server's are brought
+
+1019
+00:46:45,199 --> 00:46:49,170
+back up or connected again so the reason
+
+1020
+00:46:49,369 --> 00:46:51,060
+why this is preferable to something like
+
+1021
+00:46:51,260 --> 00:46:54,330
+chain replication is that it can easily
+
+1022
+00:46:54,530 --> 00:46:59,670
+ride out temporary dead or disconnected
+
+1023
+00:46:59,869 --> 00:47:01,470
+or slow servers so in fact the way it
+
+1024
+00:47:01,670 --> 00:47:02,700
+would work is that if you want to read
+
+1025
+00:47:02,900 --> 00:47:04,590
+or write if you want to write you would
+
+1026
+00:47:04,789 --> 00:47:05,820
+saying your newly written about you
+
+1027
+00:47:06,019 --> 00:47:08,580
+would send the newly written value plus
+
+1028
+00:47:08,780 --> 00:47:11,039
+its version number to all of the servers
+
+1029
+00:47:11,239 --> 00:47:13,230
+to all n of the servers but only wait
+
+1030
+00:47:13,429 --> 00:47:16,890
+for W of them to respond and similarly
+
+1031
+00:47:17,090 --> 00:47:18,390
+if you want to read you would in a
+
+1032
+00:47:18,590 --> 00:47:19,800
+quorum system you would send the read to
+
+1033
+00:47:20,000 --> 00:47:21,120
+all the servers and only wait for a
+
+1034
+00:47:21,320 --> 00:47:23,510
+quorum for R of the servers to respond
+
+1035
+00:47:23,710 --> 00:47:25,950
+and that and because you only have to
+
+1036
+00:47:26,150 --> 00:47:29,519
+wait for are out of n of them that means
+
+1037
+00:47:29,719 --> 00:47:31,440
+that you can continue after the fastest
+
+1038
+00:47:31,639 --> 00:47:35,280
+are have responded or the fastest W and
+
+1039
+00:47:35,480 --> 00:47:36,840
+you don't have to wait for a slow server
+
+1040
+00:47:37,039 --> 00:47:38,880
+or a server that's dead and there's not
+
+1041
+00:47:39,079 --> 00:47:43,039
+any you know the machinery for ignoring
+
+1042
+00:47:43,239 --> 00:47:45,600
+slow or dead servers is completely
+
+1043
+00:47:45,800 --> 00:47:47,580
+implicit there's nothing here or about
+
+1044
+00:47:47,780 --> 00:47:49,410
+oh we have to sort of make decisions
+
+1045
+00:47:49,610 --> 00:47:51,660
+about which servers are up or down or
+
+1046
+00:47:51,860 --> 00:47:54,110
+like the leaders or anything it just
+
+1047
+00:47:54,309 --> 00:47:57,390
+kind of automatically proceeds as long
+
+1048
+00:47:57,590 --> 00:48:02,280
+as the quorum is available so we get
+
+1049
+00:48:02,480 --> 00:48:03,930
+very smooth handling of dead or slow
+
+1050
+00:48:04,130 --> 00:48:07,080
+servers in addition there's not much
+
+1051
+00:48:07,280 --> 00:48:08,850
+leeway for it here well actually you
+
+1052
+00:48:09,050 --> 00:48:11,100
+even in this simple case you can adjust
+
+1053
+00:48:11,300 --> 00:48:14,070
+the R and W to make either reads to
+
+1054
+00:48:14,269 --> 00:48:17,370
+favor either reads or writes so here we
+
+1055
+00:48:17,570 --> 00:48:19,080
+could actually say that well the right
+
+1056
+00:48:19,280 --> 00:48:21,360
+forum is three every write has to go to
+
+1057
+00:48:21,559 --> 00:48:23,039
+all three servers and in that case the
+
+1058
+00:48:23,239 --> 00:48:26,490
+read quorum can be want so you could if
+
+1059
+00:48:26,690 --> 00:48:28,410
+you wanted to favored reads with this
+
+1060
+00:48:28,610 --> 00:48:31,410
+setup you could have read equals one
+
+1061
+00:48:31,610 --> 00:48:33,660
+write equals three memories are much
+
+1062
+00:48:33,860 --> 00:48:35,280
+faster they only have to wait for one
+
+1063
+00:48:35,480 --> 00:48:36,870
+server but then return the writes are
+
+1064
+00:48:37,070 --> 00:48:38,640
+slow if you wanted to favor right
+
+1065
+00:48:38,840 --> 00:48:40,470
+you could say that Oh any reader has to
+
+1066
+00:48:40,670 --> 00:48:42,090
+be from all of them but a writer only
+
+1067
+00:48:42,289 --> 00:48:45,180
+has to write one so I mean the only one
+
+1068
+00:48:45,380 --> 00:48:48,200
+server might have the latest value but
+
+1069
+00:48:48,400 --> 00:48:53,789
+readers have to consult all three but
+
+1070
+00:48:53,989 --> 00:48:54,990
+they're guaranteed that their three will
+
+1071
+00:48:55,190 --> 00:48:57,180
+overlap with this of course these
+
+1072
+00:48:57,380 --> 00:49:00,180
+particular values makes writes not fault
+
+1073
+00:49:00,380 --> 00:49:02,460
+tolerant and here reads not fault
+
+1074
+00:49:02,659 --> 00:49:04,560
+tolerant because all the server's have
+
+1075
+00:49:04,760 --> 00:49:06,210
+to be up so you probably wouldn't want
+
+1076
+00:49:06,409 --> 00:49:07,950
+to do this in real life you might have
+
+1077
+00:49:08,150 --> 00:49:10,260
+you would have as Knowle Rohrer does a
+
+1078
+00:49:10,460 --> 00:49:13,110
+larger number of servers and sort of
+
+1079
+00:49:13,309 --> 00:49:15,390
+intermediate numbers of vinum right
+
+1080
+00:49:15,590 --> 00:49:22,830
+corns Aurora in order to achieve its
+
+1081
+00:49:23,030 --> 00:49:26,789
+goals here of being able to write with
+
+1082
+00:49:26,989 --> 00:49:30,480
+one debt availability zone and read with
+
+1083
+00:49:30,679 --> 00:49:32,310
+one dead availability zone plus one
+
+1084
+00:49:32,510 --> 00:49:34,830
+other server it uses a quorum system
+
+1085
+00:49:35,030 --> 00:49:45,000
+with N equals 6 w equals 4 and R equals
+
+1086
+00:49:45,199 --> 00:49:47,940
+3 so the W equals 4 means that it can do
+
+1087
+00:49:48,139 --> 00:49:51,060
+a write with one dead availability zone
+
+1088
+00:49:51,260 --> 00:49:52,860
+if this availability zone can't be
+
+1089
+00:49:53,059 --> 00:49:54,570
+contacted well these other four servers
+
+1090
+00:49:54,769 --> 00:49:58,500
+are enough to complete right the reform
+
+1091
+00:49:58,699 --> 00:50:01,350
+of 3 so 4 plus week so 7 so they
+
+1092
+00:50:01,550 --> 00:50:03,990
+definitely guaranteed overlap a read
+
+1093
+00:50:04,190 --> 00:50:05,310
+quorum of 3 means that even if one
+
+1094
+00:50:05,510 --> 00:50:07,440
+availability is zone is dead plus one
+
+1095
+00:50:07,639 --> 00:50:09,360
+more server the three remaining servers
+
+1096
+00:50:09,559 --> 00:50:11,880
+are enough to serve a read now in this
+
+1097
+00:50:12,079 --> 00:50:15,000
+case we're three servers are now down
+
+1098
+00:50:15,199 --> 00:50:17,400
+the system can do reads and as you know
+
+1099
+00:50:17,599 --> 00:50:20,250
+can reconstruct the confine the current
+
+1100
+00:50:20,449 --> 00:50:21,780
+state of the database but it can't do
+
+1101
+00:50:21,980 --> 00:50:24,690
+writes without further work so if they
+
+1102
+00:50:24,889 --> 00:50:28,779
+were in a situation where there was
+
+1103
+00:50:28,840 --> 00:50:31,680
+three dead servers there they have
+
+1104
+00:50:31,880 --> 00:50:33,360
+enough of a quorum to be able to read
+
+1105
+00:50:33,559 --> 00:50:35,760
+the data and reconstruct more cop more
+
+1106
+00:50:35,960 --> 00:50:38,670
+replicas but until they've created more
+
+1107
+00:50:38,869 --> 00:50:41,519
+replicas to basically replace these dead
+
+1108
+00:50:41,719 --> 00:50:45,669
+ones they can't serve as rights
+
+1109
+00:50:47,789 --> 00:50:50,470
+and also the quorum system as I
+
+1110
+00:50:50,670 --> 00:50:52,780
+explained before allows them to ride out
+
+1111
+00:50:52,980 --> 00:51:02,490
+these transient slow replicas all right
+
+1112
+00:51:02,690 --> 00:51:07,000
+as it happens as explained before what
+
+1113
+00:51:07,199 --> 00:51:09,639
+the rights in Aurora aren't really over
+
+1114
+00:51:09,838 --> 00:51:12,690
+writing objects as in a sort of classic
+
+1115
+00:51:12,889 --> 00:51:16,750
+quorum system what Aurora in fact its
+
+1116
+00:51:16,949 --> 00:51:19,810
+rights never overwrite anything its
+
+1117
+00:51:20,010 --> 00:51:22,480
+rights just append log entries to the
+
+1118
+00:51:22,679 --> 00:51:23,379
+current law
+
+1119
+00:51:23,579 --> 00:51:25,720
+so the way it's using quorums is
+
+1120
+00:51:25,920 --> 00:51:27,490
+basically to say well when the database
+
+1121
+00:51:27,690 --> 00:51:29,200
+sends out our new log record because
+
+1122
+00:51:29,400 --> 00:51:31,570
+it's executing some transaction it needs
+
+1123
+00:51:31,769 --> 00:51:33,580
+to make sure that that log record is
+
+1124
+00:51:33,780 --> 00:51:38,080
+present on at least four of the store of
+
+1125
+00:51:38,280 --> 00:51:40,629
+its storage servers before it's allowed
+
+1126
+00:51:40,829 --> 00:51:41,950
+to proceed with the transaction are
+
+1127
+00:51:42,150 --> 00:51:43,599
+committed so that's really the meaning
+
+1128
+00:51:43,798 --> 00:51:45,970
+of its other Wars right porins is that
+
+1129
+00:51:46,170 --> 00:51:48,820
+each new log record has to be appended
+
+1130
+00:51:49,019 --> 00:51:50,409
+to the storage and at least for the
+
+1131
+00:51:50,608 --> 00:51:52,389
+replicas before the write can be
+
+1132
+00:51:52,588 --> 00:52:01,300
+considered to to have completed and when
+
+1133
+00:52:01,500 --> 00:52:03,700
+a when Aurora gets to the end of a
+
+1134
+00:52:03,900 --> 00:52:05,619
+transaction before it can reply to the
+
+1135
+00:52:05,818 --> 00:52:07,330
+client until the client tell the client
+
+1136
+00:52:07,530 --> 00:52:08,590
+a hi you know your transaction is
+
+1137
+00:52:08,789 --> 00:52:10,649
+committed and finished and durable
+
+1138
+00:52:10,849 --> 00:52:13,930
+Aurora has to wait for acknowledgments
+
+1139
+00:52:14,130 --> 00:52:16,119
+from a write quorum for each of the log
+
+1140
+00:52:16,318 --> 00:52:18,310
+records that made up that transaction
+
+1141
+00:52:18,510 --> 00:52:24,399
+and in fact because because if there
+
+1142
+00:52:24,599 --> 00:52:25,780
+were a crash in a recovery you're not
+
+1143
+00:52:25,980 --> 00:52:30,060
+allowed to recover one transaction if
+
+1144
+00:52:30,260 --> 00:52:33,609
+preceding transactions don't aren't also
+
+1145
+00:52:33,809 --> 00:52:36,490
+recovered in practice Aurora has before
+
+1146
+00:52:36,690 --> 00:52:38,050
+Aurora can acknowledge a transaction it
+
+1147
+00:52:38,250 --> 00:52:42,490
+has to wait for a write quorum of
+
+1148
+00:52:42,690 --> 00:52:44,169
+storage servers to respond for all
+
+1149
+00:52:44,369 --> 00:52:46,389
+previously committed transaction and the
+
+1150
+00:52:46,588 --> 00:52:48,550
+transaction of interest and then can
+
+1151
+00:52:48,750 --> 00:52:51,798
+respond to the client
+
+1152
+00:52:54,739 --> 00:52:57,240
+okay so these these storage servers are
+
+1153
+00:52:57,440 --> 00:52:59,789
+getting incoming log records
+
+1154
+00:52:59,989 --> 00:53:02,669
+that's what rights look like to them and
+
+1155
+00:53:02,869 --> 00:53:04,019
+so what do they actually do you know
+
+1156
+00:53:04,219 --> 00:53:06,210
+they're not getting new data pages from
+
+1157
+00:53:06,409 --> 00:53:07,409
+the database server they're just getting
+
+1158
+00:53:07,608 --> 00:53:10,500
+log records that just describe changes
+
+1159
+00:53:10,699 --> 00:53:15,810
+to the data pages so internally one of
+
+1160
+00:53:16,010 --> 00:53:22,169
+these one of these storage servers it
+
+1161
+00:53:22,369 --> 00:53:24,990
+has internally it has copies of all that
+
+1162
+00:53:25,190 --> 00:53:30,480
+data of all the data pages at some point
+
+1163
+00:53:30,679 --> 00:53:33,990
+in the database data pages evolution so
+
+1164
+00:53:34,190 --> 00:53:39,180
+it has maybe in its cache on its disk a
+
+1165
+00:53:39,380 --> 00:53:41,159
+whole bunch of these pages you know page
+
+1166
+00:53:41,358 --> 00:53:47,250
+1 page 2 so forth when a new write comes
+
+1167
+00:53:47,449 --> 00:53:52,620
+in the storage server would win a new
+
+1168
+00:53:52,820 --> 00:53:54,090
+log rec over in a new write arrives
+
+1169
+00:53:54,289 --> 00:53:56,399
+carrying with it just a log record what
+
+1170
+00:53:56,599 --> 00:53:58,200
+has to happen some day but not right
+
+1171
+00:53:58,400 --> 00:54:00,360
+away is that the changes in that log
+
+1172
+00:54:00,559 --> 00:54:02,580
+record the new value here has to be
+
+1173
+00:54:02,780 --> 00:54:05,280
+applied to the relevant page but we
+
+1174
+00:54:05,480 --> 00:54:06,450
+don't at the source of it doesn't have
+
+1175
+00:54:06,650 --> 00:54:08,909
+to do that until someone asks just until
+
+1176
+00:54:09,108 --> 00:54:11,039
+the database server or the recovery
+
+1177
+00:54:11,239 --> 00:54:13,320
+software asks to see that page so
+
+1178
+00:54:13,519 --> 00:54:15,240
+immediately what happens to a new log
+
+1179
+00:54:15,440 --> 00:54:17,310
+record is that the log records are just
+
+1180
+00:54:17,510 --> 00:54:20,010
+appended to lists of log records that
+
+1181
+00:54:20,210 --> 00:54:22,980
+effect each page so for every page that
+
+1182
+00:54:23,179 --> 00:54:26,310
+the storage server stores if it's been
+
+1183
+00:54:26,510 --> 00:54:29,070
+recently modified by a log record by a
+
+1184
+00:54:29,269 --> 00:54:31,110
+transaction what the storage server will
+
+1185
+00:54:31,309 --> 00:54:33,899
+actually store is an old version of the
+
+1186
+00:54:34,099 --> 00:54:37,260
+page plus the string of the sequence of
+
+1187
+00:54:37,460 --> 00:54:40,409
+log records that have come in from trend
+
+1188
+00:54:40,608 --> 00:54:42,539
+from the database server since that page
+
+1189
+00:54:42,739 --> 00:54:45,300
+was last brought up to date so if
+
+1190
+00:54:45,500 --> 00:54:46,860
+nothing else happens the storage server
+
+1191
+00:54:47,059 --> 00:54:49,680
+just stores these old pages plus lists
+
+1192
+00:54:49,880 --> 00:54:53,370
+of log records if the database server
+
+1193
+00:54:53,570 --> 00:54:55,919
+later you know fix the page from its
+
+1194
+00:54:56,119 --> 00:54:58,110
+cache and then needs to read the page
+
+1195
+00:54:58,309 --> 00:55:00,240
+again for a future transaction it'll
+
+1196
+00:55:00,440 --> 00:55:02,940
+send a read request out to one of the
+
+1197
+00:55:03,139 --> 00:55:04,230
+storage servers and say look you know I
+
+1198
+00:55:04,429 --> 00:55:05,940
+need a copy I need an updated copy a
+
+1199
+00:55:06,139 --> 00:55:06,589
+page one
+
+1200
+00:55:06,789 --> 00:55:08,899
+and at that point the storage server
+
+1201
+00:55:09,099 --> 00:55:12,619
+will apply these log records to the page
+
+1202
+00:55:12,818 --> 00:55:15,649
+you know do do these writes of new data
+
+1203
+00:55:15,849 --> 00:55:17,839
+that are implied that are described in
+
+1204
+00:55:18,039 --> 00:55:19,190
+the log records and then send that
+
+1205
+00:55:19,389 --> 00:55:22,039
+updated page back to the database server
+
+1206
+00:55:22,239 --> 00:55:27,798
+and presumably maybe then like a racist
+
+1207
+00:55:27,998 --> 00:55:29,629
+list and just store the newly updated
+
+1208
+00:55:29,829 --> 00:55:35,548
+page although it's not quite that simple
+
+1209
+00:55:35,759 --> 00:55:37,749
+all right so the storage servers just
+
+1210
+00:55:37,949 --> 00:55:41,089
+store these strings of log records plus
+
+1211
+00:55:41,289 --> 00:55:53,180
+old log page versions now the database
+
+1212
+00:55:53,380 --> 00:55:54,619
+server as I mentioned sometimes needs to
+
+1213
+00:55:54,818 --> 00:55:57,109
+read pages so by the way one thing to
+
+1214
+00:55:57,309 --> 00:55:58,460
+observe is that the database server is
+
+1215
+00:55:58,659 --> 00:56:00,769
+writing log records but it's reading
+
+1216
+00:56:00,969 --> 00:56:03,289
+data pages so there's also different my
+
+1217
+00:56:03,489 --> 00:56:05,419
+corns poram system in the sense that the
+
+1218
+00:56:05,619 --> 00:56:06,919
+sort of things that are being read and
+
+1219
+00:56:07,119 --> 00:56:08,899
+written are quite different in addition
+
+1220
+00:56:09,099 --> 00:56:11,690
+it turns out that in ordinary operation
+
+1221
+00:56:11,889 --> 00:56:16,639
+the database server knows doesn't have
+
+1222
+00:56:16,838 --> 00:56:20,269
+to send quorum reads because the
+
+1223
+00:56:20,469 --> 00:56:23,539
+database server tracks for each one of
+
+1224
+00:56:23,739 --> 00:56:27,109
+the storage servers how far how much of
+
+1225
+00:56:27,309 --> 00:56:29,629
+the prefix of the log that storage
+
+1226
+00:56:29,829 --> 00:56:31,969
+server is actually received so the
+
+1227
+00:56:32,168 --> 00:56:34,129
+database server is keeping track of
+
+1228
+00:56:34,329 --> 00:56:35,899
+these six numbers so so first of all log
+
+1229
+00:56:36,099 --> 00:56:37,729
+entries are numbered just one two three
+
+1230
+00:56:37,929 --> 00:56:40,219
+four five the database server sends that
+
+1231
+00:56:40,418 --> 00:56:42,469
+new log entries to all the storage
+
+1232
+00:56:42,668 --> 00:56:44,028
+servers the storage servers that receive
+
+1233
+00:56:44,228 --> 00:56:45,709
+them respond saying oh yeah I got log
+
+1234
+00:56:45,909 --> 00:56:48,379
+entries 79 and furthermore you know I
+
+1235
+00:56:48,579 --> 00:56:51,079
+have every log entry before 79 also the
+
+1236
+00:56:51,278 --> 00:56:52,579
+database server keeps track of these
+
+1237
+00:56:52,778 --> 00:56:56,229
+numbers how far each server has gotten
+
+1238
+00:56:56,429 --> 00:56:59,229
+or what the highest sort of contiguous
+
+1239
+00:56:59,429 --> 00:57:02,149
+log entry number is that each of the
+
+1240
+00:57:02,349 --> 00:57:04,519
+servers has gotten so that way when the
+
+1241
+00:57:04,719 --> 00:57:06,200
+database server needs to do a read it
+
+1242
+00:57:06,400 --> 00:57:09,680
+just picks a storage server that's up to
+
+1243
+00:57:09,880 --> 00:57:12,680
+date and sends the read request for the
+
+1244
+00:57:12,880 --> 00:57:14,359
+page it wants just to that storage
+
+1245
+00:57:14,559 --> 00:57:18,349
+server so the the database server does
+
+1246
+00:57:18,548 --> 00:57:19,609
+have to do quorum writes but it
+
+1247
+00:57:19,809 --> 00:57:20,390
+basically
+
+1248
+00:57:20,590 --> 00:57:21,920
+doesn't ordinarily have to do quorum
+
+1249
+00:57:22,119 --> 00:57:23,780
+reads and knows which of these storage
+
+1250
+00:57:23,980 --> 00:57:24,920
+servers are up to date and just reads
+
+1251
+00:57:25,119 --> 00:57:27,050
+from one of them so the reason I keep ur
+
+1252
+00:57:27,250 --> 00:57:30,230
+than they would be in a that just reads
+
+1253
+00:57:30,429 --> 00:57:32,120
+one copy of the page and doesn't have to
+
+1254
+00:57:32,320 --> 00:57:36,360
+go through the expense of a quorum read
+
+1255
+00:57:36,449 --> 00:57:39,380
+now it does sometimes use quorum reads
+
+1256
+00:57:39,579 --> 00:57:41,660
+it turns out that during crash recovery
+
+1257
+00:57:41,860 --> 00:57:43,970
+you know if the crash during crash
+
+1258
+00:57:44,170 --> 00:57:46,610
+recovery of the database server and so
+
+1259
+00:57:46,809 --> 00:57:49,160
+this is different from a crash recovery
+
+1260
+00:57:49,360 --> 00:57:50,600
+of the storage service if the database
+
+1261
+00:57:50,800 --> 00:57:53,180
+server itself sir crash in me because
+
+1262
+00:57:53,380 --> 00:57:55,640
+the it's running in an ec2 instance on
+
+1263
+00:57:55,840 --> 00:57:57,289
+some piece of hardware some real piece
+
+1264
+00:57:57,489 --> 00:57:58,370
+of hardware may be that piece of
+
+1265
+00:57:58,570 --> 00:58:01,010
+hardware suffers a failure the database
+
+1266
+00:58:01,210 --> 00:58:02,750
+server crashes there's some monitoring
+
+1267
+00:58:02,949 --> 00:58:04,310
+infrastructure at Amazon that says oh
+
+1268
+00:58:04,510 --> 00:58:06,170
+wait a minute you know the database the
+
+1269
+00:58:06,369 --> 00:58:07,970
+Aurora database server over running for
+
+1270
+00:58:08,170 --> 00:58:12,700
+a customer or whatever just crashed and
+
+1271
+00:58:12,900 --> 00:58:15,380
+Amazon will automatically fire up a new
+
+1272
+00:58:15,579 --> 00:58:17,810
+ec2 instance start up the database
+
+1273
+00:58:18,010 --> 00:58:20,570
+software and that ec2 instance and sort
+
+1274
+00:58:20,769 --> 00:58:23,090
+of tell it look your data is sitting on
+
+1275
+00:58:23,289 --> 00:58:26,210
+this particular volume this set of
+
+1276
+00:58:26,409 --> 00:58:29,140
+storage systems please clean up any
+
+1277
+00:58:29,340 --> 00:58:31,880
+partially executed transactions that are
+
+1278
+00:58:32,079 --> 00:58:34,640
+evident in the logs stored in these
+
+1279
+00:58:34,840 --> 00:58:38,750
+storage servers and continue so we have
+
+1280
+00:58:38,949 --> 00:58:44,260
+to and that's the point at which Aurora
+
+1281
+00:58:44,460 --> 00:58:48,350
+uses quorum logic for weeds because this
+
+1282
+00:58:48,550 --> 00:58:52,130
+database server when the old when the
+
+1283
+00:58:52,329 --> 00:58:53,960
+previous database server crashed it was
+
+1284
+00:58:54,159 --> 00:58:56,180
+almost certainly partway through
+
+1285
+00:58:56,380 --> 00:58:59,030
+executing some set of transactions so
+
+1286
+00:58:59,230 --> 00:59:00,320
+the state of play at the time of the
+
+1287
+00:59:00,519 --> 00:59:01,789
+crash was well it's completed some
+
+1288
+00:59:01,989 --> 00:59:03,350
+transactions and committed them and
+
+1289
+00:59:03,550 --> 00:59:06,170
+their log entries are on a quorum plus
+
+1290
+00:59:06,369 --> 00:59:09,380
+it's in the middle of executing some
+
+1291
+00:59:09,579 --> 00:59:11,960
+other set of transactions which also may
+
+1292
+00:59:12,159 --> 00:59:14,630
+have log entries on on a quorum but
+
+1293
+00:59:14,829 --> 00:59:16,519
+because a database server crashed midway
+
+1294
+00:59:16,719 --> 00:59:18,140
+through those transactions they can
+
+1295
+00:59:18,340 --> 00:59:23,000
+never be completed and for those
+
+1296
+00:59:23,199 --> 00:59:24,740
+transactions that haven't completed in
+
+1297
+00:59:24,940 --> 00:59:27,440
+addition there may be you know we may
+
+1298
+00:59:27,639 --> 00:59:30,680
+have a situation in which you know maybe
+
+1299
+00:59:30,880 --> 00:59:33,110
+log entry this server has log on three
+
+1300
+00:59:33,309 --> 00:59:33,590
+hundred
+
+1301
+00:59:33,789 --> 00:59:36,740
+and the Surrey has logon 302 and there's
+
+1302
+00:59:36,940 --> 00:59:41,120
+a hundred and four somewhere but no you
+
+1303
+00:59:41,320 --> 00:59:42,530
+know for I as yet uncommitted
+
+1304
+00:59:42,730 --> 00:59:44,269
+transaction before the crash made me
+
+1305
+00:59:44,469 --> 00:59:48,470
+know server got a copy of log entry 103
+
+1306
+00:59:48,670 --> 00:59:52,070
+so after a crash and remember the new
+
+1307
+00:59:52,269 --> 00:59:54,410
+database service recovering it does
+
+1308
+00:59:54,610 --> 00:59:56,390
+quorum reads to basically find the point
+
+1309
+00:59:56,590 --> 00:59:59,269
+in the log the highest log number for
+
+1310
+00:59:59,469 --> 01:00:02,330
+which every preceding log entry exists
+
+1311
+01:00:02,530 --> 01:00:04,460
+somewhere in the storage service so
+
+1312
+01:00:04,659 --> 01:00:07,190
+basically it finds the first missing the
+
+1313
+01:00:07,389 --> 01:00:08,780
+number of the first missing log entry
+
+1314
+01:00:08,980 --> 01:00:12,230
+which is 103 and says well and so we're
+
+1315
+01:00:12,429 --> 01:00:14,269
+missing a log entry we can't do anything
+
+1316
+01:00:14,469 --> 01:00:16,340
+with a log after this point because
+
+1317
+01:00:16,539 --> 01:00:20,240
+we're like missing an update so the
+
+1318
+01:00:20,440 --> 01:00:21,650
+database server does these quorum reads
+
+1319
+01:00:21,849 --> 01:00:22,910
+it finds a hundred and three is the
+
+1320
+01:00:23,110 --> 01:00:27,289
+first entry that's MIT that's I can't
+
+1321
+01:00:27,489 --> 01:00:28,610
+you know I look at my quorum the
+
+1322
+01:00:28,809 --> 01:00:30,920
+server's I can reach and 103 is not
+
+1323
+01:00:31,119 --> 01:00:32,690
+there and the database server will send
+
+1324
+01:00:32,889 --> 01:00:34,100
+out a message to all the server saying
+
+1325
+01:00:34,300 --> 01:00:37,130
+look please just discard every log entry
+
+1326
+01:00:37,329 --> 01:00:39,440
+from 103 onwards and those mussels
+
+1327
+01:00:39,639 --> 01:00:42,830
+necessarily not include log entries from
+
+1328
+01:00:43,030 --> 01:00:44,960
+committed transactions because we know a
+
+1329
+01:00:45,159 --> 01:00:46,670
+transaction can't commit until all of
+
+1330
+01:00:46,869 --> 01:00:49,190
+its entries are on a right corner so we
+
+1331
+01:00:49,389 --> 01:00:50,750
+would be guaranteed to see them so we're
+
+1332
+01:00:50,949 --> 01:00:52,910
+only discarding log entries from
+
+1333
+01:00:53,110 --> 01:00:58,010
+uncommitted transactions of course so
+
+1334
+01:00:58,210 --> 01:00:59,240
+we're sort of cutting off the log here
+
+1335
+01:00:59,440 --> 01:01:02,990
+at login 302 these log entries that
+
+1336
+01:01:03,190 --> 01:01:04,730
+we're preserving now may actually
+
+1337
+01:01:04,929 --> 01:01:07,100
+include log entries from uncommitted
+
+1338
+01:01:07,300 --> 01:01:08,660
+transactions from transactions that were
+
+1339
+01:01:08,860 --> 01:01:10,519
+interrupted by the crash and the
+
+1340
+01:01:10,719 --> 01:01:11,870
+database server actually has to detect
+
+1341
+01:01:12,070 --> 01:01:13,910
+those which you can by seeing a hope you
+
+1342
+01:01:14,110 --> 01:01:16,280
+know a certain transaction there's it
+
+1343
+01:01:16,480 --> 01:01:18,440
+has update entries in the log but no
+
+1344
+01:01:18,639 --> 01:01:20,300
+commit record the database server will
+
+1345
+01:01:20,500 --> 01:01:22,610
+find the full set of those uncompleted
+
+1346
+01:01:22,809 --> 01:01:25,280
+transactions and basically issue undo
+
+1347
+01:01:25,480 --> 01:01:28,130
+operations I sort of knew log entries
+
+1348
+01:01:28,329 --> 01:01:32,530
+that undo all of the changes that that
+
+1349
+01:01:32,730 --> 01:01:35,480
+that those uncommitted transactions made
+
+1350
+01:01:35,679 --> 01:01:38,080
+and you know that's the point at which
+
+1351
+01:01:38,280 --> 01:01:41,510
+Aurora needs this these old values in
+
+1352
+01:01:41,710 --> 01:01:44,490
+the log entries so that a
+
+1353
+01:01:44,690 --> 01:01:46,649
+server that's doing recovery after a
+
+1354
+01:01:46,849 --> 01:01:49,560
+crash can sort of back out of partially
+
+1355
+01:01:49,760 --> 01:02:00,200
+completed transactions all right one
+
+1356
+01:02:00,400 --> 01:02:03,800
+another thing I'd like to talk about is
+
+1357
+01:02:04,000 --> 01:02:08,820
+how Aurora deals with big databases so
+
+1358
+01:02:09,019 --> 01:02:12,899
+so far I've explained the storage setup
+
+1359
+01:02:13,099 --> 01:02:16,820
+as if the database just has these six
+
+1360
+01:02:17,019 --> 01:02:20,159
+replicas of its storage and if that was
+
+1361
+01:02:20,358 --> 01:02:21,899
+all there was to it basically a database
+
+1362
+01:02:22,099 --> 01:02:23,700
+couldn't be you know each of these just
+
+1363
+01:02:23,900 --> 01:02:25,769
+a computer with a disk or two or
+
+1364
+01:02:25,969 --> 01:02:28,409
+something attached to it if this were
+
+1365
+01:02:28,608 --> 01:02:30,810
+the way the full situation then we
+
+1366
+01:02:31,010 --> 01:02:32,129
+couldn't have a database that was bigger
+
+1367
+01:02:32,329 --> 01:02:34,200
+than the amount of storage that you
+
+1368
+01:02:34,400 --> 01:02:36,030
+could put on a single machine there's
+
+1369
+01:02:36,230 --> 01:02:36,810
+the fact that we have six machines
+
+1370
+01:02:37,010 --> 01:02:39,119
+doesn't give us six times as much usable
+
+1371
+01:02:39,318 --> 01:02:41,220
+storage because each one I'm storing a
+
+1372
+01:02:41,420 --> 01:02:43,019
+replica of the same old data again and
+
+1373
+01:02:43,219 --> 01:02:46,500
+again and you know so I want to use
+
+1374
+01:02:46,699 --> 01:02:48,119
+solid-state drives or something we can
+
+1375
+01:02:48,318 --> 01:02:50,730
+put you know terabytes of storage on a
+
+1376
+01:02:50,929 --> 01:02:53,760
+single machine but we can't put you know
+
+1377
+01:02:53,960 --> 01:02:55,260
+hundreds of terabytes on a single
+
+1378
+01:02:55,460 --> 01:02:59,310
+machine so in order to support customers
+
+1379
+01:02:59,510 --> 01:03:01,800
+who need like more than ten terabytes
+
+1380
+01:03:02,000 --> 01:03:06,510
+who need to have vast databases Amazon
+
+1381
+01:03:06,710 --> 01:03:08,879
+is happy Amazon will split up the
+
+1382
+01:03:09,079 --> 01:03:12,769
+databases data onto multiple sets of six
+
+1383
+01:03:12,969 --> 01:03:18,980
+replicas so and the kind of unit of
+
+1384
+01:03:19,179 --> 01:03:21,090
+sharding the unit of splitting up the
+
+1385
+01:03:21,289 --> 01:03:23,760
+data I think is 10 gigabytes so a
+
+1386
+01:03:23,960 --> 01:03:25,710
+database that needs 20 gigabytes of data
+
+1387
+01:03:25,909 --> 01:03:28,200
+will use two protection groups these
+
+1388
+01:03:28,400 --> 01:03:31,860
+these PG things to its data you know sit
+
+1389
+01:03:32,059 --> 01:03:35,369
+on half of it will sit on the six
+
+1390
+01:03:35,568 --> 01:03:41,039
+servers of protection Group one and then
+
+1391
+01:03:41,239 --> 01:03:44,610
+they'll be another six servers you know
+
+1392
+01:03:44,809 --> 01:03:46,440
+possibly a different set of six storage
+
+1393
+01:03:46,639 --> 01:03:48,269
+servers because Amazon's running and
+
+1394
+01:03:48,469 --> 01:03:49,619
+like a huge fleet of these storage
+
+1395
+01:03:49,818 --> 01:03:51,570
+servers that are jointly used by all of
+
+1396
+01:03:51,769 --> 01:03:54,539
+its Aurora customers the second ten
+
+1397
+01:03:54,739 --> 01:03:57,480
+gigabytes of the databases 20 gigabytes
+
+1398
+01:03:57,679 --> 01:03:58,050
+of data
+
+1399
+01:03:58,250 --> 01:04:02,539
+we'll be replicated on another set of
+
+1400
+01:04:02,739 --> 01:04:04,980
+you know typically different I'll you
+
+1401
+01:04:05,179 --> 01:04:06,269
+know there could be overlap between
+
+1402
+01:04:06,469 --> 01:04:08,519
+these but typically just a different set
+
+1403
+01:04:08,719 --> 01:04:11,010
+of six server so now we get 20 gigabytes
+
+1404
+01:04:11,210 --> 01:04:15,539
+a day done and we have more of these as
+
+1405
+01:04:15,739 --> 01:04:18,690
+a database goes bigger one interesting
+
+1406
+01:04:18,889 --> 01:04:20,850
+piece of fallout from this is that while
+
+1407
+01:04:21,050 --> 01:04:25,470
+it's clear that you can take the data
+
+1408
+01:04:25,670 --> 01:04:28,710
+pages and split them up over multiple
+
+1409
+01:04:28,909 --> 01:04:30,630
+independent protection groups maybe you
+
+1410
+01:04:30,829 --> 01:04:32,250
+know odd numbered data pages from your
+
+1411
+01:04:32,449 --> 01:04:35,190
+b-tree go on PG one and even number
+
+1412
+01:04:35,389 --> 01:04:37,860
+pages go on PG - it's good you can shard
+
+1413
+01:04:38,059 --> 01:04:40,440
+split up the data pages it's not
+
+1414
+01:04:40,639 --> 01:04:41,760
+immediately obvious what to do with a
+
+1415
+01:04:41,960 --> 01:04:44,610
+log all right how do you split up the
+
+1416
+01:04:44,809 --> 01:04:46,710
+log if you have two of these two
+
+1417
+01:04:46,909 --> 01:04:48,420
+protection groups or more in a mantra
+
+1418
+01:04:48,619 --> 01:04:51,960
+tection group and the answer that amazon
+
+1419
+01:04:52,159 --> 01:04:53,940
+does is that that that Aurora uses is
+
+1420
+01:04:54,139 --> 01:04:55,050
+that the database server when it's
+
+1421
+01:04:55,250 --> 01:04:57,000
+sending out a log record it looks at the
+
+1422
+01:04:57,199 --> 01:04:59,730
+data that the log record modifies and
+
+1423
+01:04:59,929 --> 01:05:03,420
+figures out which protection groups
+
+1424
+01:05:03,619 --> 01:05:06,060
+store that data and it sends each log
+
+1425
+01:05:06,260 --> 01:05:08,039
+record just to the protection groups
+
+1426
+01:05:08,239 --> 01:05:11,160
+that store data that's mentioned that's
+
+1427
+01:05:11,360 --> 01:05:14,340
+modified in the log entry and so that
+
+1428
+01:05:14,539 --> 01:05:16,530
+means that each of these protection
+
+1429
+01:05:16,730 --> 01:05:19,230
+groups store some fraction of the data
+
+1430
+01:05:19,429 --> 01:05:22,140
+pages plus all the log records that
+
+1431
+01:05:22,340 --> 01:05:25,080
+apply to those data pages see these
+
+1432
+01:05:25,280 --> 01:05:26,940
+protection groups stores a subset of a
+
+1433
+01:05:27,139 --> 01:05:36,090
+log that's relevant to its pages so a
+
+1434
+01:05:36,289 --> 01:05:41,250
+final maybe I erase the photons
+
+1435
+01:05:41,449 --> 01:05:43,620
+requirements but a final requirement is
+
+1436
+01:05:43,820 --> 01:05:48,060
+that if a if ass one of these storage
+
+1437
+01:05:48,260 --> 01:05:50,400
+servers crashes we want to be able to
+
+1438
+01:05:50,599 --> 01:05:52,860
+replace it as soon as possible right
+
+1439
+01:05:53,059 --> 01:05:55,200
+because you know if we wait too long
+
+1440
+01:05:55,400 --> 01:05:57,300
+then we risk maybe three of them are
+
+1441
+01:05:57,500 --> 01:05:58,650
+four of them crashing and a four of them
+
+1442
+01:05:58,849 --> 01:06:01,350
+crash then we actually can't recover
+
+1443
+01:06:01,550 --> 01:06:02,550
+because then we don't have a reform
+
+1444
+01:06:02,750 --> 01:06:05,789
+anymore so we need to regain replication
+
+1445
+01:06:05,989 --> 01:06:07,830
+as soon as possible if you think about
+
+1446
+01:06:08,030 --> 01:06:11,280
+any one storage server sure this this do
+
+1447
+01:06:11,480 --> 01:06:13,500
+which server is storing 10 gigabytes for
+
+1448
+01:06:13,699 --> 01:06:15,419
+you know my databases protection group
+
+1449
+01:06:15,619 --> 01:06:17,610
+but in fact the physical thing you know
+
+1450
+01:06:17,809 --> 01:06:19,230
+the physical setup of any one of these
+
+1451
+01:06:19,429 --> 01:06:21,330
+servers is that it has a you know maybe
+
+1452
+01:06:21,530 --> 01:06:23,130
+a one or two or something
+
+1453
+01:06:23,329 --> 01:06:26,700
+terabyte disk on it that's storing 10
+
+1454
+01:06:26,900 --> 01:06:31,169
+gigabyte segments of a hundred or more
+
+1455
+01:06:31,369 --> 01:06:34,470
+different Aurora instances so what's
+
+1456
+01:06:34,670 --> 01:06:37,260
+what's on this physical machine is you
+
+1457
+01:06:37,460 --> 01:06:39,210
+know 10 terabyte era byte or 10
+
+1458
+01:06:39,409 --> 01:06:41,909
+terabytes or whatever of data in total
+
+1459
+01:06:42,108 --> 01:06:44,340
+so when there's a when one of these
+
+1460
+01:06:44,539 --> 01:06:47,400
+storage servers crashes it's taking with
+
+1461
+01:06:47,599 --> 01:06:50,430
+it not just the 10 gigabytes from my
+
+1462
+01:06:50,630 --> 01:06:53,159
+database but also 10 gigabytes from a
+
+1463
+01:06:53,358 --> 01:06:55,110
+hundred other people's databases as well
+
+1464
+01:06:55,309 --> 01:06:57,900
+and what has to be replicated is not
+
+1465
+01:06:58,099 --> 01:07:00,120
+just my 10 gigabytes but the entire
+
+1466
+01:07:00,320 --> 01:07:02,820
+terabyte or whatever or more that's
+
+1467
+01:07:03,019 --> 01:07:05,340
+stored on this servers solid-state drive
+
+1468
+01:07:05,539 --> 01:07:07,860
+and if you think through the numbers you
+
+1469
+01:07:08,059 --> 01:07:09,960
+know maybe we have 10 gigabit per second
+
+1470
+01:07:10,159 --> 01:07:14,880
+network interfaces if we need to move 10
+
+1471
+01:07:15,079 --> 01:07:18,240
+terabytes across a 10 gigabyte per
+
+1472
+01:07:18,440 --> 01:07:19,530
+second network interface from one
+
+1473
+01:07:19,730 --> 01:07:22,220
+machine to another it's gonna take I
+
+1474
+01:07:22,420 --> 01:07:25,019
+don't know a thousand seconds ten
+
+1475
+01:07:25,219 --> 01:07:26,730
+thousand seconds maybe ten thousand
+
+1476
+01:07:26,929 --> 01:07:30,900
+seconds and that's way too long right we
+
+1477
+01:07:31,099 --> 01:07:32,039
+don't want to have to sit there and wait
+
+1478
+01:07:32,239 --> 01:07:34,380
+you know it we don't want to have a
+
+1479
+01:07:34,579 --> 01:07:36,840
+strategy in which the way we weak we can
+
+1480
+01:07:37,039 --> 01:07:39,870
+reconstruct this is to find is to have
+
+1481
+01:07:40,070 --> 01:07:41,430
+another machine that was replicating
+
+1482
+01:07:41,630 --> 01:07:43,409
+everything on it and had that machine
+
+1483
+01:07:43,608 --> 01:07:46,740
+send 10 terabytes to a replacement
+
+1484
+01:07:46,940 --> 01:07:48,210
+machine we're gonna be able to
+
+1485
+01:07:48,409 --> 01:07:49,890
+reconstruct the data far faster than
+
+1486
+01:07:50,090 --> 01:07:52,650
+that and so the actual setup they use is
+
+1487
+01:07:52,849 --> 01:07:56,250
+that if I have a particular storage
+
+1488
+01:07:56,449 --> 01:07:57,409
+server
+
+1489
+01:07:57,608 --> 01:08:01,650
+it stores many many segments you know
+
+1490
+01:08:01,849 --> 01:08:04,230
+replicas of many 10 gigabyte protection
+
+1491
+01:08:04,429 --> 01:08:07,280
+groups so maybe this protection group
+
+1492
+01:08:07,480 --> 01:08:09,630
+maybe this segment that it's storing
+
+1493
+01:08:09,829 --> 01:08:12,630
+data for the other envy for this one the
+
+1494
+01:08:12,829 --> 01:08:17,279
+other replicas are you know these five
+
+1495
+01:08:17,479 --> 01:08:19,619
+other machines all right so these are
+
+1496
+01:08:19,819 --> 01:08:22,600
+all storing
+
+1497
+01:08:22,738 --> 01:08:24,889
+segments of protection group a and so
+
+1498
+01:08:25,088 --> 01:08:26,119
+you know there's a whole bunch of other
+
+1499
+01:08:26,319 --> 01:08:27,498
+ones that we're also storing so I mean
+
+1500
+01:08:27,698 --> 01:08:29,088
+we may be this particular machine also
+
+1501
+01:08:29,288 --> 01:08:33,378
+stores a replica for protecting group B
+
+1502
+01:08:33,578 --> 01:08:35,930
+but the other copies of the data for B
+
+1503
+01:08:36,130 --> 01:08:38,779
+are going to be put on a disjoint set of
+
+1504
+01:08:38,979 --> 01:08:41,239
+servers right so now there's five
+
+1505
+01:08:41,439 --> 01:08:43,069
+servers that have the other copies of B
+
+1506
+01:08:43,269 --> 01:08:48,588
+and so on for all of the segments that
+
+1507
+01:08:48,788 --> 01:08:50,239
+this server that are sitting on this
+
+1508
+01:08:50,439 --> 01:08:52,220
+storage servers hard drive for you know
+
+1509
+01:08:52,420 --> 01:08:55,369
+many many different Aurora instances so
+
+1510
+01:08:55,569 --> 01:08:56,979
+that means that this machine goes down
+
+1511
+01:08:57,179 --> 01:09:00,139
+the replacement strategy is that we pick
+
+1512
+01:09:00,338 --> 01:09:01,699
+if we're say we're storing a hundred of
+
+1513
+01:09:01,899 --> 01:09:03,859
+these segments on it we pick a hundred
+
+1514
+01:09:04,059 --> 01:09:09,260
+different storage servers each of which
+
+1515
+01:09:09,460 --> 01:09:13,248
+is gonna pick up one new segment that is
+
+1516
+01:09:13,448 --> 01:09:14,748
+each of which is going to now be
+
+1517
+01:09:14,948 --> 01:09:16,970
+participating in one more protection
+
+1518
+01:09:17,170 --> 01:09:19,849
+group so one one we miss like one server
+
+1519
+01:09:20,048 --> 01:09:22,609
+to be replicate on for each of these ten
+
+1520
+01:09:22,809 --> 01:09:24,439
+gigabytes segments and now we have you
+
+1521
+01:09:24,639 --> 01:09:28,038
+know maybe 100 sort of different segment
+
+1522
+01:09:28,238 --> 01:09:29,239
+servers and you know I probably storing
+
+1523
+01:09:29,439 --> 01:09:30,588
+other stuff but they have a little bit
+
+1524
+01:09:30,788 --> 01:09:32,359
+of free disk space and then for each of
+
+1525
+01:09:32,559 --> 01:09:35,659
+these we pick one machine one of the
+
+1526
+01:09:35,859 --> 01:09:37,939
+replicas that we're going to copy the
+
+1527
+01:09:38,139 --> 01:09:39,708
+data from one of the remaining replicas
+
+1528
+01:09:39,908 --> 01:09:41,208
+so maybe for a we're going to copy from
+
+1529
+01:09:41,408 --> 01:09:43,548
+there for B from here you know if we
+
+1530
+01:09:43,748 --> 01:09:47,538
+have five other copies with C we pick a
+
+1531
+01:09:47,738 --> 01:09:50,689
+different server for C and so we have we
+
+1532
+01:09:50,889 --> 01:09:53,208
+copy a from this server to that server
+
+1533
+01:09:53,408 --> 01:09:57,649
+and B like this and C like this and so
+
+1534
+01:09:57,849 --> 01:10:01,548
+now we have a hundred different 10
+
+1535
+01:10:01,748 --> 01:10:03,760
+gigabyte copies going on in parallel
+
+1536
+01:10:03,960 --> 01:10:07,159
+across the network and assuming you know
+
+1537
+01:10:07,359 --> 01:10:09,168
+we have enough servers that these can
+
+1538
+01:10:09,368 --> 01:10:11,798
+all be disjoint and we have plenty of
+
+1539
+01:10:11,998 --> 01:10:14,689
+bandwidth in switching network that
+
+1540
+01:10:14,889 --> 01:10:17,649
+connects them now we can copy our
+
+1541
+01:10:17,849 --> 01:10:19,939
+terabyte or 10 terabytes or whatever of
+
+1542
+01:10:20,139 --> 01:10:22,909
+data and total in parallel with a
+
+1543
+01:10:23,109 --> 01:10:25,369
+hundredfold parallelism and the whole
+
+1544
+01:10:25,569 --> 01:10:27,288
+thing will take you know 10 seconds or
+
+1545
+01:10:27,488 --> 01:10:29,088
+something instead of taking a thousand
+
+1546
+01:10:29,288 --> 01:10:30,529
+seconds if there were just two machines
+
+1547
+01:10:30,729 --> 01:10:34,248
+involved anyway so this is
+
+1548
+01:10:34,448 --> 01:10:35,538
+this is the strategies they use and it
+
+1549
+01:10:35,738 --> 01:10:36,890
+means that they can recover you know for
+
+1550
+01:10:37,090 --> 01:10:39,498
+machine dies they can recover in
+
+1551
+01:10:39,698 --> 01:10:41,479
+parallel from one machine's death
+
+1552
+01:10:41,679 --> 01:10:45,140
+extremely quickly if lots of machines
+
+1553
+01:10:45,340 --> 01:10:48,890
+diets doesn't work as well but they can
+
+1554
+01:10:49,090 --> 01:10:50,180
+recover from single they can be
+
+1555
+01:10:50,380 --> 01:10:51,979
+replicate from single machine crashes
+
+1556
+01:10:52,179 --> 01:10:57,918
+extremely quickly alright so a final
+
+1557
+01:10:58,118 --> 01:10:59,628
+thing that the paper mentions if you
+
+1558
+01:10:59,828 --> 01:11:02,748
+look at figure three you'll see that not
+
+1559
+01:11:02,948 --> 01:11:06,079
+only do they have this main database but
+
+1560
+01:11:06,279 --> 01:11:09,680
+they also have replica databases so for
+
+1561
+01:11:09,880 --> 01:11:11,930
+many of their customers many of their
+
+1562
+01:11:12,130 --> 01:11:14,628
+customers see far more read-only queries
+
+1563
+01:11:14,828 --> 01:11:17,418
+than they see readwrite queries that is
+
+1564
+01:11:17,618 --> 01:11:19,009
+if you think about a web server if you
+
+1565
+01:11:19,208 --> 01:11:21,019
+just view a web page on some website
+
+1566
+01:11:21,219 --> 01:11:23,869
+then chances are the web server you
+
+1567
+01:11:24,069 --> 01:11:25,519
+connected to has to read lots and lots
+
+1568
+01:11:25,719 --> 01:11:27,949
+and stuff in order to generate all the
+
+1569
+01:11:28,149 --> 01:11:29,989
+things that are shown on the page to you
+
+1570
+01:11:30,189 --> 01:11:31,819
+maybe hundreds of different items have
+
+1571
+01:11:32,019 --> 01:11:33,769
+to be read out of the database or so out
+
+1572
+01:11:33,969 --> 01:11:35,298
+of some database but the number of
+
+1573
+01:11:35,498 --> 01:11:37,430
+writes for a typical web page view is
+
+1574
+01:11:37,630 --> 01:11:39,140
+usually much much smaller maybe some
+
+1575
+01:11:39,340 --> 01:11:41,060
+statistics have to be updated or a
+
+1576
+01:11:41,260 --> 01:11:42,439
+little bit of history for you or
+
+1577
+01:11:42,639 --> 01:11:44,239
+something so you might have a hundred to
+
+1578
+01:11:44,439 --> 01:11:48,199
+one ratio of reads to writes that is you
+
+1579
+01:11:48,399 --> 01:11:50,538
+may typically have a large large large
+
+1580
+01:11:50,738 --> 01:11:54,319
+number of straight read only database
+
+1581
+01:11:54,519 --> 01:11:57,529
+queries now with this set up the writes
+
+1582
+01:11:57,729 --> 01:11:59,689
+can only go through the one database
+
+1583
+01:11:59,889 --> 01:12:00,949
+server because we really can only
+
+1584
+01:12:01,149 --> 01:12:02,930
+support one writer for this storage
+
+1585
+01:12:03,130 --> 01:12:05,869
+strategy and I think you know one place
+
+1586
+01:12:06,069 --> 01:12:07,279
+where the rubber really hits the road
+
+1587
+01:12:07,479 --> 01:12:09,288
+there is that the log entries have to be
+
+1588
+01:12:09,488 --> 01:12:11,569
+numbered sequentially and that's easy to
+
+1589
+01:12:11,769 --> 01:12:13,279
+do if all the writes go through a single
+
+1590
+01:12:13,479 --> 01:12:15,259
+server and extremely difficult if we
+
+1591
+01:12:15,458 --> 01:12:17,239
+have lots of different servers all sort
+
+1592
+01:12:17,439 --> 01:12:18,890
+of writing in an uncoordinated way to
+
+1593
+01:12:19,090 --> 01:12:21,680
+the same database so the writes really
+
+1594
+01:12:21,880 --> 01:12:24,128
+have to be go through one database but
+
+1595
+01:12:24,328 --> 01:12:27,229
+we could set up and indeed Amazon does
+
+1596
+01:12:27,429 --> 01:12:29,269
+set up a situation where we have read
+
+1597
+01:12:29,469 --> 01:12:32,509
+only database replicas that can read
+
+1598
+01:12:32,708 --> 01:12:35,269
+from these storage servers and so the
+
+1599
+01:12:35,469 --> 01:12:38,329
+full glory of figure three is that in
+
+1600
+01:12:38,529 --> 01:12:40,519
+addition to the main database server
+
+1601
+01:12:40,719 --> 01:12:42,680
+that handles the write requests there's
+
+1602
+01:12:42,880 --> 01:12:48,079
+also a set of read-only
+
+1603
+01:12:48,279 --> 01:12:50,760
+databases and they say they can support
+
+1604
+01:12:50,960 --> 01:12:52,829
+up to 15 so you can actually get a lot
+
+1605
+01:12:53,029 --> 01:12:56,310
+of you know if your senior we'd have you
+
+1606
+01:12:56,510 --> 01:12:58,650
+workload a lot of it can be you know
+
+1607
+01:12:58,850 --> 01:13:00,989
+most of it can be sort of hived off to a
+
+1608
+01:13:01,189 --> 01:13:02,760
+whole bunch of these read-only databases
+
+1609
+01:13:02,960 --> 01:13:05,250
+and when a client sends a read request
+
+1610
+01:13:05,449 --> 01:13:06,960
+to read only database what happens is
+
+1611
+01:13:07,159 --> 01:13:09,270
+the read only database figures out you
+
+1612
+01:13:09,470 --> 01:13:11,579
+know what data pages it needs to serve
+
+1613
+01:13:11,779 --> 01:13:13,920
+that request and sends reads into the
+
+1614
+01:13:14,119 --> 01:13:15,720
+directly into the storage system without
+
+1615
+01:13:15,920 --> 01:13:21,300
+bothering the main readwrite database so
+
+1616
+01:13:21,500 --> 01:13:22,980
+the the read-only replica database
+
+1617
+01:13:23,180 --> 01:13:25,440
+ascend page requests read requests
+
+1618
+01:13:25,640 --> 01:13:27,360
+directly the storage servers and then
+
+1619
+01:13:27,560 --> 01:13:31,289
+they'll be no cache those pages so that
+
+1620
+01:13:31,489 --> 01:13:33,480
+they can you know respond to future read
+
+1621
+01:13:33,680 --> 01:13:35,610
+requests right out of their cache of
+
+1622
+01:13:35,810 --> 01:13:36,630
+course they need to be able to update
+
+1623
+01:13:36,829 --> 01:13:40,170
+those caches and for that reason Aurora
+
+1624
+01:13:40,369 --> 01:13:43,079
+also the main database sends a copy of
+
+1625
+01:13:43,279 --> 01:13:46,590
+its log to each of the read-only
+
+1626
+01:13:46,789 --> 01:13:48,930
+databases and that's the horizontal
+
+1627
+01:13:49,130 --> 01:13:51,060
+lines you see between the blue boxes and
+
+1628
+01:13:51,260 --> 01:13:52,770
+figure three that the main database
+
+1629
+01:13:52,970 --> 01:13:55,289
+sends all the log entries do these mean
+
+1630
+01:13:55,489 --> 01:13:57,350
+only databases which they use to update
+
+1631
+01:13:57,550 --> 01:14:03,539
+their cached copies to reflect recent
+
+1632
+01:14:03,739 --> 01:14:05,220
+transactions in the database and it
+
+1633
+01:14:05,420 --> 01:14:07,739
+means it does mean that the read only
+
+1634
+01:14:07,939 --> 01:14:09,329
+database is lag a little bit behind the
+
+1635
+01:14:09,529 --> 01:14:12,060
+main database but it turns out for a lot
+
+1636
+01:14:12,260 --> 01:14:13,619
+of read-only workloads that's okay if
+
+1637
+01:14:13,819 --> 01:14:15,449
+you look at a web page and it's you know
+
+1638
+01:14:15,649 --> 01:14:17,130
+20 milliseconds out of date that's
+
+1639
+01:14:17,329 --> 01:14:24,029
+usually not a big problem there are some
+
+1640
+01:14:24,229 --> 01:14:26,550
+complexities from this like one problem
+
+1641
+01:14:26,750 --> 01:14:28,140
+is that we don't want these relay
+
+1642
+01:14:28,340 --> 01:14:30,810
+databases to see data from uncommitted
+
+1643
+01:14:31,010 --> 01:14:34,110
+transactions yet and so in this stream
+
+1644
+01:14:34,310 --> 01:14:36,779
+of log entries the database may need to
+
+1645
+01:14:36,979 --> 01:14:39,270
+be sort of denotes which transactions
+
+1646
+01:14:39,470 --> 01:14:41,850
+have committed and they're read-only
+
+1647
+01:14:42,050 --> 01:14:43,310
+databases are careful not to apply
+
+1648
+01:14:43,510 --> 01:14:44,600
+uncommon
+
+1649
+01:14:44,800 --> 01:14:47,670
+uncommitted transactions to their caches
+
+1650
+01:14:47,869 --> 01:14:49,470
+they wait till the transactions commit
+
+1651
+01:14:49,670 --> 01:14:54,570
+the other complexity that these
+
+1652
+01:14:54,770 --> 01:14:59,210
+read-only replicas impose is that
+
+1653
+01:14:59,409 --> 01:15:03,230
+the the the these structures he of these
+
+1654
+01:15:03,430 --> 01:15:05,180
+andhe structures are quite complex this
+
+1655
+01:15:05,380 --> 01:15:06,470
+might be a b-tree it might need to be
+
+1656
+01:15:06,670 --> 01:15:09,320
+rebalanced periodically for example I'm
+
+1657
+01:15:09,520 --> 01:15:10,520
+the rebalancing is quite a complex
+
+1658
+01:15:10,720 --> 01:15:12,230
+operation in which a lot of the tree has
+
+1659
+01:15:12,430 --> 01:15:15,380
+to be modified in atomically and so the
+
+1660
+01:15:15,579 --> 01:15:17,150
+tree is incorrect while it's being be
+
+1661
+01:15:17,350 --> 01:15:18,800
+balanced and you only allowed to look at
+
+1662
+01:15:19,000 --> 01:15:21,320
+it after the rebalancing is done if
+
+1663
+01:15:21,520 --> 01:15:23,750
+these read-only replicas directly read
+
+1664
+01:15:23,949 --> 01:15:25,190
+the pages out of the database there's a
+
+1665
+01:15:25,390 --> 01:15:27,920
+risk they might see the be tree that the
+
+1666
+01:15:28,119 --> 01:15:29,989
+database that's being stored here in
+
+1667
+01:15:30,189 --> 01:15:31,610
+these data pages they may see the bee
+
+1668
+01:15:31,810 --> 01:15:33,829
+tree in the middle of a rebalancing or
+
+1669
+01:15:34,029 --> 01:15:37,250
+some other operation and the data is
+
+1670
+01:15:37,449 --> 01:15:38,869
+just totally illegal and they might
+
+1671
+01:15:39,069 --> 01:15:43,159
+crash or just malfunction and when the
+
+1672
+01:15:43,359 --> 01:15:45,440
+paper talks about mini transactions and
+
+1673
+01:15:45,640 --> 01:15:49,520
+the vdl verses vcl distinction what it's
+
+1674
+01:15:49,720 --> 01:15:51,560
+talking about is the machinery by which
+
+1675
+01:15:51,760 --> 01:15:54,500
+the database server can tell the storage
+
+1676
+01:15:54,699 --> 01:15:57,350
+servers look this complex sequence of
+
+1677
+01:15:57,550 --> 01:16:02,360
+log entries must only be revealed all or
+
+1678
+01:16:02,560 --> 01:16:04,489
+nothing' atomically to any read-only
+
+1679
+01:16:04,689 --> 01:16:07,220
+transactions that's what the mini
+
+1680
+01:16:07,420 --> 01:16:09,050
+transactions and VDL are about and
+
+1681
+01:16:09,250 --> 01:16:10,579
+basically the read when a read only
+
+1682
+01:16:10,779 --> 01:16:13,400
+database asks to see data a data page
+
+1683
+01:16:13,600 --> 01:16:15,380
+from a storage server the storage server
+
+1684
+01:16:15,579 --> 01:16:17,600
+is careful to either show it data from
+
+1685
+01:16:17,800 --> 01:16:20,449
+just before one of these sequence many
+
+1686
+01:16:20,649 --> 01:16:23,539
+transaction sequences of log entries or
+
+1687
+01:16:23,739 --> 01:16:28,430
+just after but not in the middle all
+
+1688
+01:16:28,630 --> 01:16:33,170
+right so that's the all the technical
+
+1689
+01:16:33,369 --> 01:16:34,640
+stuff I have to talk about just to kind
+
+1690
+01:16:34,840 --> 01:16:36,230
+of summarize what's interesting about
+
+1691
+01:16:36,430 --> 01:16:37,520
+the paper and what can be learned from
+
+1692
+01:16:37,720 --> 01:16:41,270
+the paper one thing to learn which is
+
+1693
+01:16:41,470 --> 01:16:43,340
+just good in general not specific to
+
+1694
+01:16:43,539 --> 01:16:45,199
+this paper but everybody in systems
+
+1695
+01:16:45,399 --> 01:16:48,159
+should know is the basics of how
+
+1696
+01:16:48,359 --> 01:16:50,420
+transaction processing databases work
+
+1697
+01:16:50,619 --> 01:16:53,320
+and the sort of impact that the
+
+1698
+01:16:53,520 --> 01:16:55,720
+interaction between transaction
+
+1699
+01:16:55,920 --> 01:16:58,250
+processing databases and the storage
+
+1700
+01:16:58,449 --> 01:17:00,140
+systems because this comes up a lot it's
+
+1701
+01:17:00,340 --> 01:17:01,699
+like a pervasive you know the
+
+1702
+01:17:01,899 --> 01:17:04,960
+performance and crash recoverability
+
+1703
+01:17:05,159 --> 01:17:07,039
+complexity of running a real database
+
+1704
+01:17:07,239 --> 01:17:09,850
+just comes up over and over again in
+
+1705
+01:17:10,050 --> 01:17:13,010
+systems design another thing to learn
+
+1706
+01:17:13,210 --> 01:17:15,619
+this paper is this idea of quorums and
+
+1707
+01:17:15,819 --> 01:17:18,500
+overlap the technique of overlapping
+
+1708
+01:17:18,699 --> 01:17:20,750
+read/write quorums in order to always be
+
+1709
+01:17:20,949 --> 01:17:22,340
+able to see the latest data but also get
+
+1710
+01:17:22,539 --> 01:17:24,050
+fault tolerance and of course this comes
+
+1711
+01:17:24,250 --> 01:17:27,050
+up in raft also raft has a strong kind
+
+1712
+01:17:27,250 --> 01:17:28,869
+of quorum flavor to it
+
+1713
+01:17:29,069 --> 01:17:31,369
+another interesting thought from this
+
+1714
+01:17:31,569 --> 01:17:33,560
+paper is that the database and the
+
+1715
+01:17:33,760 --> 01:17:35,630
+storage system are basically Co designed
+
+1716
+01:17:35,829 --> 01:17:37,670
+as kind of an integrated there's
+
+1717
+01:17:37,869 --> 01:17:39,260
+integration across the database layer
+
+1718
+01:17:39,460 --> 01:17:40,970
+and the storage layer or nearly
+
+1719
+01:17:41,170 --> 01:17:43,279
+redesigned to try to design systems so
+
+1720
+01:17:43,479 --> 01:17:45,170
+they have you know good separation
+
+1721
+01:17:45,369 --> 01:17:48,980
+between consumers of services and the
+
+1722
+01:17:49,180 --> 01:17:50,570
+sort of infrastructure services like
+
+1723
+01:17:50,770 --> 01:17:52,640
+typically storage is very
+
+1724
+01:17:52,840 --> 01:17:54,680
+general-purpose not aimed at a
+
+1725
+01:17:54,880 --> 01:17:57,579
+particular application just you know
+
+1726
+01:17:57,779 --> 01:17:59,810
+because that's a pleasant design and it
+
+1727
+01:18:00,010 --> 01:18:01,730
+also means that lots of different uses
+
+1728
+01:18:01,930 --> 01:18:03,260
+can be made of the same infrastructure
+
+1729
+01:18:03,460 --> 01:18:05,900
+but here the performance issues were so
+
+1730
+01:18:06,100 --> 01:18:07,159
+extreme you know they would have to get
+
+1731
+01:18:07,359 --> 01:18:09,619
+a 35 times performance improvement by
+
+1732
+01:18:09,819 --> 01:18:13,340
+sort of blurring this boundary this was
+
+1733
+01:18:13,539 --> 01:18:14,630
+a situation in which general-purpose
+
+1734
+01:18:14,829 --> 01:18:16,699
+storage was actually really not
+
+1735
+01:18:16,899 --> 01:18:19,060
+advantageous and they got a big win by
+
+1736
+01:18:19,260 --> 01:18:22,730
+abandoning that idea and a final set of
+
+1737
+01:18:22,930 --> 01:18:24,340
+things to get out of the papers all the
+
+1738
+01:18:24,539 --> 01:18:26,570
+interesting sometimes kind of implicit
+
+1739
+01:18:26,770 --> 01:18:29,840
+information about what was valuable to
+
+1740
+01:18:30,039 --> 01:18:32,360
+these Amazon engineers who you know
+
+1741
+01:18:32,560 --> 01:18:35,119
+really know what they're doing about
+
+1742
+01:18:35,319 --> 01:18:37,100
+what concerns they had about cloud
+
+1743
+01:18:37,300 --> 01:18:40,850
+infrastructure like the amount of worry
+
+1744
+01:18:41,050 --> 01:18:42,770
+that they put into the possibility of an
+
+1745
+01:18:42,970 --> 01:18:45,409
+entire availability zone might fail it's
+
+1746
+01:18:45,609 --> 01:18:48,050
+an important tidbit the fact that
+
+1747
+01:18:48,250 --> 01:18:51,350
+transient slowness of individual storage
+
+1748
+01:18:51,550 --> 01:18:53,779
+servers was important is another thing
+
+1749
+01:18:53,979 --> 01:18:57,520
+that actually also comes up a lot and
+
+1750
+01:18:57,720 --> 01:19:00,289
+finally the implication that the network
+
+1751
+01:19:00,489 --> 01:19:02,329
+is the main bottleneck because after all
+
+1752
+01:19:02,529 --> 01:19:04,460
+they were it went to extreme lengths to
+
+1753
+01:19:04,659 --> 01:19:06,409
+send less data over the network
+
+1754
+01:19:06,609 --> 01:19:07,850
+but in return the storage servers have
+
+1755
+01:19:08,050 --> 01:19:10,610
+to do more work and they put it they're
+
+1756
+01:19:10,810 --> 01:19:12,409
+willing to you know 6 copies the data
+
+1757
+01:19:12,609 --> 01:19:16,600
+and have 6 CPUs all replicating the
+
+1758
+01:19:16,800 --> 01:19:19,279
+execution of applying these redo log
+
+1759
+01:19:19,479 --> 01:19:21,199
+entries apparently CPU is relatively
+
+1760
+01:19:21,399 --> 01:19:24,260
+cheap for them whereas the network
+
+1761
+01:19:24,460 --> 01:19:26,360
+capacity was extremely important
+
+1762
+01:19:26,560 --> 01:19:31,630
+all right that's all I have to say and
+
+1763
+01:19:31,899 --> 01:19:36,899
+see you next week
+

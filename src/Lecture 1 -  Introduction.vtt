@@ -1,0 +1,6966 @@
+﻿WEBVTT
+
+1
+00:00:00.800 --> 00:00:05.009
+all right let's get started
+
+2
+00:00:05.209 --> 00:00:11.620
+this is 682 for distributed systems so
+
+3
+00:00:11.820 --> 00:00:13.030
+I'd like to start with just a brief
+
+4
+00:00:13.230 --> 00:00:14.439
+explanation of what I think a
+
+5
+00:00:14.638 --> 00:00:18.760
+distributed system is you know the core
+
+6
+00:00:18.960 --> 00:00:21.429
+of it is a set of cooperating computers
+
+7
+00:00:21.629 --> 00:00:22.990
+that are communicating with each other
+
+8
+00:00:23.190 --> 00:00:25.990
+over networked to get some coherent task
+
+9
+00:00:26.190 --> 00:00:29.530
+done and so the kinds of examples that
+
+10
+00:00:29.730 --> 00:00:31.330
+we'll be focusing on in this class are
+
+11
+00:00:31.530 --> 00:00:34.769
+things like storage for big websites or
+
+12
+00:00:34.969 --> 00:00:38.459
+big data computations such as MapReduce
+
+13
+00:00:38.659 --> 00:00:41.559
+and also somewhat more exotic things
+
+14
+00:00:41.759 --> 00:00:43.750
+like peer-to-peer file sharing so
+
+15
+00:00:43.950 --> 00:00:45.669
+they're all just examples the kinds of
+
+16
+00:00:45.869 --> 00:00:48.128
+case studies we'll look at and the
+
+17
+00:00:48.329 --> 00:00:49.599
+reason why all this is important is that
+
+18
+00:00:49.799 --> 00:00:51.399
+a lot of critical infrastructure out
+
+19
+00:00:51.600 --> 00:00:53.288
+there is built out of distributed
+
+20
+00:00:53.488 --> 00:00:56.049
+systems infrastructure that requires
+
+21
+00:00:56.250 --> 00:00:57.369
+more than one computer to get its job
+
+22
+00:00:57.570 --> 00:00:59.378
+done or it's sort of inherently needs to
+
+23
+00:00:59.579 --> 00:01:03.819
+be spread out physically so the reasons
+
+24
+00:01:04.019 --> 00:01:06.099
+why people build this stuff so first of
+
+25
+00:01:06.299 --> 00:01:07.989
+all before I even talk about distributed
+
+26
+00:01:08.189 --> 00:01:10.299
+systems sort of remind you that you know
+
+27
+00:01:10.500 --> 00:01:12.219
+if you're designing a system redesigning
+
+28
+00:01:12.420 --> 00:01:14.079
+you need to solve some problem if you
+
+29
+00:01:14.280 --> 00:01:16.209
+can possibly solve it on a single
+
+30
+00:01:16.409 --> 00:01:18.369
+computer you know without building a
+
+31
+00:01:18.569 --> 00:01:19.899
+distributed system you should do it that
+
+32
+00:01:20.099 --> 00:01:23.140
+way and there's many many jobs you can
+
+33
+00:01:23.340 --> 00:01:24.879
+get done on a single computer and it's
+
+34
+00:01:25.079 --> 00:01:29.019
+always easier so distributed systems you
+
+35
+00:01:29.219 --> 00:01:30.579
+know you should try everything else
+
+36
+00:01:30.780 --> 00:01:32.200
+before you try building distributed
+
+37
+00:01:32.400 --> 00:01:33.819
+systems because they're not they're not
+
+38
+00:01:34.019 --> 00:01:36.429
+simpler so the reason why people are
+
+39
+00:01:36.629 --> 00:01:38.859
+driven to use lots of cooperating
+
+40
+00:01:39.060 --> 00:01:41.439
+computers are they need to get
+
+41
+00:01:41.640 --> 00:01:43.149
+high-performance and the way to think
+
+42
+00:01:43.349 --> 00:01:44.980
+about that is they want to get achieve
+
+43
+00:01:45.180 --> 00:01:50.319
+some sort of parallelism lots of CPUs
+
+44
+00:01:50.519 --> 00:01:52.209
+lots of memories lots of disk arms
+
+45
+00:01:52.409 --> 00:01:56.379
+moving in parallel another reason why
+
+46
+00:01:56.579 --> 00:01:58.090
+people build this stuff is to be able to
+
+47
+00:01:58.290 --> 00:02:01.070
+tolerate faults
+
+48
+00:02:05.310 --> 00:02:07.700
+have two computers do the exact same
+
+49
+00:02:07.900 --> 00:02:09.380
+thing if one of them fails you can cut
+
+50
+00:02:09.580 --> 00:02:12.410
+over to the other one another is that
+
+51
+00:02:12.610 --> 00:02:14.870
+some problems are just naturally spread
+
+52
+00:02:15.069 --> 00:02:17.360
+out in space like you know you want to
+
+53
+00:02:17.560 --> 00:02:19.219
+do interbank transfers of money or
+
+54
+00:02:19.419 --> 00:02:21.620
+something well you know bank a has this
+
+55
+00:02:21.819 --> 00:02:23.780
+computer in New York City and Bank B as
+
+56
+00:02:23.979 --> 00:02:25.910
+this computer in London you know you
+
+57
+00:02:26.110 --> 00:02:27.590
+just have to have some way for them to
+
+58
+00:02:27.789 --> 00:02:29.509
+talk to each other and cooperate in
+
+59
+00:02:29.709 --> 00:02:31.130
+order to carry that out so there's some
+
+60
+00:02:31.330 --> 00:02:36.110
+natural sort of physical reasons systems
+
+61
+00:02:36.310 --> 00:02:37.160
+that are inherently physically
+
+62
+00:02:37.360 --> 00:02:39.800
+distributed for the final reason that
+
+63
+00:02:40.000 --> 00:02:41.840
+people build this stuff is in order to
+
+64
+00:02:42.039 --> 00:02:44.120
+achieve some sort of security goal so
+
+65
+00:02:44.319 --> 00:02:46.460
+often by if there's some code you don't
+
+66
+00:02:46.659 --> 00:02:48.890
+trust or you know you need to interact
+
+67
+00:02:49.090 --> 00:02:50.719
+with somebody but you know they may not
+
+68
+00:02:50.919 --> 00:02:52.969
+be immediate malicious or maybe their
+
+69
+00:02:53.169 --> 00:02:55.219
+code has bugs in it so you don't want to
+
+70
+00:02:55.419 --> 00:02:56.960
+have to trust it you may want to split
+
+71
+00:02:57.159 --> 00:02:59.150
+up the computation so you know your
+
+72
+00:02:59.349 --> 00:03:00.800
+stuff runs over there and that computer
+
+73
+00:03:01.000 --> 00:03:02.300
+my stuff runs here on this computer and
+
+74
+00:03:02.500 --> 00:03:03.950
+they only talk to each other to some
+
+75
+00:03:04.150 --> 00:03:06.380
+sort of narrow narrowly defined network
+
+76
+00:03:06.580 --> 00:03:10.130
+protocol assuming we may be worried
+
+77
+00:03:10.330 --> 00:03:13.370
+about you know security and that's
+
+78
+00:03:13.569 --> 00:03:14.780
+achieved by splitting things up into
+
+79
+00:03:14.979 --> 00:03:16.219
+multiple computers so that they can be
+
+80
+00:03:16.419 --> 00:03:21.259
+isolated the most of this course is
+
+81
+00:03:21.459 --> 00:03:23.719
+going to be about performance and fault
+
+82
+00:03:23.919 --> 00:03:26.210
+tolerance although the other two often
+
+83
+00:03:26.409 --> 00:03:28.430
+work themselves in by way of the sort of
+
+84
+00:03:28.629 --> 00:03:29.870
+constraints on the case studies that
+
+85
+00:03:30.069 --> 00:03:32.599
+we're going to look at you know all
+
+86
+00:03:32.799 --> 00:03:34.189
+these distributed systems so these
+
+87
+00:03:34.389 --> 00:03:36.230
+problems are because they have many
+
+88
+00:03:36.430 --> 00:03:39.610
+parts and the parts execute concurrently
+
+89
+00:03:39.810 --> 00:03:42.020
+because there are multiple computers you
+
+90
+00:03:42.219 --> 00:03:43.310
+get all the problems that come up with
+
+91
+00:03:43.509 --> 00:03:44.990
+concurrent programming all the sort of
+
+92
+00:03:45.189 --> 00:03:46.520
+complex interactions and we're
+
+93
+00:03:46.719 --> 00:03:49.460
+timing-dependent stuff and that's part
+
+94
+00:03:49.659 --> 00:03:51.580
+of what makes distributed systems hard
+
+95
+00:03:51.780 --> 00:03:54.140
+another thing that makes distributed
+
+96
+00:03:54.340 --> 00:03:56.719
+systems hard is that because again you
+
+97
+00:03:56.919 --> 00:03:59.210
+have multiple pieces plus a network you
+
+98
+00:03:59.409 --> 00:04:02.240
+can have very unexpected failure
+
+99
+00:04:02.439 --> 00:04:04.340
+patterns that is if you have a single
+
+100
+00:04:04.539 --> 00:04:06.080
+computer it's usually the case either
+
+101
+00:04:06.280 --> 00:04:08.150
+computer works or maybe it crashes or
+
+102
+00:04:08.349 --> 00:04:10.850
+suffers a power failure or something but
+
+103
+00:04:11.050 --> 00:04:12.080
+it pretty much either works or doesn't
+
+104
+00:04:12.280 --> 00:04:14.270
+work distributed systems made up of lots
+
+105
+00:04:14.469 --> 00:04:15.740
+of computers you can have partial
+
+106
+00:04:15.939 --> 00:04:18.199
+failures that is some pieces stopped
+
+107
+00:04:18.399 --> 00:04:19.939
+working other people other pieces
+
+108
+00:04:20.139 --> 00:04:22.250
+continue working or maybe the computers
+
+109
+00:04:22.449 --> 00:04:24.079
+are working but some part of the network
+
+110
+00:04:24.279 --> 00:04:27.800
+is broken or unreliable so partial
+
+111
+00:04:28.000 --> 00:04:30.670
+failures is another reason why
+
+112
+00:04:30.870 --> 00:04:50.028
+distributed systems are hard and a final
+
+113
+00:04:50.228 --> 00:04:51.680
+reason why it's hard is that you know
+
+114
+00:04:51.879 --> 00:04:53.088
+them the original reason to build the
+
+115
+00:04:53.288 --> 00:04:54.579
+distributed system is often to get
+
+116
+00:04:54.779 --> 00:04:57.410
+higher performance to get you know a
+
+117
+00:04:57.610 --> 00:04:59.180
+thousand computers worth of performance
+
+118
+00:04:59.379 --> 00:05:01.459
+or a thousand disk arms were the
+
+119
+00:05:01.658 --> 00:05:03.379
+performance but it's actually very
+
+120
+00:05:03.579 --> 00:05:06.620
+tricky to obtain that thousand X speed
+
+121
+00:05:06.819 --> 00:05:09.110
+up with a thousand computers there's
+
+122
+00:05:09.310 --> 00:05:11.810
+often a lot of roadblocks thrown in your
+
+123
+00:05:12.009 --> 00:05:19.879
+way so the Elven takes a bit of careful
+
+124
+00:05:20.079 --> 00:05:22.759
+design to make the system actually give
+
+125
+00:05:22.959 --> 00:05:24.069
+you the performance you feel you deserve
+
+126
+00:05:24.269 --> 00:05:26.240
+so solving these problems of course
+
+127
+00:05:26.439 --> 00:05:27.490
+going to be all about you know
+
+128
+00:05:27.689 --> 00:05:31.759
+addressing these issues the reason to
+
+129
+00:05:31.959 --> 00:05:33.528
+take the course is because often the
+
+130
+00:05:33.728 --> 00:05:35.209
+problems and the solutions are quite
+
+131
+00:05:35.408 --> 00:05:38.120
+just technically interesting they're
+
+132
+00:05:38.319 --> 00:05:40.129
+hard problems for some of these problems
+
+133
+00:05:40.329 --> 00:05:42.439
+there's pretty good solutions known for
+
+134
+00:05:42.639 --> 00:05:44.300
+other problems they're not such great
+
+135
+00:05:44.500 --> 00:05:47.540
+solutions now distributed systems are
+
+136
+00:05:47.740 --> 00:05:50.718
+used by a lot of real-world systems out
+
+137
+00:05:50.918 --> 00:05:53.149
+there like big websites often involved
+
+138
+00:05:53.348 --> 00:05:55.040
+you know vast numbers computers that are
+
+139
+00:05:55.240 --> 00:05:57.770
+you know put together as distributed
+
+140
+00:05:57.970 --> 00:06:00.230
+systems when I first started teaching
+
+141
+00:06:00.430 --> 00:06:03.290
+this course it was distributed systems
+
+142
+00:06:03.490 --> 00:06:05.028
+were something of an academic curiosity
+
+143
+00:06:05.228 --> 00:06:07.459
+you know people thought oh you know at a
+
+144
+00:06:07.658 --> 00:06:09.560
+small scale they were used sometimes and
+
+145
+00:06:09.759 --> 00:06:10.879
+people felt that oh someday they'd be
+
+146
+00:06:11.079 --> 00:06:14.540
+might be important but now particularly
+
+147
+00:06:14.740 --> 00:06:16.490
+driven by the rise of giant websites
+
+148
+00:06:16.689 --> 00:06:18.770
+that have you know vast amounts of data
+
+149
+00:06:18.970 --> 00:06:21.759
+and entire warehouses full of computers
+
+150
+00:06:21.959 --> 00:06:23.449
+distributed systems in the last
+
+151
+00:06:23.649 --> 00:06:25.660
+twenty years have gotten to be very
+
+152
+00:06:25.860 --> 00:06:29.059
+seriously important part of computing
+
+153
+00:06:29.259 --> 00:06:32.689
+infrastructure this means that there's
+
+154
+00:06:32.889 --> 00:06:34.278
+been a lot of attention paid to them a
+
+155
+00:06:34.478 --> 00:06:36.050
+lot of problems have been solved but
+
+156
+00:06:36.250 --> 00:06:37.490
+there's still quite a few unsolved
+
+157
+00:06:37.689 --> 00:06:39.740
+problems so if you're a graduate student
+
+158
+00:06:39.939 --> 00:06:42.290
+or you're interested in research there's
+
+159
+00:06:42.490 --> 00:06:45.110
+a lot to you let a lot of problems yet
+
+160
+00:06:45.310 --> 00:06:47.088
+to be solved in distributed systems that
+
+161
+00:06:47.288 --> 00:06:49.520
+you could look into his research and
+
+162
+00:06:49.720 --> 00:06:51.439
+finally if you like building stuff this
+
+163
+00:06:51.639 --> 00:06:54.020
+is a good class because it has a lab
+
+164
+00:06:54.220 --> 00:06:55.850
+sequence in which you'll construct some
+
+165
+00:06:56.050 --> 00:06:58.490
+fairly realistic distributed systems
+
+166
+00:06:58.689 --> 00:07:00.410
+focused on performance and fault
+
+167
+00:07:00.610 --> 00:07:00.980
+tolerance
+
+168
+00:07:01.180 --> 00:07:04.400
+so you've got a lot of practice building
+
+169
+00:07:04.600 --> 00:07:06.588
+districts just building distributed
+
+170
+00:07:06.788 --> 00:07:09.350
+systems and making them work all right
+
+171
+00:07:09.550 --> 00:07:12.218
+let me talk about course structure a bit
+
+172
+00:07:12.418 --> 00:07:16.338
+before I get started on real technical
+
+173
+00:07:16.538 --> 00:07:18.860
+content you should be able to find the
+
+174
+00:07:19.060 --> 00:07:22.579
+course website using Google and on the
+
+175
+00:07:22.779 --> 00:07:24.620
+course website is the lab assignments
+
+176
+00:07:24.819 --> 00:07:27.949
+and course schedule and also link to a
+
+177
+00:07:28.149 --> 00:07:31.009
+Piazza page where you can post questions
+
+178
+00:07:31.209 --> 00:07:35.120
+get answers the course staff I'm Robert
+
+179
+00:07:35.319 --> 00:07:36.770
+Morris I'll be giving the lectures I
+
+180
+00:07:36.970 --> 00:07:39.050
+also have for TAS you guys want to stand
+
+181
+00:07:39.250 --> 00:07:44.149
+up and show your faces the TAS are
+
+182
+00:07:44.348 --> 00:07:47.749
+experts at in particular at doing the
+
+183
+00:07:47.949 --> 00:07:49.490
+solving the labs they'll be holding
+
+184
+00:07:49.689 --> 00:07:51.199
+office hours so if you have questions
+
+185
+00:07:51.399 --> 00:07:52.879
+about the labs you can come you should
+
+186
+00:07:53.079 --> 00:07:55.160
+go to office hours or you could post
+
+187
+00:07:55.360 --> 00:07:59.449
+questions to Piazza the course has a
+
+188
+00:07:59.649 --> 00:08:03.829
+couple of important components one is
+
+189
+00:08:04.029 --> 00:08:08.899
+this lectures there's a paper for almost
+
+190
+00:08:09.098 --> 00:08:16.379
+every lecture there's two exams
+
+191
+00:08:17.788 --> 00:08:22.449
+there's the labs programming labs and
+
+192
+00:08:22.649 --> 00:08:25.278
+there's an optional final project that
+
+193
+00:08:25.478 --> 00:08:28.740
+you can do instead of one of the labs
+
+194
+00:08:36.038 --> 00:08:38.120
+the lectures will be about two big ideas
+
+195
+00:08:38.320 --> 00:08:41.870
+in distributed systems they'll also be a
+
+196
+00:08:42.070 --> 00:08:43.609
+couple of lectures that are more about
+
+197
+00:08:43.809 --> 00:08:46.939
+sort of lab programming stuff a lot of
+
+198
+00:08:47.139 --> 00:08:48.439
+our lectures will be taken up by case
+
+199
+00:08:48.639 --> 00:08:50.389
+studies a lot of the way that I sort of
+
+200
+00:08:50.589 --> 00:08:53.449
+try to bring out the content of
+
+201
+00:08:53.649 --> 00:08:55.009
+distributed systems is by looking at
+
+202
+00:08:55.210 --> 00:08:57.909
+papers some academics some written by
+
+203
+00:08:58.110 --> 00:09:01.759
+people in industry describing real
+
+204
+00:09:01.960 --> 00:09:05.100
+solutions to real problems
+
+205
+00:09:05.589 --> 00:09:07.389
+these lectures actually be videotaped
+
+206
+00:09:07.589 --> 00:09:10.069
+and I'm hoping to post them online so
+
+207
+00:09:10.269 --> 00:09:12.740
+that you can so if you're not here or
+
+208
+00:09:12.940 --> 00:09:15.078
+you want to review the lectures you'll
+
+209
+00:09:15.278 --> 00:09:16.069
+be able to look at the videotape
+
+210
+00:09:16.269 --> 00:09:19.909
+lectures the papers again there's one to
+
+211
+00:09:20.110 --> 00:09:21.859
+read per week most of a research paper
+
+212
+00:09:22.059 --> 00:09:24.409
+some of them are classic papers like
+
+213
+00:09:24.610 --> 00:09:26.240
+today's paper which I hope some of you
+
+214
+00:09:26.440 --> 00:09:28.189
+have read on MapReduce it's an old paper
+
+215
+00:09:28.389 --> 00:09:31.189
+but it was the beginning of its spurred
+
+216
+00:09:31.389 --> 00:09:33.109
+an enormous amount of interesting work
+
+217
+00:09:33.309 --> 00:09:35.659
+both academic and in the real world so
+
+218
+00:09:35.860 --> 00:09:36.828
+some are classic and some are more
+
+219
+00:09:37.028 --> 00:09:39.859
+recent papers sort of talking about more
+
+220
+00:09:40.059 --> 00:09:41.299
+up-to-date research what people are
+
+221
+00:09:41.500 --> 00:09:44.328
+currently worried about and from the
+
+222
+00:09:44.528 --> 00:09:45.859
+papers we'll be hoping to tease out what
+
+223
+00:09:46.059 --> 00:09:48.919
+the basic problems are what ideas people
+
+224
+00:09:49.120 --> 00:09:50.328
+have had that might or might not be
+
+225
+00:09:50.528 --> 00:09:51.979
+useful in solving distributed system
+
+226
+00:09:52.179 --> 00:09:54.769
+problems we'll be looking at sometimes
+
+227
+00:09:54.970 --> 00:09:56.449
+in implementation details in some of
+
+228
+00:09:56.649 --> 00:09:58.519
+these papers because a lot of this has
+
+229
+00:09:58.720 --> 00:10:00.919
+to do with actual construction of of
+
+230
+00:10:01.120 --> 00:10:03.229
+software based systems and we're also
+
+231
+00:10:03.429 --> 00:10:04.699
+going to spend a certain time looking at
+
+232
+00:10:04.899 --> 00:10:07.339
+evaluations people evaluating how fault
+
+233
+00:10:07.539 --> 00:10:09.109
+tolerant their systems by measuring them
+
+234
+00:10:09.309 --> 00:10:11.000
+or people measuring how much performance
+
+235
+00:10:11.200 --> 00:10:12.589
+or whether they got performance
+
+236
+00:10:12.789 --> 00:10:17.750
+improvement at all so I'm hoping that
+
+237
+00:10:17.950 --> 00:10:19.609
+you'll read the papers before coming to
+
+238
+00:10:19.809 --> 00:10:22.459
+class the lectures are maybe not going
+
+239
+00:10:22.659 --> 00:10:24.019
+to make as much sense if you haven't
+
+240
+00:10:24.220 --> 00:10:25.909
+already read the lecture because there's
+
+241
+00:10:26.110 --> 00:10:28.008
+not enough time to both explaining all
+
+242
+00:10:28.208 --> 00:10:30.620
+the content of the paper and have a sort
+
+243
+00:10:30.820 --> 00:10:32.629
+of interesting reflection on what the
+
+244
+00:10:32.830 --> 00:10:34.849
+paper means online class so you really
+
+245
+00:10:35.049 --> 00:10:37.008
+got to read the papers before I come
+
+246
+00:10:37.208 --> 00:10:38.419
+into class and hopefully one of the
+
+247
+00:10:38.620 --> 00:10:39.829
+things you'll learn in this class is how
+
+248
+00:10:40.029 --> 00:10:42.269
+to read a paper rapidly in the fish
+
+249
+00:10:42.470 --> 00:10:44.740
+and skip over the parts that maybe
+
+250
+00:10:44.940 --> 00:10:47.229
+aren't that important and sort of focus
+
+251
+00:10:47.429 --> 00:10:51.159
+on teasing out the important ideas on
+
+252
+00:10:51.360 --> 00:10:53.529
+the website there's for every link to
+
+253
+00:10:53.730 --> 00:10:56.529
+buy the schedule there's a question that
+
+254
+00:10:56.730 --> 00:10:58.959
+you should submit an answer for for
+
+255
+00:10:59.159 --> 00:11:00.549
+every paper I think the answers are due
+
+256
+00:11:00.750 --> 00:11:02.589
+at midnight and we also ask that you
+
+257
+00:11:02.789 --> 00:11:03.819
+submit a question you have about the
+
+258
+00:11:04.019 --> 00:11:07.870
+paper through the website in order both
+
+259
+00:11:08.070 --> 00:11:09.189
+to give me something to think about as
+
+260
+00:11:09.389 --> 00:11:11.079
+I'm preparing the lecture and if I have
+
+261
+00:11:11.279 --> 00:11:13.689
+time I'll try to answer at least a few
+
+262
+00:11:13.889 --> 00:11:17.079
+of the questions by email and the
+
+263
+00:11:17.279 --> 00:11:18.399
+question and the answer for each paper
+
+264
+00:11:18.600 --> 00:11:21.939
+due midnight the night before there's
+
+265
+00:11:22.139 --> 00:11:24.459
+two exams there's a midterm exam in
+
+266
+00:11:24.659 --> 00:11:26.649
+class I think on the last class meeting
+
+267
+00:11:26.850 --> 00:11:32.439
+before spring break and there's a final
+
+268
+00:11:32.639 --> 00:11:35.799
+exam during final exam week at the end
+
+269
+00:11:36.000 --> 00:11:37.569
+of the semester the exams are going to
+
+270
+00:11:37.769 --> 00:11:41.919
+focus mostly on papers and the labs and
+
+271
+00:11:42.120 --> 00:11:43.929
+probably the best way to prepare for
+
+272
+00:11:44.129 --> 00:11:46.120
+them as well as attending lecture and
+
+273
+00:11:46.320 --> 00:11:49.029
+reading the papers a good way to prepare
+
+274
+00:11:49.230 --> 00:11:51.159
+for the exams is to look at all exams we
+
+275
+00:11:51.360 --> 00:11:55.479
+have links to 20 years of old exams and
+
+276
+00:11:55.679 --> 00:11:57.039
+solutions and so you look at those and
+
+277
+00:11:57.240 --> 00:11:58.509
+sort of get a feel for what kind of
+
+278
+00:11:58.710 --> 00:12:01.149
+questions that I like to ask and indeed
+
+279
+00:12:01.350 --> 00:12:02.969
+because we read many of the same papers
+
+280
+00:12:03.169 --> 00:12:05.349
+inevitably I ask questions each year
+
+281
+00:12:05.549 --> 00:12:08.709
+that can't help but resemble questions
+
+282
+00:12:08.909 --> 00:12:15.219
+asked in previous years the labs there's
+
+283
+00:12:15.419 --> 00:12:17.289
+for programming labs the first one of
+
+284
+00:12:17.490 --> 00:12:25.449
+them is due Friday next week lab one is
+
+285
+00:12:25.649 --> 00:12:31.779
+a simple MapReduce lab to implement your
+
+286
+00:12:31.980 --> 00:12:33.609
+own version of the paper they write
+
+287
+00:12:33.809 --> 00:12:34.899
+today in which I'll be discussing in a
+
+288
+00:12:35.100 --> 00:12:35.849
+few minutes
+
+289
+00:12:36.049 --> 00:12:40.120
+lab 2 involves using a technique called
+
+290
+00:12:40.320 --> 00:12:43.419
+raft in order to get fault taught in
+
+291
+00:12:43.620 --> 00:12:46.990
+order to sort of allow in theory allow
+
+292
+00:12:47.190 --> 00:12:49.479
+any system to be made fault tolerant by
+
+293
+00:12:49.679 --> 00:12:51.009
+replicating it and having this raft
+
+294
+00:12:51.210 --> 00:12:53.649
+technique manage the replication and
+
+295
+00:12:53.850 --> 00:12:55.029
+manage sort of automatic cut
+
+296
+00:12:55.230 --> 00:12:57.459
+or if there's a field if one of the
+
+297
+00:12:57.659 --> 00:12:59.949
+replicated servers fails so this is rav4
+
+298
+00:13:00.149 --> 00:13:08.500
+fault tolerance in lad 3 you'll use your
+
+299
+00:13:08.700 --> 00:13:11.169
+raft implementation in order to build a
+
+300
+00:13:11.370 --> 00:13:18.789
+fault tolerant key-value server it'll be
+
+301
+00:13:18.990 --> 00:13:22.439
+replicated and fault tolerant in a lab 4
+
+302
+00:13:22.639 --> 00:13:25.750
+you'll take your replicated key-value
+
+303
+00:13:25.950 --> 00:13:28.000
+server and clone it into a number of
+
+304
+00:13:28.200 --> 00:13:30.189
+independent groups and you'll split the
+
+305
+00:13:30.389 --> 00:13:33.669
+data in your key value storage system
+
+306
+00:13:33.870 --> 00:13:34.959
+across all of these individual
+
+307
+00:13:35.159 --> 00:13:36.579
+replicated groups to get parallel
+
+308
+00:13:36.779 --> 00:13:39.459
+speed-up by running multiple replicated
+
+309
+00:13:39.659 --> 00:13:42.039
+groups in parallel and you'll also be
+
+310
+00:13:42.240 --> 00:13:47.589
+responsible for moving the various
+
+311
+00:13:47.789 --> 00:13:49.870
+chunks of data between different servers
+
+312
+00:13:50.070 --> 00:13:52.299
+as they come and go without dropping any
+
+313
+00:13:52.500 --> 00:13:54.609
+balls so this is a what's often called a
+
+314
+00:13:54.809 --> 00:14:03.129
+sharded key value service sharding
+
+315
+00:14:03.330 --> 00:14:04.629
+refers to splitting up the data
+
+316
+00:14:04.830 --> 00:14:07.209
+partitioning the data among multiple
+
+317
+00:14:07.409 --> 00:14:10.089
+servers in order to get parallel speed
+
+318
+00:14:10.289 --> 00:14:16.409
+up if you want instead of doing lab 4
+
+319
+00:14:16.610 --> 00:14:19.539
+you can do a project of your own choice
+
+320
+00:14:19.740 --> 00:14:21.279
+and the idea here is if you have some
+
+321
+00:14:21.480 --> 00:14:23.500
+idea for a distributed system you know
+
+322
+00:14:23.700 --> 00:14:25.809
+in the style of some of the distributed
+
+323
+00:14:26.009 --> 00:14:27.129
+systems we talked about in the class if
+
+324
+00:14:27.330 --> 00:14:28.329
+you have your own idea that you want to
+
+325
+00:14:28.529 --> 00:14:30.099
+pursue and you like to build something
+
+326
+00:14:30.299 --> 00:14:31.899
+and measure whether it worked in order
+
+327
+00:14:32.100 --> 00:14:34.299
+to explore your idea you can do a
+
+328
+00:14:34.500 --> 00:14:38.169
+project and so for a project you'll pick
+
+329
+00:14:38.370 --> 00:14:39.969
+some teammates because we require that
+
+330
+00:14:40.169 --> 00:14:43.870
+projects are done in teams of two or
+
+331
+00:14:44.070 --> 00:14:47.229
+three people so like some teammates and
+
+332
+00:14:47.429 --> 00:14:48.849
+send your project idea to us and we'll
+
+333
+00:14:49.049 --> 00:14:50.740
+think about it and say yes or no and
+
+334
+00:14:50.940 --> 00:14:53.379
+maybe give you some advice and then if
+
+335
+00:14:53.580 --> 00:14:55.029
+you go ahead and do if we say yes and
+
+336
+00:14:55.230 --> 00:14:56.409
+you want to do a project you do that and
+
+337
+00:14:56.610 --> 00:14:58.959
+instead of lab 4 and it's due at the end
+
+338
+00:14:59.159 --> 00:15:00.669
+of the semester and you know you'll you
+
+339
+00:15:00.870 --> 00:15:05.049
+should do some design work and build a
+
+340
+00:15:05.250 --> 00:15:06.759
+real system and then in the last day of
+
+341
+00:15:06.960 --> 00:15:08.740
+class you'll demonstrate your system
+
+342
+00:15:08.940 --> 00:15:11.169
+as well as handing in a short sort of
+
+343
+00:15:11.370 --> 00:15:12.699
+written report to us about what you
+
+344
+00:15:12.899 --> 00:15:17.529
+built and I posted on the website some
+
+345
+00:15:17.730 --> 00:15:19.870
+some ideas which might or may not be
+
+346
+00:15:20.070 --> 00:15:22.149
+useful for you to sort of spur thoughts
+
+347
+00:15:22.350 --> 00:15:24.939
+about what projects you might build but
+
+348
+00:15:25.139 --> 00:15:27.490
+really the best projects are one where
+
+349
+00:15:27.690 --> 00:15:29.889
+sort of you have a good idea for the
+
+350
+00:15:30.090 --> 00:15:32.500
+project and the idea is if you want to
+
+351
+00:15:32.700 --> 00:15:34.719
+do a project you should choose an idea
+
+352
+00:15:34.919 --> 00:15:36.609
+that's sort of in the same vein as the
+
+353
+00:15:36.809 --> 00:15:38.949
+systems that were talked about in this
+
+354
+00:15:39.149 --> 00:15:40.439
+class
+
+355
+00:15:40.639 --> 00:15:43.839
+okay back to labs the lab Greed's they
+
+356
+00:15:44.039 --> 00:15:45.819
+we give you you hand in your lab code
+
+357
+00:15:46.019 --> 00:15:47.740
+and we run some tests against it and
+
+358
+00:15:47.940 --> 00:15:49.509
+you're great early based on how many
+
+359
+00:15:49.710 --> 00:15:51.669
+tests you pass we give you all the tests
+
+360
+00:15:51.870 --> 00:15:54.969
+that we use those no hidden tests so if
+
+361
+00:15:55.169 --> 00:15:56.649
+you implement the lab and it reliably
+
+362
+00:15:56.850 --> 00:15:58.750
+passes all the tests and chances are
+
+363
+00:15:58.950 --> 00:16:00.549
+good unless there's something funny
+
+364
+00:16:00.750 --> 00:16:02.109
+going on which there sometimes is
+
+365
+00:16:02.309 --> 00:16:04.449
+chances are good that if you your coop
+
+366
+00:16:04.649 --> 00:16:05.859
+passes all the tests when you run it or
+
+367
+00:16:06.059 --> 00:16:07.359
+pass all the tests when we run it and
+
+368
+00:16:07.559 --> 00:16:10.120
+you'll get a four score full score so
+
+369
+00:16:10.320 --> 00:16:11.319
+hopefully there'll be no mystery about
+
+370
+00:16:11.519 --> 00:16:13.629
+what score you're likely to get on the
+
+371
+00:16:13.830 --> 00:16:18.579
+labs let me warn you that debugging
+
+372
+00:16:18.779 --> 00:16:21.729
+these labs can be time-consuming because
+
+373
+00:16:21.929 --> 00:16:23.349
+they're distributed systems and a lot of
+
+374
+00:16:23.549 --> 00:16:26.620
+concurrency and communication sort of
+
+375
+00:16:26.820 --> 00:16:29.799
+strange difficult to debug errors can
+
+376
+00:16:30.000 --> 00:16:33.819
+crop up so you really ought to start the
+
+377
+00:16:34.019 --> 00:16:37.179
+labs early don't don't even have a lot
+
+378
+00:16:37.379 --> 00:16:39.009
+of trouble if you be elapsed to the last
+
+379
+00:16:39.210 --> 00:16:41.169
+moment you got to start early if your
+
+380
+00:16:41.370 --> 00:16:43.479
+problems please come to the TAS office
+
+381
+00:16:43.679 --> 00:16:45.579
+hours and please feel free to ask
+
+382
+00:16:45.779 --> 00:16:48.879
+questions about the labs on Piazza and
+
+383
+00:16:49.080 --> 00:16:51.069
+indeed I hope if you know the answer
+
+384
+00:16:51.269 --> 00:16:52.569
+that you'll answer people's questions on
+
+385
+00:16:52.769 --> 00:16:56.139
+Piazza as well all right any questions
+
+386
+00:16:56.339 --> 00:17:04.759
+about the mechanics of the course yes
+
+387
+00:17:10.338 --> 00:17:12.940
+so the question is what is how does how
+
+388
+00:17:13.140 --> 00:17:15.128
+do the different factor these things
+
+389
+00:17:15.328 --> 00:17:17.349
+factoring the grade I forget but it's
+
+390
+00:17:17.549 --> 00:17:19.980
+all on the it's on the website under
+
+391
+00:17:20.180 --> 00:17:24.700
+something I think though it's the labs
+
+392
+00:17:24.900 --> 00:17:29.369
+are the single most important component
+
+393
+00:17:29.569 --> 00:17:36.149
+okay alright so this is a course about
+
+394
+00:17:36.349 --> 00:17:39.579
+about infrastructure for applications
+
+395
+00:17:39.779 --> 00:17:41.259
+and so all through this course there's
+
+396
+00:17:41.460 --> 00:17:42.608
+going to be a sort of split in the way I
+
+397
+00:17:42.808 --> 00:17:44.979
+talk about things between applications
+
+398
+00:17:45.179 --> 00:17:47.349
+which are sort of other people the
+
+399
+00:17:47.549 --> 00:17:49.779
+customer somebody else writes but the
+
+400
+00:17:49.980 --> 00:17:51.190
+applications are going to use the
+
+401
+00:17:51.390 --> 00:17:52.960
+infrastructure that we're thinking about
+
+402
+00:17:53.160 --> 00:17:55.539
+in this course and so the kinds of
+
+403
+00:17:55.740 --> 00:17:58.750
+infrastructure that tend to come up a
+
+404
+00:17:58.950 --> 00:18:13.419
+lot our storage communication and
+
+405
+00:18:13.619 --> 00:18:16.720
+computation and we'll talk about systems
+
+406
+00:18:16.920 --> 00:18:18.849
+that provide all three of these kinds of
+
+407
+00:18:19.049 --> 00:18:23.169
+infrastructure the the storage it turns
+
+408
+00:18:23.369 --> 00:18:24.700
+out that storage is going to be the one
+
+409
+00:18:24.900 --> 00:18:27.789
+we focus most on because it's a very
+
+410
+00:18:27.990 --> 00:18:30.779
+well-defined and useful abstraction and
+
+411
+00:18:30.980 --> 00:18:32.619
+usually fairly straightforward
+
+412
+00:18:32.819 --> 00:18:34.119
+abstraction so people know a lot about
+
+413
+00:18:34.319 --> 00:18:36.029
+how to build how to use and build
+
+414
+00:18:36.230 --> 00:18:40.149
+storage systems and how to build sort of
+
+415
+00:18:40.349 --> 00:18:41.470
+replicated fault tolerant
+
+416
+00:18:41.670 --> 00:18:43.479
+high-performance distributed
+
+417
+00:18:43.679 --> 00:18:46.210
+implementations of storage we'll also
+
+418
+00:18:46.410 --> 00:18:48.519
+talk about some some of our computation
+
+419
+00:18:48.720 --> 00:18:50.769
+systems like MapReduce for today is a
+
+420
+00:18:50.970 --> 00:18:54.549
+computation system and we will talk
+
+421
+00:18:54.750 --> 00:18:56.919
+about communications some but mostly
+
+422
+00:18:57.119 --> 00:18:58.509
+from the point is a tool that we need to
+
+423
+00:18:58.710 --> 00:19:00.309
+use to build distributed systems like
+
+424
+00:19:00.509 --> 00:19:01.779
+computers have to talk to each other
+
+425
+00:19:01.980 --> 00:19:03.549
+over a network you know maybe you need
+
+426
+00:19:03.750 --> 00:19:06.129
+reliability or something and so we'll
+
+427
+00:19:06.329 --> 00:19:08.470
+talk a bit about what we're actually
+
+428
+00:19:08.670 --> 00:19:11.769
+mostly consumers of communication if you
+
+429
+00:19:11.970 --> 00:19:12.779
+want to learn about communication
+
+430
+00:19:12.980 --> 00:19:16.839
+systems as sort of how they work that's
+
+431
+00:19:17.039 --> 00:19:20.579
+more the topic of six eight to nine
+
+432
+00:19:20.779 --> 00:19:24.549
+so for storage and computation a lot of
+
+433
+00:19:24.750 --> 00:19:27.000
+our goal is to be able to discover
+
+434
+00:19:27.200 --> 00:19:31.419
+abstractions where use of simplifying
+
+435
+00:19:31.619 --> 00:19:34.240
+the interface to these two storage and
+
+436
+00:19:34.440 --> 00:19:36.460
+computation distributed storage and
+
+437
+00:19:36.660 --> 00:19:38.559
+computation infrastructure so that it's
+
+438
+00:19:38.759 --> 00:19:40.659
+easy to build applications on top of it
+
+439
+00:19:40.859 --> 00:19:43.299
+and what that really means is that we
+
+440
+00:19:43.500 --> 00:19:45.069
+need to we'd like to be able to build
+
+441
+00:19:45.269 --> 00:19:47.169
+abstraction that hide the distributed
+
+442
+00:19:47.369 --> 00:19:51.039
+nature of these of these systems so the
+
+443
+00:19:51.240 --> 00:19:54.099
+dream which is rarely fully achieved but
+
+444
+00:19:54.299 --> 00:19:56.379
+the dream would be to be able to build
+
+445
+00:19:56.579 --> 00:19:58.509
+an interface that looks to an
+
+446
+00:19:58.710 --> 00:20:00.430
+application is if it's a non distributed
+
+447
+00:20:00.630 --> 00:20:02.109
+storage system just like a file system
+
+448
+00:20:02.309 --> 00:20:03.549
+or something that everybody already
+
+449
+00:20:03.750 --> 00:20:05.079
+knows how to program and has a pretty
+
+450
+00:20:05.279 --> 00:20:07.899
+simple model semantics we'd love to be
+
+451
+00:20:08.099 --> 00:20:09.789
+able to build interfaces that look and
+
+452
+00:20:09.990 --> 00:20:13.569
+act just like non distributed storage
+
+453
+00:20:13.769 --> 00:20:17.399
+and computation systems but are actually
+
+454
+00:20:17.599 --> 00:20:20.169
+you know vast extremely high performance
+
+455
+00:20:20.369 --> 00:20:22.389
+fault tolerant distributed systems
+
+456
+00:20:22.589 --> 00:20:27.889
+underneath so we both have abstractions
+
+457
+00:20:30.019 --> 00:20:32.829
+and you know as you'll see as a course
+
+458
+00:20:33.029 --> 00:20:37.750
+goes on we sort of you know only part of
+
+459
+00:20:37.950 --> 00:20:39.609
+the way there it's rare that you find an
+
+460
+00:20:39.809 --> 00:20:41.619
+abstraction for a distributed version of
+
+461
+00:20:41.819 --> 00:20:44.529
+storage or computation that has simple
+
+462
+00:20:44.730 --> 00:20:48.909
+behavior but he's just like the non just
+
+463
+00:20:49.109 --> 00:20:50.919
+non distributed version of storage that
+
+464
+00:20:51.119 --> 00:20:52.720
+everybody understands but people getting
+
+465
+00:20:52.920 --> 00:20:59.440
+better at this and we're gonna try to
+
+466
+00:20:59.640 --> 00:21:01.480
+study the ways and what people have
+
+467
+00:21:01.680 --> 00:21:03.659
+learned about building such abstractions
+
+468
+00:21:03.859 --> 00:21:08.559
+ok so what kind of what kind of topics
+
+469
+00:21:08.759 --> 00:21:09.970
+show up is we're considering these
+
+470
+00:21:10.170 --> 00:21:13.389
+abstractions the first one this first
+
+471
+00:21:13.589 --> 00:21:15.639
+topic general topic that we'll see a lot
+
+472
+00:21:15.839 --> 00:21:18.490
+a lot of the systems we looked at have
+
+473
+00:21:18.690 --> 00:21:24.720
+to do with implementation so for example
+
+474
+00:21:24.920 --> 00:21:27.369
+the kind of tools that you see a lot for
+
+475
+00:21:27.569 --> 00:21:29.950
+for ways people learn how to build these
+
+476
+00:21:30.150 --> 00:21:31.450
+systems are things like remote procedure
+
+477
+00:21:31.650 --> 00:21:32.389
+call
+
+478
+00:21:32.589 --> 00:21:35.328
+whose goal is to mask the fact that
+
+479
+00:21:35.528 --> 00:21:36.769
+we're communicating over an unreliable
+
+480
+00:21:36.970 --> 00:21:44.649
+Network another kind of implementation
+
+481
+00:21:44.849 --> 00:21:49.029
+topic that we'll see a lot is threads
+
+482
+00:21:49.230 --> 00:21:51.740
+which are a programming technique that
+
+483
+00:21:51.940 --> 00:21:54.828
+allows us to harness what allows us to
+
+484
+00:21:55.028 --> 00:21:56.659
+harness multi-core computers but maybe
+
+485
+00:21:56.859 --> 00:21:58.548
+more important for this class threads
+
+486
+00:21:58.749 --> 00:22:00.108
+are a way of structuring concurrent
+
+487
+00:22:00.308 --> 00:22:02.899
+operations in a way that's hopefully
+
+488
+00:22:03.099 --> 00:22:06.078
+simplifies the programmer view of those
+
+489
+00:22:06.278 --> 00:22:08.899
+concurrent operations and because we're
+
+490
+00:22:09.099 --> 00:22:10.129
+gonna use threads a lot it turns out
+
+491
+00:22:10.329 --> 00:22:12.078
+we're going to need to also you know
+
+492
+00:22:12.278 --> 00:22:13.578
+just as from an implementation level
+
+493
+00:22:13.778 --> 00:22:14.959
+spend a certain amount of time thinking
+
+494
+00:22:15.159 --> 00:22:16.639
+about concurrency control things like
+
+495
+00:22:16.839 --> 00:22:24.979
+locks and the main place that these
+
+496
+00:22:25.179 --> 00:22:26.389
+implementation ideas will come up in the
+
+497
+00:22:26.589 --> 00:22:28.399
+class they'll be touched on in many of
+
+498
+00:22:28.599 --> 00:22:29.990
+the papers but you're gonna come face
+
+499
+00:22:30.190 --> 00:22:31.668
+the face of all this in a big way in the
+
+500
+00:22:31.868 --> 00:22:34.009
+labs you need to build distributed you
+
+501
+00:22:34.210 --> 00:22:35.509
+know do the programming for distributed
+
+502
+00:22:35.710 --> 00:22:37.879
+system and these are like a lot of sort
+
+503
+00:22:38.079 --> 00:22:40.879
+of important tools you know beyond just
+
+504
+00:22:41.079 --> 00:22:43.459
+sort of ordinary programming these are
+
+505
+00:22:43.659 --> 00:22:44.808
+some of the critical tools that you'll
+
+506
+00:22:45.009 --> 00:22:50.078
+need to use to build distributed systems
+
+507
+00:22:50.278 --> 00:22:53.928
+another big topic that comes up in all
+
+508
+00:22:54.128 --> 00:22:55.188
+the papers we're going to talk about is
+
+509
+00:22:55.388 --> 00:23:05.240
+performance usually the high-level goal
+
+510
+00:23:05.440 --> 00:23:07.369
+of building a distributed system is to
+
+511
+00:23:07.569 --> 00:23:11.649
+get what people call scalable speed-up
+
+512
+00:23:11.849 --> 00:23:17.259
+so we're looking for scalability and
+
+513
+00:23:17.460 --> 00:23:20.838
+what I mean by scalability or scalable
+
+514
+00:23:21.038 --> 00:23:23.328
+speed-up is that if I have some problem
+
+515
+00:23:23.528 --> 00:23:25.909
+that I'm solving with one computer and I
+
+516
+00:23:26.109 --> 00:23:29.358
+buy a second computer to help me execute
+
+517
+00:23:29.558 --> 00:23:31.578
+my problem if I can now solve the
+
+518
+00:23:31.778 --> 00:23:33.889
+problem in half the time or maybe solve
+
+519
+00:23:34.089 --> 00:23:37.250
+twice as many problem instances you know
+
+520
+00:23:37.450 --> 00:23:39.649
+per minute on two computers as I had on
+
+521
+00:23:39.849 --> 00:23:42.139
+one then that's an example of
+
+522
+00:23:42.339 --> 00:23:44.119
+scalability so
+
+523
+00:23:44.319 --> 00:23:47.359
+sort of two times you know computers or
+
+524
+00:23:47.559 --> 00:23:53.889
+resources gets me you know two times
+
+525
+00:23:54.089 --> 00:24:00.889
+performance or throughput and this is a
+
+526
+00:24:01.089 --> 00:24:02.720
+huge hammer if you can build a system
+
+527
+00:24:02.920 --> 00:24:04.970
+that actually has this behavior Namie
+
+528
+00:24:05.170 --> 00:24:07.129
+that if you increase the number of
+
+529
+00:24:07.329 --> 00:24:08.629
+computers you throw at the problem by
+
+530
+00:24:08.829 --> 00:24:11.990
+some factor you get that factor more
+
+531
+00:24:12.190 --> 00:24:14.450
+throughput more performance out of the
+
+532
+00:24:14.650 --> 00:24:17.690
+system that's a huge win because you can
+
+533
+00:24:17.890 --> 00:24:20.809
+buy computers with just money right
+
+534
+00:24:21.009 --> 00:24:23.210
+whereas if in order to get the
+
+535
+00:24:23.410 --> 00:24:26.839
+alternative to this is that in order to
+
+536
+00:24:27.039 --> 00:24:28.430
+get more performance you have to pay
+
+537
+00:24:28.630 --> 00:24:31.180
+programmers to restructure your software
+
+538
+00:24:31.380 --> 00:24:33.349
+to get better performance to make it
+
+539
+00:24:33.549 --> 00:24:35.720
+more efficient or to apply some sort of
+
+540
+00:24:35.920 --> 00:24:37.700
+specialized techniques better algorithms
+
+541
+00:24:37.900 --> 00:24:39.769
+or something if you have to pay
+
+542
+00:24:39.970 --> 00:24:42.740
+programmers to fix your code to be
+
+543
+00:24:42.940 --> 00:24:45.259
+faster that's an expensive way to go
+
+544
+00:24:45.460 --> 00:24:47.389
+we'd love to be able just oh by thousand
+
+545
+00:24:47.589 --> 00:24:49.490
+computers instead of ten computers and
+
+546
+00:24:49.690 --> 00:24:51.409
+get a hundred times more throughput
+
+547
+00:24:51.609 --> 00:24:53.539
+that's fantastic and so this sort of
+
+548
+00:24:53.740 --> 00:24:56.629
+scalability idea is a huge idea in the
+
+549
+00:24:56.829 --> 00:24:57.859
+backs of people's heads when they're
+
+550
+00:24:58.059 --> 00:24:59.359
+like building things like big websites
+
+551
+00:24:59.559 --> 00:25:01.399
+that run on are you know building full
+
+552
+00:25:01.599 --> 00:25:04.309
+of computers if the building full of
+
+553
+00:25:04.509 --> 00:25:06.470
+computers is there to get a sort of
+
+554
+00:25:06.670 --> 00:25:09.409
+corresponding amount of performance but
+
+555
+00:25:09.609 --> 00:25:11.839
+you have to be careful about the design
+
+556
+00:25:12.039 --> 00:25:13.250
+in order to actually get that
+
+557
+00:25:13.450 --> 00:25:19.579
+performance so often the way this looks
+
+558
+00:25:19.779 --> 00:25:21.710
+when we're looking at diagrams or I'm
+
+559
+00:25:21.910 --> 00:25:23.329
+writing diagrams in this course is that
+
+560
+00:25:23.529 --> 00:25:25.279
+I'm not supposing we're building a
+
+561
+00:25:25.480 --> 00:25:27.500
+website ordinarily you might have a
+
+562
+00:25:27.700 --> 00:25:31.879
+website that you know has a HTTP server
+
+563
+00:25:32.079 --> 00:25:36.389
+let's say it has some types of users
+
+564
+00:25:36.900 --> 00:25:41.990
+many web browsers and they talk to a web
+
+565
+00:25:42.190 --> 00:25:44.690
+server running Python or PHP or whatever
+
+566
+00:25:44.890 --> 00:25:49.099
+sort of web server and the web server
+
+567
+00:25:49.299 --> 00:25:52.740
+talks to some kind of database
+
+568
+00:25:54.230 --> 00:25:56.289
+you know when you have one or two users
+
+569
+00:25:56.490 --> 00:25:58.419
+you can just have one computer running
+
+570
+00:25:58.619 --> 00:26:00.519
+both and maybe a computer for the web
+
+571
+00:26:00.720 --> 00:26:02.198
+server and a computer from the database
+
+572
+00:26:02.398 --> 00:26:03.639
+but maybe all of a sudden you get really
+
+573
+00:26:03.839 --> 00:26:05.139
+proper popular and you'll be up and
+
+574
+00:26:05.339 --> 00:26:08.379
+you've you know 100 million people sign
+
+575
+00:26:08.579 --> 00:26:13.299
+up your service ID how do you how do you
+
+576
+00:26:13.500 --> 00:26:14.979
+fix your c-certainly can it support
+
+577
+00:26:15.179 --> 00:26:17.698
+millions of people on a single computer
+
+578
+00:26:17.898 --> 00:26:20.438
+except by extremely careful
+
+579
+00:26:20.638 --> 00:26:24.428
+labor-intensive optimization but you
+
+580
+00:26:24.628 --> 00:26:27.578
+don't have time for so typically the way
+
+581
+00:26:27.778 --> 00:26:29.318
+you're going to speed things up the
+
+582
+00:26:29.519 --> 00:26:30.909
+first thing you do is buy more web
+
+583
+00:26:31.109 --> 00:26:33.338
+servers and just split the user so that
+
+584
+00:26:33.538 --> 00:26:35.379
+you know how few users or some fraction
+
+585
+00:26:35.579 --> 00:26:37.029
+the user go to a web server 1 and the
+
+586
+00:26:37.230 --> 00:26:39.549
+other half you send them to a web server
+
+587
+00:26:39.750 --> 00:26:45.759
+2 and because maybe you're building I
+
+588
+00:26:45.960 --> 00:26:47.558
+don't know what reddit or something
+
+589
+00:26:47.759 --> 00:26:49.240
+where all the users need to see the same
+
+590
+00:26:49.440 --> 00:26:51.009
+data ultimately you have all the web
+
+591
+00:26:51.210 --> 00:26:53.828
+servers talk to the backend and you can
+
+592
+00:26:54.028 --> 00:26:55.358
+keep on adding web servers for a long
+
+593
+00:26:55.558 --> 00:27:01.479
+time here and so this is a way of
+
+594
+00:27:01.679 --> 00:27:02.828
+getting parallel speed up on the web
+
+595
+00:27:03.028 --> 00:27:04.058
+server code you know if you're running
+
+596
+00:27:04.259 --> 00:27:05.709
+PHP or Python maybe it's not too
+
+597
+00:27:05.909 --> 00:27:09.369
+efficient as long as each individual web
+
+598
+00:27:09.569 --> 00:27:11.289
+server doesn't put too much load on the
+
+599
+00:27:11.490 --> 00:27:12.639
+database you can add a lot of web
+
+600
+00:27:12.839 --> 00:27:17.500
+servers before you run into problems but
+
+601
+00:27:17.700 --> 00:27:20.469
+this kind of scalability is rarely
+
+602
+00:27:20.669 --> 00:27:23.409
+infinite unfortunately certainly not
+
+603
+00:27:23.609 --> 00:27:25.088
+without serious thought and so what
+
+604
+00:27:25.288 --> 00:27:26.500
+tends to happen with these systems is
+
+605
+00:27:26.700 --> 00:27:29.108
+that at some point after you have 10 or
+
+606
+00:27:29.308 --> 00:27:31.178
+20 or 100 web servers all talking to the
+
+607
+00:27:31.378 --> 00:27:33.250
+same database now all of a sudden the
+
+608
+00:27:33.450 --> 00:27:34.899
+database starts to be a bottleneck and
+
+609
+00:27:35.099 --> 00:27:36.848
+adding more web servers no longer helps
+
+610
+00:27:37.048 --> 00:27:38.709
+so it's rare that you get full scale
+
+611
+00:27:38.909 --> 00:27:42.509
+ability to sort of infinite numbers of
+
+612
+00:27:42.710 --> 00:27:44.649
+adding infinite numbers of computers
+
+613
+00:27:44.849 --> 00:27:46.509
+some point you run out of gas because
+
+614
+00:27:46.710 --> 00:27:48.399
+the place at which you are adding more
+
+615
+00:27:48.599 --> 00:27:51.219
+computers is no longer the bottleneck by
+
+616
+00:27:51.419 --> 00:27:52.539
+having lots and lots of web servers we
+
+617
+00:27:52.740 --> 00:27:54.068
+basically moved the bottleneck
+
+618
+00:27:54.269 --> 00:27:56.348
+I think it's limiting performance from
+
+619
+00:27:56.548 --> 00:28:01.448
+the web servers to the database and at
+
+620
+00:28:01.648 --> 00:28:03.250
+this point actually you almost certainly
+
+621
+00:28:03.450 --> 00:28:05.529
+have to do a bit of design work because
+
+622
+00:28:05.730 --> 00:28:07.389
+it's rare that you can
+
+623
+00:28:07.589 --> 00:28:09.729
+there's any straightforward way to take
+
+624
+00:28:09.929 --> 00:28:13.209
+a single database and sort of refactor
+
+625
+00:28:13.409 --> 00:28:17.259
+things with it or you can take data
+
+626
+00:28:17.460 --> 00:28:19.149
+sorta in a single database and refactor
+
+627
+00:28:19.349 --> 00:28:23.089
+it so it's split over multiple databases
+
+628
+00:28:23.839 --> 00:28:26.639
+but it's often a fair amount of work and
+
+629
+00:28:26.839 --> 00:28:29.108
+because it's awkward but people many
+
+630
+00:28:29.308 --> 00:28:31.869
+people actually need to do this we're
+
+631
+00:28:32.069 --> 00:28:33.188
+gonna see a lot of examples in this
+
+632
+00:28:33.388 --> 00:28:34.688
+course in which the distributed system
+
+633
+00:28:34.888 --> 00:28:37.328
+people are talking about is a storage
+
+634
+00:28:37.528 --> 00:28:40.659
+system because the authors were running
+
+635
+00:28:40.859 --> 00:28:42.459
+you know something like a big website
+
+636
+00:28:42.659 --> 00:28:45.608
+that ran out of gas on a single database
+
+637
+00:28:45.808 --> 00:28:49.229
+or storage servers anyway so the
+
+638
+00:28:49.429 --> 00:28:51.399
+scalability story is we love to build
+
+639
+00:28:51.599 --> 00:28:56.129
+systems that scale this way but you know
+
+640
+00:28:56.329 --> 00:28:58.899
+it's hard to make it or takes work off
+
+641
+00:28:59.099 --> 00:29:01.750
+and design work to push this idea
+
+642
+00:29:01.950 --> 00:29:11.678
+infinitely far ok so another big topic
+
+643
+00:29:11.878 --> 00:29:16.248
+that comes up a lot is fault tolerance
+
+644
+00:29:22.249 --> 00:29:24.490
+if you're building a system with a
+
+645
+00:29:24.690 --> 00:29:27.250
+single computer in it well a single
+
+646
+00:29:27.450 --> 00:29:29.348
+computer often can stay up for years
+
+647
+00:29:29.548 --> 00:29:30.938
+like I have servers in my office that
+
+648
+00:29:31.138 --> 00:29:33.328
+have been up for years without crashing
+
+649
+00:29:33.528 --> 00:29:35.709
+you know the computer is pretty reliable
+
+650
+00:29:35.909 --> 00:29:37.539
+the operating systems reliable
+
+651
+00:29:37.740 --> 00:29:39.490
+apparently the power in my building is
+
+652
+00:29:39.690 --> 00:29:41.438
+pretty reliable so it's not uncommon to
+
+653
+00:29:41.638 --> 00:29:42.938
+have single computers it's just a for
+
+654
+00:29:43.138 --> 00:29:46.389
+amazing amount of time however if you're
+
+655
+00:29:46.589 --> 00:29:47.948
+building systems out of thousands of
+
+656
+00:29:48.148 --> 00:29:50.619
+computers then even if each computer can
+
+657
+00:29:50.819 --> 00:29:53.500
+be expected to stay up for a year with a
+
+658
+00:29:53.700 --> 00:29:55.119
+thousand computers that means you're
+
+659
+00:29:55.319 --> 00:29:56.918
+going to have like about three computer
+
+660
+00:29:57.118 --> 00:29:59.828
+failures per day in your set of a
+
+661
+00:30:00.028 --> 00:30:02.348
+thousand computers so solving big
+
+662
+00:30:02.548 --> 00:30:04.178
+problems with big distributed systems
+
+663
+00:30:04.378 --> 00:30:07.629
+turns sort of very rare fault tolerance
+
+664
+00:30:07.829 --> 00:30:10.328
+very real failure very rare failure
+
+665
+00:30:10.528 --> 00:30:11.979
+problems into failure problems that
+
+666
+00:30:12.179 --> 00:30:14.348
+happen just all the time in a system
+
+667
+00:30:14.548 --> 00:30:15.608
+with a thousand computers there's almost
+
+668
+00:30:15.808 --> 00:30:17.828
+certainly always something broken it's
+
+669
+00:30:18.028 --> 00:30:20.379
+always some computer that's either
+
+670
+00:30:20.579 --> 00:30:22.869
+crashed or mysteriously you know running
+
+671
+00:30:23.069 --> 00:30:24.639
+incorrectly or slowly or doing the wrong
+
+672
+00:30:24.839 --> 00:30:26.740
+thing or maybe there's some piece of the
+
+673
+00:30:26.940 --> 00:30:28.690
+network with a thousand computers we got
+
+674
+00:30:28.890 --> 00:30:31.029
+a lot of network cables and a lot of
+
+675
+00:30:31.230 --> 00:30:33.399
+network switches and so you know there's
+
+676
+00:30:33.599 --> 00:30:34.899
+always some network cable that somebody
+
+677
+00:30:35.099 --> 00:30:37.000
+stepped on and is unreliability or
+
+678
+00:30:37.200 --> 00:30:38.619
+network cable that fell out or some
+
+679
+00:30:38.819 --> 00:30:40.539
+networks which whose fan is broken and
+
+680
+00:30:40.740 --> 00:30:43.059
+the switch overheated and failed there's
+
+681
+00:30:43.259 --> 00:30:44.649
+always some little problem somewhere in
+
+682
+00:30:44.849 --> 00:30:48.568
+your building sized distributed system
+
+683
+00:30:48.769 --> 00:30:52.358
+so big scale turns problems from very
+
+684
+00:30:52.558 --> 00:30:53.828
+rare events you really don't have to
+
+685
+00:30:54.028 --> 00:30:56.348
+worry about that much into just constant
+
+686
+00:30:56.548 --> 00:30:59.078
+problems that means the failure has to
+
+687
+00:30:59.278 --> 00:31:01.869
+be really or the response the masking of
+
+688
+00:31:02.069 --> 00:31:03.519
+failures the ability to proceed without
+
+689
+00:31:03.720 --> 00:31:05.438
+failures just has to be built into the
+
+690
+00:31:05.638 --> 00:31:08.698
+design because there's always failures
+
+691
+00:31:08.898 --> 00:31:12.698
+and you know it's part of building you
+
+692
+00:31:12.898 --> 00:31:14.259
+know convenient abstractions for
+
+693
+00:31:14.460 --> 00:31:16.419
+application programmers we really need
+
+694
+00:31:16.619 --> 00:31:17.438
+that but to be able to build
+
+695
+00:31:17.638 --> 00:31:19.149
+infrastructure that as much as possible
+
+696
+00:31:19.349 --> 00:31:21.698
+hides the failures from application
+
+697
+00:31:21.898 --> 00:31:23.729
+programmers or masks them or something
+
+698
+00:31:23.929 --> 00:31:26.259
+so that every application programmer
+
+699
+00:31:26.460 --> 00:31:27.879
+doesn't have to have a complete
+
+700
+00:31:28.079 --> 00:31:30.309
+complicated story for all the different
+
+701
+00:31:30.509 --> 00:31:34.899
+kinds of failures that can occur there's
+
+702
+00:31:35.099 --> 00:31:37.629
+a bunch of different notions that you
+
+703
+00:31:37.829 --> 00:31:40.959
+can have about what it means to be fault
+
+704
+00:31:41.159 --> 00:31:43.358
+tolerant about a little more but you
+
+705
+00:31:43.558 --> 00:31:46.479
+know exactly what we mean by that we'll
+
+706
+00:31:46.679 --> 00:31:47.889
+see a lot of a lot of different flavors
+
+707
+00:31:48.089 --> 00:31:50.680
+but among the more common ideas you see
+
+708
+00:31:50.880 --> 00:31:58.149
+one is availability so you know some
+
+709
+00:31:58.349 --> 00:32:01.269
+systems are designed so that under some
+
+710
+00:32:01.470 --> 00:32:03.729
+kind certain kinds of failures not all
+
+711
+00:32:03.929 --> 00:32:05.259
+failures but certain kinds of failures
+
+712
+00:32:05.460 --> 00:32:08.919
+the system will keep operating despite
+
+713
+00:32:09.119 --> 00:32:12.938
+the failure while providing you know
+
+714
+00:32:13.138 --> 00:32:16.209
+undamaged service the same kind of
+
+715
+00:32:16.409 --> 00:32:17.619
+service it would have provided even if
+
+716
+00:32:17.819 --> 00:32:19.299
+there had been no failure so some
+
+717
+00:32:19.500 --> 00:32:21.088
+systems are available in that sense that
+
+718
+00:32:21.288 --> 00:32:23.948
+up and up you know so if you build a
+
+719
+00:32:24.148 --> 00:32:25.750
+replicated service that maybe has two
+
+720
+00:32:25.950 --> 00:32:28.709
+copies you know one of the replicas
+
+721
+00:32:28.909 --> 00:32:31.569
+replica servers fail fails maybe the
+
+722
+00:32:31.769 --> 00:32:34.329
+other server can continue operating
+
+723
+00:32:34.529 --> 00:32:36.849
+they both fail of course you can't you
+
+724
+00:32:37.049 --> 00:32:40.329
+know you can't promise availability in
+
+725
+00:32:40.529 --> 00:32:41.950
+that case so available systems usually
+
+726
+00:32:42.150 --> 00:32:44.470
+say well under certain set of failures
+
+727
+00:32:44.670 --> 00:32:45.940
+we're going to continue providing
+
+728
+00:32:46.140 --> 00:32:48.250
+service we're going to be available more
+
+729
+00:32:48.450 --> 00:32:50.589
+failures than that occur it won't be
+
+730
+00:32:50.789 --> 00:32:52.529
+available anymore
+
+731
+00:32:52.730 --> 00:32:54.879
+another kind of fault tolerance you
+
+732
+00:32:55.079 --> 00:32:57.730
+might you might have or in addition to
+
+733
+00:32:57.930 --> 00:32:58.930
+availability or by itself as
+
+734
+00:32:59.130 --> 00:33:06.279
+recoverability and what this means is
+
+735
+00:33:06.480 --> 00:33:07.960
+that if something goes wrong maybe the
+
+736
+00:33:08.160 --> 00:33:10.000
+service will stop working that it is
+
+737
+00:33:10.200 --> 00:33:12.839
+it'll simply stop responding to requests
+
+738
+00:33:13.039 --> 00:33:15.579
+and it will wait for someone to come
+
+739
+00:33:15.779 --> 00:33:17.230
+along and repair or whatever went wrong
+
+740
+00:33:17.430 --> 00:33:19.450
+but after the repair occurs the system
+
+741
+00:33:19.650 --> 00:33:21.700
+will be able to continue as if nothing
+
+742
+00:33:21.900 --> 00:33:24.220
+bad had gone wrong right so this is sort
+
+743
+00:33:24.420 --> 00:33:25.389
+of a weaker requirement than
+
+744
+00:33:25.589 --> 00:33:27.609
+availability because here we're not
+
+745
+00:33:27.809 --> 00:33:29.440
+going to do anything while while the
+
+746
+00:33:29.640 --> 00:33:30.940
+failed come until the failed component
+
+747
+00:33:31.140 --> 00:33:33.519
+has been repaired but the fact that we
+
+748
+00:33:33.720 --> 00:33:37.029
+can get up get going again without you
+
+749
+00:33:37.230 --> 00:33:39.309
+know but without any loss of correctness
+
+750
+00:33:39.509 --> 00:33:41.680
+is still a significant requirement it
+
+751
+00:33:41.880 --> 00:33:43.299
+means you know recoverable systems
+
+752
+00:33:43.500 --> 00:33:45.490
+typically need to do things like save
+
+753
+00:33:45.690 --> 00:33:47.799
+their latest date on disk or something
+
+754
+00:33:48.000 --> 00:33:49.029
+where they can get it back
+
+755
+00:33:49.230 --> 00:33:50.889
+you know after the power comes back up
+
+756
+00:33:51.089 --> 00:33:55.809
+and even among available systems in
+
+757
+00:33:56.009 --> 00:33:57.669
+order for a system to be useful in real
+
+758
+00:33:57.869 --> 00:34:01.690
+life usually what the way available
+
+759
+00:34:01.890 --> 00:34:04.089
+systems are SPECT is that they're
+
+760
+00:34:04.289 --> 00:34:07.149
+available until some number of failures
+
+761
+00:34:07.349 --> 00:34:08.949
+have happened if too many failures have
+
+762
+00:34:09.148 --> 00:34:11.469
+happened an available system will stop
+
+763
+00:34:11.668 --> 00:34:14.620
+working or you know will stop responding
+
+764
+00:34:14.820 --> 00:34:18.670
+at all but when enough things have been
+
+765
+00:34:18.869 --> 00:34:21.130
+repaired it'll continue operating so a
+
+766
+00:34:21.329 --> 00:34:23.229
+good available system will sort of be
+
+767
+00:34:23.429 --> 00:34:24.939
+recoverable as well in a sensitive to
+
+768
+00:34:25.139 --> 00:34:26.620
+many failures occur
+
+769
+00:34:26.820 --> 00:34:28.269
+it'll stop answering but then will
+
+770
+00:34:28.469 --> 00:34:35.320
+continue correctly after that so this is
+
+771
+00:34:35.519 --> 00:34:38.229
+what we love - this is what we'd love to
+
+772
+00:34:38.429 --> 00:34:43.090
+obtain the biggest hammer what we'll see
+
+773
+00:34:43.289 --> 00:34:44.920
+a number of approaches to solving these
+
+774
+00:34:45.119 --> 00:34:47.580
+problems there's really sort of
+
+775
+00:34:47.780 --> 00:34:49.979
+things that are the most important tools
+
+776
+00:34:50.179 --> 00:34:52.440
+we have in this department one is
+
+777
+00:34:52.639 --> 00:34:55.650
+non-volatile storage so that you know
+
+778
+00:34:55.849 --> 00:34:58.220
+something crash power fails or whatever
+
+779
+00:34:58.420 --> 00:35:01.110
+there's a building wide power failure we
+
+780
+00:35:01.309 --> 00:35:02.550
+can use non-volatile store it's like
+
+781
+00:35:02.750 --> 00:35:05.130
+hard drives or flash or solid-state
+
+782
+00:35:05.329 --> 00:35:07.230
+drives or something to sort of store a
+
+783
+00:35:07.429 --> 00:35:12.480
+check point or a log of the state of a
+
+784
+00:35:12.679 --> 00:35:14.280
+system and then when the power comes
+
+785
+00:35:14.480 --> 00:35:16.560
+back up or somebody repairs our power
+
+786
+00:35:16.760 --> 00:35:17.820
+suppliers notice what we'll be able to
+
+787
+00:35:18.019 --> 00:35:20.310
+read our latest state off the hard drive
+
+788
+00:35:20.510 --> 00:35:24.420
+and continue from there so so one tool
+
+789
+00:35:24.619 --> 00:35:29.190
+is sort of non-volatile storage and the
+
+790
+00:35:29.389 --> 00:35:30.810
+management of non-volatile storage just
+
+791
+00:35:31.010 --> 00:35:32.640
+Ning comes up a lot because non-volatile
+
+792
+00:35:32.840 --> 00:35:34.800
+storage tends to be expensive to update
+
+793
+00:35:35.000 --> 00:35:37.260
+and so a huge amount of the sort of
+
+794
+00:35:37.460 --> 00:35:38.940
+nitty-gritty of building sort of
+
+795
+00:35:39.139 --> 00:35:42.269
+high-performance fault-tolerant systems
+
+796
+00:35:42.469 --> 00:35:45.090
+is in you know clever ways to avoid
+
+797
+00:35:45.289 --> 00:35:47.400
+having to write the non-volatile storage
+
+798
+00:35:47.599 --> 00:35:49.769
+too much in the old days and even today
+
+799
+00:35:49.969 --> 00:35:52.800
+you know what writing non-volatile
+
+800
+00:35:53.000 --> 00:35:55.590
+storage meant was moving a disk arm and
+
+801
+00:35:55.789 --> 00:35:57.860
+waiting for a disk platter to rotate
+
+802
+00:35:58.059 --> 00:36:00.720
+both of which are agonizingly slow on
+
+803
+00:36:00.920 --> 00:36:04.019
+the scale of you know three gigahertz
+
+804
+00:36:04.219 --> 00:36:06.769
+microprocessors good things like flash
+
+805
+00:36:06.969 --> 00:36:08.789
+life is quite a bit better but still
+
+806
+00:36:08.989 --> 00:36:10.560
+requires a lot of thought to get good
+
+807
+00:36:10.760 --> 00:36:12.750
+performance out of and the other big
+
+808
+00:36:12.949 --> 00:36:14.160
+tool we have for fault tolerance is
+
+809
+00:36:14.360 --> 00:36:19.800
+replication and the management of
+
+810
+00:36:20.000 --> 00:36:22.560
+replicated copies is sort of tricky you
+
+811
+00:36:22.760 --> 00:36:26.310
+know that sort of he problem lurking in
+
+812
+00:36:26.510 --> 00:36:28.289
+any replicated system where we have two
+
+813
+00:36:28.489 --> 00:36:30.600
+servers each with a supposedly identical
+
+814
+00:36:30.800 --> 00:36:33.960
+copy of the system state the key problem
+
+815
+00:36:34.159 --> 00:36:35.820
+that comes up is always that the two
+
+816
+00:36:36.019 --> 00:36:38.400
+replicas will accidentally drift out of
+
+817
+00:36:38.599 --> 00:36:41.130
+sync and will stop being replicas right
+
+818
+00:36:41.329 --> 00:36:43.110
+and this is just you know with the back
+
+819
+00:36:43.309 --> 00:36:45.210
+of the every design that we're gonna see
+
+820
+00:36:45.409 --> 00:36:47.580
+for using replication to get fault
+
+821
+00:36:47.780 --> 00:36:51.060
+tolerance and lab - a lot - you're all
+
+822
+00:36:51.260 --> 00:36:53.600
+about management management of
+
+823
+00:36:53.800 --> 00:36:57.250
+replicated copies for fault tolerance
+
+824
+00:36:57.449 --> 00:37:02.358
+as you'll see it's pretty complex a
+
+825
+00:37:03.739 --> 00:37:10.030
+final topic final cross-cutting topic is
+
+826
+00:37:10.230 --> 00:37:17.349
+consistency so it's an example of what I
+
+827
+00:37:17.548 --> 00:37:19.230
+mean by consistency supposing we're
+
+828
+00:37:19.429 --> 00:37:21.879
+building a distributed storage system
+
+829
+00:37:22.079 --> 00:37:24.220
+and it's a key/value service so it just
+
+830
+00:37:24.420 --> 00:37:26.409
+supports two operations maybe there's a
+
+831
+00:37:26.608 --> 00:37:29.619
+put operation and you give it a key and
+
+832
+00:37:29.818 --> 00:37:32.889
+a value and that the storage system sort
+
+833
+00:37:33.088 --> 00:37:36.010
+of stashes away the value under as the
+
+834
+00:37:36.210 --> 00:37:37.869
+value for this key maintains it's just a
+
+835
+00:37:38.068 --> 00:37:39.879
+big table of keys and values and then
+
+836
+00:37:40.079 --> 00:37:43.720
+there's a good operation you the client
+
+837
+00:37:43.920 --> 00:37:47.050
+sends it a key and the storage service
+
+838
+00:37:47.250 --> 00:37:49.330
+is supposed to you know respond with the
+
+839
+00:37:49.530 --> 00:37:50.619
+value of the value it has stored for
+
+840
+00:37:50.818 --> 00:37:52.599
+that key right and this is kind of good
+
+841
+00:37:52.798 --> 00:37:54.580
+when I can't think of anything else as
+
+842
+00:37:54.780 --> 00:37:56.289
+an example of a distributed system all
+
+843
+00:37:56.489 --> 00:38:00.280
+Oh without key value services and
+
+844
+00:38:00.480 --> 00:38:01.750
+they're very useful right they're just
+
+845
+00:38:01.949 --> 00:38:05.109
+sort of a kind of fundamental simple
+
+846
+00:38:05.309 --> 00:38:09.099
+version of a storage system so of course
+
+847
+00:38:09.298 --> 00:38:11.500
+if you're an application programmer it's
+
+848
+00:38:11.699 --> 00:38:14.950
+helpful if these two operations kind of
+
+849
+00:38:15.150 --> 00:38:16.599
+have meanings attached to them that you
+
+850
+00:38:16.798 --> 00:38:18.430
+can go look in the manual and the manual
+
+851
+00:38:18.630 --> 00:38:21.099
+says you know what it what it means what
+
+852
+00:38:21.298 --> 00:38:23.320
+you'll get back if you call get right
+
+853
+00:38:23.519 --> 00:38:25.330
+and sort of what it means for you to
+
+854
+00:38:25.530 --> 00:38:27.909
+call put all right so it's immediate so
+
+855
+00:38:28.108 --> 00:38:29.230
+some sort of spec for what they meant
+
+856
+00:38:29.429 --> 00:38:31.240
+otherwise like who knows how can you
+
+857
+00:38:31.440 --> 00:38:32.680
+possibly write an application without a
+
+858
+00:38:32.880 --> 00:38:35.050
+description of what putting get are
+
+859
+00:38:35.250 --> 00:38:38.169
+supposed to do and this is the topic of
+
+860
+00:38:38.369 --> 00:38:40.000
+consistency and the reason why it's
+
+861
+00:38:40.199 --> 00:38:42.129
+interesting in distributed systems is
+
+862
+00:38:42.329 --> 00:38:46.000
+that both for performance and for fault
+
+863
+00:38:46.199 --> 00:38:48.099
+tolerant reasons fault tolerance reason
+
+864
+00:38:48.298 --> 00:38:50.200
+we often have more than one copy of the
+
+865
+00:38:50.400 --> 00:38:53.680
+data floating around so you know in a
+
+866
+00:38:53.880 --> 00:38:55.300
+non distributed system where you just
+
+867
+00:38:55.500 --> 00:38:58.930
+have a single server with a single table
+
+868
+00:38:59.130 --> 00:39:02.379
+there's often although not always but
+
+869
+00:39:02.579 --> 00:39:04.000
+there's often like relatively no
+
+870
+00:39:04.199 --> 00:39:05.740
+ambiguity about what pudding get could
+
+871
+00:39:05.940 --> 00:39:07.160
+possibly mean right in
+
+872
+00:39:07.360 --> 00:39:08.780
+to ative Lee you know what put means is
+
+873
+00:39:08.980 --> 00:39:10.670
+update the table and what get means is
+
+874
+00:39:10.869 --> 00:39:12.350
+just get me the version that's stored in
+
+875
+00:39:12.550 --> 00:39:16.850
+the table which but in a distributed
+
+876
+00:39:17.050 --> 00:39:18.440
+system where there's more than one copy
+
+877
+00:39:18.639 --> 00:39:20.390
+in the data due to replication or
+
+878
+00:39:20.590 --> 00:39:23.690
+caching or who knows what there may be
+
+879
+00:39:23.889 --> 00:39:29.930
+lots of different versions of this key
+
+880
+00:39:30.130 --> 00:39:32.180
+value pair floating around like if one
+
+881
+00:39:32.380 --> 00:39:33.830
+of the replicas you know if supposing
+
+882
+00:39:34.030 --> 00:39:36.710
+some client issues a put and you know
+
+883
+00:39:36.909 --> 00:39:42.830
+there's two copies of the the server so
+
+884
+00:39:43.030 --> 00:39:47.870
+they both have a key value table right
+
+885
+00:39:48.070 --> 00:39:51.350
+and maybe key one has value twenty on
+
+886
+00:39:51.550 --> 00:39:55.160
+both of them and then some client issues
+
+887
+00:39:55.360 --> 00:39:58.789
+a put nice we have client over here and
+
+888
+00:39:58.989 --> 00:40:00.110
+it's gonna send a put it wants to update
+
+889
+00:40:00.309 --> 00:40:03.289
+the value of one to be twenty-one all
+
+890
+00:40:03.489 --> 00:40:04.760
+right maybe it's counting stuff in this
+
+891
+00:40:04.960 --> 00:40:09.350
+key value server so sends a put with key
+
+892
+00:40:09.550 --> 00:40:13.550
+one and value twenty one it sends it to
+
+893
+00:40:13.750 --> 00:40:15.640
+the first server and it's about to send
+
+894
+00:40:15.840 --> 00:40:17.810
+the same put you know wants to update
+
+895
+00:40:18.010 --> 00:40:20.180
+both copies right it keeps them in sync
+
+896
+00:40:20.380 --> 00:40:22.100
+it's about to send this put but just
+
+897
+00:40:22.300 --> 00:40:23.330
+before it sends to put to the second
+
+898
+00:40:23.530 --> 00:40:26.750
+server crashes I power failure or bug an
+
+899
+00:40:26.949 --> 00:40:28.490
+operating system or something so now the
+
+900
+00:40:28.690 --> 00:40:30.440
+state were left in sadly is that we sent
+
+901
+00:40:30.639 --> 00:40:35.269
+this put and so we've updated one of the
+
+902
+00:40:35.469 --> 00:40:37.100
+two replicas didn't have value twenty
+
+903
+00:40:37.300 --> 00:40:38.390
+one but the other ones still with twenty
+
+904
+00:40:38.590 --> 00:40:40.670
+now somebody comes along and reads with
+
+905
+00:40:40.869 --> 00:40:42.710
+a get and they might get they want to
+
+906
+00:40:42.909 --> 00:40:44.870
+read the value associated with key one
+
+907
+00:40:45.070 --> 00:40:46.220
+they might get twenty one or they might
+
+908
+00:40:46.420 --> 00:40:47.900
+get twenty depending on who they talk to
+
+909
+00:40:48.099 --> 00:40:50.150
+and even if the rule is you always talk
+
+910
+00:40:50.349 --> 00:40:52.400
+to the top server first if you're
+
+911
+00:40:52.599 --> 00:40:53.630
+building a fault-tolerant system the
+
+912
+00:40:53.829 --> 00:40:55.820
+actual rule has to be oh you talk to the
+
+913
+00:40:56.019 --> 00:40:57.800
+top server first unless it's failed in
+
+914
+00:40:58.000 --> 00:41:00.610
+which case you talk to the bottom server
+
+915
+00:41:00.809 --> 00:41:03.440
+so either way someday you risk exposing
+
+916
+00:41:03.639 --> 00:41:06.410
+this stale copy of the data to some
+
+917
+00:41:06.610 --> 00:41:08.450
+future again it could be that many gets
+
+918
+00:41:08.650 --> 00:41:10.430
+get the updated twenty one and then like
+
+919
+00:41:10.630 --> 00:41:12.530
+next week all of a sudden some get
+
+920
+00:41:12.730 --> 00:41:14.720
+yields you know a week old copy of the
+
+921
+00:41:14.920 --> 00:41:19.170
+data so that's not very consistent
+
+922
+00:41:19.369 --> 00:41:23.519
+right so in order but you know it's the
+
+923
+00:41:23.719 --> 00:41:25.670
+kind of thing that could happen right
+
+924
+00:41:25.869 --> 00:41:29.010
+we're not careful so you know we need to
+
+925
+00:41:29.210 --> 00:41:32.220
+have we need to actually write down what
+
+926
+00:41:32.420 --> 00:41:33.720
+the rules are going to be about puts and
+
+927
+00:41:33.920 --> 00:41:36.450
+gets given this danger of due to
+
+928
+00:41:36.650 --> 00:41:39.030
+replication and it turns out there's
+
+929
+00:41:39.230 --> 00:41:42.450
+many different definitions you can have
+
+930
+00:41:42.650 --> 00:41:46.830
+of consistency you know many of them are
+
+931
+00:41:47.030 --> 00:41:48.269
+relatively straightforward many of them
+
+932
+00:41:48.469 --> 00:41:52.740
+sound like well I get yields the you
+
+933
+00:41:52.940 --> 00:41:55.050
+know value put by the most recently
+
+934
+00:41:55.250 --> 00:41:59.970
+completed put all right so that's
+
+935
+00:42:00.170 --> 00:42:02.760
+usually called strong consistency it
+
+936
+00:42:02.960 --> 00:42:05.190
+turns out also it's very useful to build
+
+937
+00:42:05.389 --> 00:42:06.539
+systems that have much weaker
+
+938
+00:42:06.739 --> 00:42:08.460
+consistency there for example do not
+
+939
+00:42:08.659 --> 00:42:11.789
+guarantee anything like a get sees the
+
+940
+00:42:11.989 --> 00:42:14.970
+value written by the most recent put and
+
+941
+00:42:15.170 --> 00:42:18.240
+the reason so there's there strongly
+
+942
+00:42:18.440 --> 00:42:22.830
+consistent systems they usually have
+
+943
+00:42:23.030 --> 00:42:24.930
+some version that gets seen most recent
+
+944
+00:42:25.130 --> 00:42:27.090
+puts although you have to there's a lot
+
+945
+00:42:27.289 --> 00:42:28.620
+of details to work out there's also
+
+946
+00:42:28.820 --> 00:42:31.980
+weekly consistent many sort of flavors
+
+947
+00:42:32.179 --> 00:42:33.630
+of weekly consistent systems that do not
+
+948
+00:42:33.829 --> 00:42:36.450
+make any such guarantee that you know
+
+949
+00:42:36.650 --> 00:42:38.670
+may guarantee well you're you know if
+
+950
+00:42:38.869 --> 00:42:41.490
+someone does a put then you may not see
+
+951
+00:42:41.690 --> 00:42:43.410
+the put you may see old values that
+
+952
+00:42:43.610 --> 00:42:45.539
+weren't updated by the put for an
+
+953
+00:42:45.739 --> 00:42:48.870
+unbounded amount of time maybe and the
+
+954
+00:42:49.070 --> 00:42:51.090
+reason for people being very interested
+
+955
+00:42:51.289 --> 00:42:53.660
+in wheat consistency schemes is that
+
+956
+00:42:53.860 --> 00:42:56.820
+strong consistency that is having Rezac
+
+957
+00:42:57.019 --> 00:43:00.660
+Chua lessee be guaranteed to see the
+
+958
+00:43:00.860 --> 00:43:02.490
+most recent right that's a very
+
+959
+00:43:02.690 --> 00:43:06.990
+expensive spec to implement because what
+
+960
+00:43:07.190 --> 00:43:08.610
+it means is almost certainly that you
+
+961
+00:43:08.809 --> 00:43:10.289
+have to somebody has to do a lot of
+
+962
+00:43:10.489 --> 00:43:12.269
+communication in order to actually
+
+963
+00:43:12.469 --> 00:43:13.980
+implement some notion of strong
+
+964
+00:43:14.179 --> 00:43:16.250
+consistency if you have multiple copies
+
+965
+00:43:16.449 --> 00:43:20.550
+it means that either the writer or the
+
+966
+00:43:20.750 --> 00:43:22.289
+reader or maybe both has to consult
+
+967
+00:43:22.489 --> 00:43:26.130
+every copy like in this case where you
+
+968
+00:43:26.329 --> 00:43:28.140
+know maybe a client crash left one
+
+969
+00:43:28.340 --> 00:43:30.269
+updated but not the other if we wanted
+
+970
+00:43:30.469 --> 00:43:31.620
+to implement strong
+
+971
+00:43:31.820 --> 00:43:33.510
+Sisseton see in them maybe a simple way
+
+972
+00:43:33.710 --> 00:43:35.010
+in this system we'd have readers read
+
+973
+00:43:35.210 --> 00:43:36.810
+both of the copies or if there's more
+
+974
+00:43:37.010 --> 00:43:39.360
+than one copy all the copies and use the
+
+975
+00:43:39.559 --> 00:43:41.070
+most recently written value that they
+
+976
+00:43:41.269 --> 00:43:44.670
+find but that's expensive that's a lot
+
+977
+00:43:44.869 --> 00:43:49.440
+of chitchat to read one value so in
+
+978
+00:43:49.639 --> 00:43:51.420
+order to avoid communication as much as
+
+979
+00:43:51.619 --> 00:43:54.480
+possible particularly if replicas are
+
+980
+00:43:54.679 --> 00:43:56.610
+far away people build weak systems that
+
+981
+00:43:56.809 --> 00:43:59.280
+might actually allow the stale read of
+
+982
+00:43:59.480 --> 00:44:02.640
+an old value in this case although
+
+983
+00:44:02.840 --> 00:44:05.340
+there's often more semantics attached to
+
+984
+00:44:05.539 --> 00:44:06.780
+that to try to make these weak schemes
+
+985
+00:44:06.980 --> 00:44:10.170
+more useful and we're this communication
+
+986
+00:44:10.369 --> 00:44:13.220
+problem you know strong consistency
+
+987
+00:44:13.420 --> 00:44:16.650
+requiring expensive communication where
+
+988
+00:44:16.849 --> 00:44:19.170
+this really runs you into trouble is
+
+989
+00:44:19.369 --> 00:44:21.300
+that if we're using replication for
+
+990
+00:44:21.500 --> 00:44:24.330
+fault tolerance then we really want the
+
+991
+00:44:24.530 --> 00:44:26.400
+replicas to have independent failure
+
+992
+00:44:26.599 --> 00:44:29.010
+probability to have uncorrelated failure
+
+993
+00:44:29.210 --> 00:44:31.650
+so for example putting both of the
+
+994
+00:44:31.849 --> 00:44:34.650
+replicas of our data in the same iraq in
+
+995
+00:44:34.849 --> 00:44:36.900
+the same machine room it's probably a
+
+996
+00:44:37.099 --> 00:44:38.160
+really bad idea
+
+997
+00:44:38.360 --> 00:44:39.630
+because if someone trips over the power
+
+998
+00:44:39.829 --> 00:44:42.210
+cable to that rack both of our copies of
+
+999
+00:44:42.409 --> 00:44:43.890
+our data are going to die because
+
+1000
+00:44:44.090 --> 00:44:45.990
+they're both attached to the same power
+
+1001
+00:44:46.190 --> 00:44:49.530
+cable in the same rack so in the search
+
+1002
+00:44:49.730 --> 00:44:53.039
+for making replicas as independent and
+
+1003
+00:44:53.239 --> 00:44:54.780
+failure as possible in order to get
+
+1004
+00:44:54.980 --> 00:44:57.660
+decent fault tolerance people would love
+
+1005
+00:44:57.860 --> 00:45:00.120
+to put different replicas as far apart
+
+1006
+00:45:00.320 --> 00:45:02.760
+as possible like in different cities or
+
+1007
+00:45:02.960 --> 00:45:05.010
+maybe on opposite sides of the continent
+
+1008
+00:45:05.210 --> 00:45:06.900
+so an earthquake that destroys one data
+
+1009
+00:45:07.099 --> 00:45:09.060
+center will be extremely unlikely to
+
+1010
+00:45:09.260 --> 00:45:11.640
+also destroy the other data center that
+
+1011
+00:45:11.840 --> 00:45:15.660
+as the other copy you know so we'd love
+
+1012
+00:45:15.860 --> 00:45:17.220
+to be able to do that if you do that
+
+1013
+00:45:17.420 --> 00:45:20.460
+then the other copy is thousands of
+
+1014
+00:45:20.659 --> 00:45:23.460
+miles away and the rate at which light
+
+1015
+00:45:23.659 --> 00:45:26.280
+travels means that it may take on the
+
+1016
+00:45:26.480 --> 00:45:28.350
+order of milliseconds or tens of
+
+1017
+00:45:28.550 --> 00:45:31.470
+milliseconds to communicate to a data
+
+1018
+00:45:31.670 --> 00:45:33.180
+center across the continent in order to
+
+1019
+00:45:33.380 --> 00:45:36.390
+update the other copy of the data and so
+
+1020
+00:45:36.590 --> 00:45:38.250
+that makes this the communication
+
+1021
+00:45:38.449 --> 00:45:40.410
+required for strong consistency for good
+
+1022
+00:45:40.610 --> 00:45:42.150
+consistency potentially extremely
+
+1023
+00:45:42.349 --> 00:45:44.250
+expensive like every time you want to do
+
+1024
+00:45:44.449 --> 00:45:45.119
+one of these put opera
+
+1025
+00:45:45.318 --> 00:45:46.798
+or maybe again depending on how you
+
+1026
+00:45:46.998 --> 00:45:48.899
+implement it you might have to sit there
+
+1027
+00:45:49.099 --> 00:45:50.309
+waiting for like 10 or 20 or 30
+
+1028
+00:45:50.509 --> 00:45:52.740
+milliseconds in order to talk to both
+
+1029
+00:45:52.940 --> 00:45:54.450
+copies of the data to ensure that
+
+1030
+00:45:54.650 --> 00:45:56.548
+they're both updated or or both checked
+
+1031
+00:45:56.748 --> 00:46:01.159
+to find the latest copy and that
+
+1032
+00:46:01.358 --> 00:46:03.839
+tremendous expense right this is 10 or
+
+1033
+00:46:04.039 --> 00:46:05.879
+20 or 30 milliseconds on machines that
+
+1034
+00:46:06.079 --> 00:46:07.589
+after all I'll execute like a billion
+
+1035
+00:46:07.789 --> 00:46:09.298
+instructions per second so we're wasting
+
+1036
+00:46:09.498 --> 00:46:11.339
+a lot of potential instructions while we
+
+1037
+00:46:11.539 --> 00:46:14.309
+wait people often go much weaker systems
+
+1038
+00:46:14.509 --> 00:46:15.809
+you're allowed to only update the
+
+1039
+00:46:16.009 --> 00:46:17.579
+nearest copy you're only consulted
+
+1040
+00:46:17.778 --> 00:46:19.889
+nearest copy I mean there's a huge sort
+
+1041
+00:46:20.088 --> 00:46:22.940
+of amount of academic and real-world
+
+1042
+00:46:23.139 --> 00:46:26.639
+research on how to structure weak
+
+1043
+00:46:26.838 --> 00:46:27.899
+consistency guarantees so they're
+
+1044
+00:46:28.099 --> 00:46:30.180
+actually useful to applications and how
+
+1045
+00:46:30.380 --> 00:46:31.559
+to take advantage of them in order to
+
+1046
+00:46:31.759 --> 00:46:36.149
+actually get high performance alright so
+
+1047
+00:46:36.349 --> 00:46:39.950
+that's a lightning preview of the
+
+1048
+00:46:40.150 --> 00:46:43.528
+technical ideas in the course any
+
+1049
+00:46:43.728 --> 00:46:46.139
+questions about this before I start
+
+1050
+00:46:46.338 --> 00:46:50.669
+talking about MapReduce all right I want
+
+1051
+00:46:50.869 --> 00:46:53.849
+to switch to Map Reduce that's a sort of
+
+1052
+00:46:54.048 --> 00:46:55.318
+detailed case study that's actually
+
+1053
+00:46:55.518 --> 00:46:57.749
+going to illustrate most of the ideas
+
+1054
+00:46:57.949 --> 00:47:02.220
+that we've been talking about here now
+
+1055
+00:47:02.420 --> 00:47:07.579
+produces a system that was originally
+
+1056
+00:47:07.778 --> 00:47:11.789
+designed and built and used by Google I
+
+1057
+00:47:11.989 --> 00:47:14.940
+think the paper dates back to 2004 the
+
+1058
+00:47:15.139 --> 00:47:17.068
+problem they were faced with was that
+
+1059
+00:47:17.268 --> 00:47:20.700
+they were running huge computations on
+
+1060
+00:47:20.900 --> 00:47:22.559
+terabytes and terabytes of data like
+
+1061
+00:47:22.759 --> 00:47:26.970
+creating an index of all of the content
+
+1062
+00:47:27.170 --> 00:47:29.460
+of the web or analyzing the link
+
+1063
+00:47:29.659 --> 00:47:32.159
+structure of the entire web in order to
+
+1064
+00:47:32.358 --> 00:47:34.829
+identify the most important pages or the
+
+1065
+00:47:35.028 --> 00:47:37.019
+most authoritative pages as you know the
+
+1066
+00:47:37.219 --> 00:47:38.940
+whole web is what's even in those days
+
+1067
+00:47:39.139 --> 00:47:44.879
+tens of terabytes of data building index
+
+1068
+00:47:45.079 --> 00:47:46.829
+of the web is basically equivalent to a
+
+1069
+00:47:47.028 --> 00:47:49.528
+sort running sort of the entire data
+
+1070
+00:47:49.728 --> 00:47:51.869
+sort you know ones like reasonably
+
+1071
+00:47:52.068 --> 00:47:55.139
+expensive and to run a sort on the
+
+1072
+00:47:55.338 --> 00:47:56.430
+entire content to the way I've been a
+
+1073
+00:47:56.630 --> 00:47:57.930
+single computer
+
+1074
+00:47:58.130 --> 00:47:59.789
+how long would have taken but you know
+
+1075
+00:47:59.989 --> 00:48:01.740
+it's weeks or months or years or
+
+1076
+00:48:01.940 --> 00:48:04.109
+something so Google the time was
+
+1077
+00:48:04.309 --> 00:48:06.000
+desperate to be able to run giant
+
+1078
+00:48:06.199 --> 00:48:08.339
+computations on giant data on thousands
+
+1079
+00:48:08.539 --> 00:48:10.470
+of computers in order that the
+
+1080
+00:48:10.670 --> 00:48:12.780
+computations could finish rapidly it's
+
+1081
+00:48:12.980 --> 00:48:14.010
+worth it to them to buy lots of
+
+1082
+00:48:14.210 --> 00:48:16.200
+computers so that their engineers
+
+1083
+00:48:16.400 --> 00:48:17.519
+wouldn't have to spend a lot of time
+
+1084
+00:48:17.719 --> 00:48:19.318
+reading the newspaper or something
+
+1085
+00:48:19.518 --> 00:48:21.839
+waiting for their big compute jobs to
+
+1086
+00:48:22.039 --> 00:48:27.210
+finish and so for a while they had their
+
+1087
+00:48:27.409 --> 00:48:29.430
+clever engineer or sort of handwrite you
+
+1088
+00:48:29.630 --> 00:48:30.419
+know if you needed to write a web
+
+1089
+00:48:30.619 --> 00:48:32.730
+indexer or some sort of Lincoln outlay a
+
+1090
+00:48:32.929 --> 00:48:35.609
+blink analysis tool you know Google
+
+1091
+00:48:35.809 --> 00:48:36.930
+bought the computers and they say here
+
+1092
+00:48:37.130 --> 00:48:38.399
+engineers you know do write but never
+
+1093
+00:48:38.599 --> 00:48:39.690
+whatever software you like on these
+
+1094
+00:48:39.889 --> 00:48:41.068
+computers and you know they would
+
+1095
+00:48:41.268 --> 00:48:44.030
+laborious ly write the sort of one-off
+
+1096
+00:48:44.230 --> 00:48:46.079
+manually bitten software to take
+
+1097
+00:48:46.278 --> 00:48:47.460
+whatever problem they were working on
+
+1098
+00:48:47.659 --> 00:48:49.409
+and so to somehow farm it out to a lot
+
+1099
+00:48:49.608 --> 00:48:51.269
+of computers and organize that
+
+1100
+00:48:51.469 --> 00:48:56.609
+computation and get the data back if you
+
+1101
+00:48:56.809 --> 00:48:58.339
+only hire engineers who are skilled
+
+1102
+00:48:58.539 --> 00:49:01.589
+distributed systems experts maybe that's
+
+1103
+00:49:01.789 --> 00:49:03.990
+ok although even then it's probably very
+
+1104
+00:49:04.190 --> 00:49:07.289
+wasteful of engineering effort but they
+
+1105
+00:49:07.489 --> 00:49:09.089
+wanted to hire people who were skilled
+
+1106
+00:49:09.289 --> 00:49:15.009
+at something else and not necessarily
+
+1107
+00:49:15.159 --> 00:49:16.710
+engineers who wanted to spend all their
+
+1108
+00:49:16.909 --> 00:49:18.359
+time writing distributed system software
+
+1109
+00:49:18.559 --> 00:49:20.159
+so they really needed some kind of
+
+1110
+00:49:20.358 --> 00:49:22.109
+framework that would make it easy to
+
+1111
+00:49:22.309 --> 00:49:25.889
+just have their engineers write the kind
+
+1112
+00:49:26.088 --> 00:49:27.930
+of guts of whatever analysis they wanted
+
+1113
+00:49:28.130 --> 00:49:29.940
+to do like the sort algorithm or a web
+
+1114
+00:49:30.139 --> 00:49:32.789
+index or link analyzer or whatever just
+
+1115
+00:49:32.989 --> 00:49:34.349
+write the guts of that application and
+
+1116
+00:49:34.548 --> 00:49:36.539
+not be able to run it on a thousands of
+
+1117
+00:49:36.739 --> 00:49:39.510
+computers without worrying about the
+
+1118
+00:49:39.710 --> 00:49:41.339
+details of how to spread the work over
+
+1119
+00:49:41.539 --> 00:49:43.530
+the thousands of computers how to
+
+1120
+00:49:43.730 --> 00:49:45.750
+organize whatever data movement was
+
+1121
+00:49:45.949 --> 00:49:48.149
+required how to cope with the inevitable
+
+1122
+00:49:48.349 --> 00:49:50.430
+failures so they were looking for a
+
+1123
+00:49:50.630 --> 00:49:51.809
+framework that would make it easy for
+
+1124
+00:49:52.009 --> 00:49:54.539
+non specialists to be able to write and
+
+1125
+00:49:54.739 --> 00:50:00.119
+run giant distributed computations and
+
+1126
+00:50:00.318 --> 00:50:03.409
+so that's what MapReduce is all about
+
+1127
+00:50:03.608 --> 00:50:06.269
+and the idea is that the programmer just
+
+1128
+00:50:06.469 --> 00:50:09.730
+write the application designer
+
+1129
+00:50:09.929 --> 00:50:11.800
+consumer of this distributed computation
+
+1130
+00:50:12.000 --> 00:50:14.169
+I'm just be able to write a simple map
+
+1131
+00:50:14.369 --> 00:50:15.879
+function and a simple reduce function
+
+1132
+00:50:16.079 --> 00:50:18.039
+that don't know anything about
+
+1133
+00:50:18.239 --> 00:50:20.440
+distribution and the MapReduce framework
+
+1134
+00:50:20.639 --> 00:50:24.879
+would take care of everything else so an
+
+1135
+00:50:25.079 --> 00:50:27.669
+abstract view of how what MapReduce is
+
+1136
+00:50:27.869 --> 00:50:30.700
+up to is it starts by assuming that
+
+1137
+00:50:30.900 --> 00:50:32.830
+there's some input and the input is
+
+1138
+00:50:33.030 --> 00:50:35.230
+split up into some a whole bunch of
+
+1139
+00:50:35.429 --> 00:50:37.359
+different files or chunks in some way so
+
+1140
+00:50:37.559 --> 00:50:42.909
+we're imagining that no yeah you know
+
+1141
+00:50:43.108 --> 00:50:50.919
+input file one and put file two etc you
+
+1142
+00:50:51.119 --> 00:50:54.039
+know these inputs are maybe you know web
+
+1143
+00:50:54.239 --> 00:50:55.720
+pages crawled from the web or more
+
+1144
+00:50:55.920 --> 00:50:57.820
+likely sort of big files that contain
+
+1145
+00:50:58.019 --> 00:50:59.980
+many web each of which contains many web
+
+1146
+00:51:00.179 --> 00:51:03.220
+files crawl from the web all right and
+
+1147
+00:51:03.420 --> 00:51:04.619
+the way Map Reduce
+
+1148
+00:51:04.818 --> 00:51:07.750
+starts is that you're to find a map
+
+1149
+00:51:07.949 --> 00:51:09.460
+function and the MapReduce framework is
+
+1150
+00:51:09.659 --> 00:51:15.690
+gonna run your map function on each of
+
+1151
+00:51:15.889 --> 00:51:22.000
+the input files and of course you can
+
+1152
+00:51:22.199 --> 00:51:22.990
+see here there's some obvious
+
+1153
+00:51:23.190 --> 00:51:26.769
+parallelism available can run the maps
+
+1154
+00:51:26.969 --> 00:51:28.149
+in parallel so the each of these map
+
+1155
+00:51:28.349 --> 00:51:29.859
+functions only looks as this input and
+
+1156
+00:51:30.059 --> 00:51:32.200
+produces output the output that a map
+
+1157
+00:51:32.400 --> 00:51:33.789
+function is required to produce is a
+
+1158
+00:51:33.989 --> 00:51:36.550
+list you know it takes a file as input
+
+1159
+00:51:36.750 --> 00:51:39.550
+and the file is some fraction of the
+
+1160
+00:51:39.750 --> 00:51:41.980
+input data and it produces a list of key
+
+1161
+00:51:42.179 --> 00:51:45.419
+value pairs as output the map function
+
+1162
+00:51:45.619 --> 00:51:48.310
+and so for example let's suppose we're
+
+1163
+00:51:48.510 --> 00:51:50.379
+writing the simplest possible MapReduce
+
+1164
+00:51:50.579 --> 00:51:56.200
+example a word count MapReduce job goal
+
+1165
+00:51:56.400 --> 00:51:57.970
+is to count the number of occurrences of
+
+1166
+00:51:58.170 --> 00:52:00.190
+each word so your map function might
+
+1167
+00:52:00.389 --> 00:52:02.619
+emit key value pairs where the key is
+
+1168
+00:52:02.818 --> 00:52:06.730
+the word and the value is just one so
+
+1169
+00:52:06.929 --> 00:52:08.710
+for every word at C so then this map
+
+1170
+00:52:08.909 --> 00:52:10.210
+function will split the input up into
+
+1171
+00:52:10.409 --> 00:52:11.560
+words or everywhere ditzies
+
+1172
+00:52:11.760 --> 00:52:14.109
+it emits that word as the key and 1 as
+
+1173
+00:52:14.309 --> 00:52:15.970
+the value and then later on will count
+
+1174
+00:52:16.170 --> 00:52:18.159
+up all those ones in order to get the
+
+1175
+00:52:18.358 --> 00:52:21.220
+final output so you know maybe input 1
+
+1176
+00:52:21.420 --> 00:52:23.028
+has the word
+
+1177
+00:52:23.228 --> 00:52:26.269
+a in it and the word B in it and so the
+
+1178
+00:52:26.469 --> 00:52:28.369
+output the map is going to produce is
+
+1179
+00:52:28.568 --> 00:52:32.480
+key a value one key B value one maybe
+
+1180
+00:52:32.679 --> 00:52:35.450
+the second not communication sees a file
+
+1181
+00:52:35.650 --> 00:52:38.690
+that has a B in it and nothing else so
+
+1182
+00:52:38.889 --> 00:52:42.919
+it's going to implement output b1 maybe
+
+1183
+00:52:43.119 --> 00:52:45.889
+this third input has an A in it and a C
+
+1184
+00:52:46.088 --> 00:52:49.940
+in it alright so we run all these maps
+
+1185
+00:52:50.139 --> 00:52:53.180
+on all the input files and we get this
+
+1186
+00:52:53.380 --> 00:52:54.859
+intermediate with the paper calls
+
+1187
+00:52:55.059 --> 00:52:56.930
+intermediate output which is for every
+
+1188
+00:52:57.130 --> 00:53:00.220
+map a set of key value pairs as output
+
+1189
+00:53:00.420 --> 00:53:02.930
+then the second stage of the computation
+
+1190
+00:53:03.130 --> 00:53:06.859
+is to run the reduces and the idea is
+
+1191
+00:53:07.059 --> 00:53:09.259
+that the MapReduce framework collects
+
+1192
+00:53:09.458 --> 00:53:12.409
+together all instances from all maps of
+
+1193
+00:53:12.608 --> 00:53:14.930
+each key word so the MapReduce framework
+
+1194
+00:53:15.130 --> 00:53:16.669
+is going to collect together all of the
+
+1195
+00:53:16.869 --> 00:53:20.539
+A's you know from every map every key
+
+1196
+00:53:20.739 --> 00:53:22.399
+value pair whose key was a it's gonna
+
+1197
+00:53:22.599 --> 00:53:28.289
+take collect them all and hand them to
+
+1198
+00:53:30.389 --> 00:53:32.869
+one call of the programmer to find
+
+1199
+00:53:33.068 --> 00:53:35.329
+reduce function and then it's gonna take
+
+1200
+00:53:35.528 --> 00:53:38.119
+all the B's and collect them together of
+
+1201
+00:53:38.318 --> 00:53:39.499
+course you know requires a real
+
+1202
+00:53:39.699 --> 00:53:42.139
+collection because they were different
+
+1203
+00:53:42.338 --> 00:53:43.818
+instances of key B were produced by
+
+1204
+00:53:44.018 --> 00:53:46.789
+different indications of map on
+
+1205
+00:53:46.989 --> 00:53:48.409
+different computers so we're not talking
+
+1206
+00:53:48.608 --> 00:53:50.480
+about data movement I'm so we're gonna
+
+1207
+00:53:50.679 --> 00:53:53.139
+collect all the B keys and hand them to
+
+1208
+00:53:53.338 --> 00:53:58.519
+a different call to reduce that has all
+
+1209
+00:53:58.719 --> 00:54:01.759
+of the B keys as its arguments and same
+
+1210
+00:54:01.958 --> 00:54:07.430
+as C so there's going to be the
+
+1211
+00:54:07.630 --> 00:54:08.960
+MapReduce framework will arrange for one
+
+1212
+00:54:09.159 --> 00:54:11.568
+call to reduce for every key that
+
+1213
+00:54:11.768 --> 00:54:16.940
+occurred in any of the math output and
+
+1214
+00:54:17.139 --> 00:54:19.249
+you know for our sort of silly word
+
+1215
+00:54:19.449 --> 00:54:23.298
+count example all these reduces have to
+
+1216
+00:54:23.498 --> 00:54:24.859
+do or any one of them has to do is just
+
+1217
+00:54:25.059 --> 00:54:28.129
+count the number of items passed to it
+
+1218
+00:54:28.329 --> 00:54:29.450
+doesn't even have to look at the items
+
+1219
+00:54:29.650 --> 00:54:30.859
+because it knows that each of them is
+
+1220
+00:54:31.059 --> 00:54:34.278
+the word is responsible for plus one is
+
+1221
+00:54:34.478 --> 00:54:35.568
+the value you don't have to look at
+
+1222
+00:54:35.768 --> 00:54:36.680
+those ones we've just count
+
+1223
+00:54:36.880 --> 00:54:41.390
+so this reduce is going to produce a and
+
+1224
+00:54:41.590 --> 00:54:44.380
+then the count of its inputs this reduce
+
+1225
+00:54:44.579 --> 00:54:47.480
+it's going to produce the key associated
+
+1226
+00:54:47.679 --> 00:54:50.150
+with it and then count of its values
+
+1227
+00:54:50.349 --> 00:54:56.840
+which is also two so this is what a
+
+1228
+00:54:57.039 --> 00:55:01.789
+typical MapReduce job looks like the
+
+1229
+00:55:01.989 --> 00:55:07.000
+high level just for completeness the
+
+1230
+00:55:07.199 --> 00:55:08.900
+well some a little bit of terminology
+
+1231
+00:55:09.099 --> 00:55:12.280
+the whole computation is called the job
+
+1232
+00:55:12.480 --> 00:55:16.700
+anyone invocation of MapReduce is called
+
+1233
+00:55:16.900 --> 00:55:18.800
+a task so we have the entire job and
+
+1234
+00:55:19.000 --> 00:55:20.810
+it's made up of a bunch of math tasks
+
+1235
+00:55:21.010 --> 00:55:27.019
+and then a bunch of produced tasks so
+
+1236
+00:55:27.219 --> 00:55:29.660
+it's an example for this word count you
+
+1237
+00:55:29.860 --> 00:55:30.950
+know the what the map and reduce
+
+1238
+00:55:31.150 --> 00:55:40.550
+functions would look like the map
+
+1239
+00:55:40.750 --> 00:55:44.930
+function takes a key in the value as
+
+1240
+00:55:45.130 --> 00:55:46.220
+arguments and now we're talking about
+
+1241
+00:55:46.420 --> 00:55:47.870
+functions like written in an ordinary
+
+1242
+00:55:48.070 --> 00:55:51.320
+programming language like C++ or Java or
+
+1243
+00:55:51.519 --> 00:55:54.620
+who knows what so this is just code
+
+1244
+00:55:54.820 --> 00:55:56.960
+people ordinary people can write what a
+
+1245
+00:55:57.159 --> 00:55:58.670
+map function for word count would do is
+
+1246
+00:55:58.869 --> 00:56:02.720
+split the the key is the file name which
+
+1247
+00:56:02.920 --> 00:56:04.910
+typically is ignored we really care what
+
+1248
+00:56:05.110 --> 00:56:07.400
+the file name was and the V is the
+
+1249
+00:56:07.599 --> 00:56:12.050
+content of this maps input file so V is
+
+1250
+00:56:12.250 --> 00:56:14.200
+you know just contains all this text
+
+1251
+00:56:14.400 --> 00:56:21.560
+we're gonna split V into words and then
+
+1252
+00:56:21.760 --> 00:56:24.630
+for each word
+
+1253
+00:56:30.889 --> 00:56:33.930
+we're just gonna emit and emit takes two
+
+1254
+00:56:34.130 --> 00:56:36.690
+arguments mitts you know calmly map can
+
+1255
+00:56:36.889 --> 00:56:38.220
+make emit is provided by the MapReduce
+
+1256
+00:56:38.420 --> 00:56:41.099
+framework we get to produce we hand emit
+
+1257
+00:56:41.298 --> 00:56:44.690
+a key which is the word and a value
+
+1258
+00:56:44.889 --> 00:56:49.530
+which is the string one so that's it for
+
+1259
+00:56:49.730 --> 00:56:52.889
+the map function and a word count map
+
+1260
+00:56:53.088 --> 00:56:54.659
+function and MapReduce literally it
+
+1261
+00:56:54.858 --> 00:56:56.359
+could be this simple
+
+1262
+00:56:56.559 --> 00:57:00.109
+so there's sort of promise to make the
+
+1263
+00:57:00.309 --> 00:57:02.399
+and you know this map function doesn't
+
+1264
+00:57:02.599 --> 00:57:03.990
+know anything about distribution or
+
+1265
+00:57:04.190 --> 00:57:05.970
+multiple computers or the fact we need
+
+1266
+00:57:06.170 --> 00:57:07.769
+we need to move data across the network
+
+1267
+00:57:07.969 --> 00:57:08.820
+or who knows what
+
+1268
+00:57:09.019 --> 00:57:13.200
+this is extremely straightforward and
+
+1269
+00:57:13.400 --> 00:57:19.349
+the reduce function for a word count the
+
+1270
+00:57:19.548 --> 00:57:21.690
+reduce is called with you know remember
+
+1271
+00:57:21.889 --> 00:57:23.129
+each reduce is called with sort of all
+
+1272
+00:57:23.329 --> 00:57:25.230
+the instances of a given key on the
+
+1273
+00:57:25.429 --> 00:57:26.970
+MapReduce framework calls reduce with
+
+1274
+00:57:27.170 --> 00:57:29.879
+the key that it's responsible for and a
+
+1275
+00:57:30.079 --> 00:57:33.210
+vector of all the values that the maps
+
+1276
+00:57:33.409 --> 00:57:38.190
+produced associated with that key the
+
+1277
+00:57:38.389 --> 00:57:40.440
+key is the word the values are all ones
+
+1278
+00:57:40.639 --> 00:57:41.760
+we don't like here about them we only
+
+1279
+00:57:41.960 --> 00:57:44.310
+care about how many they were and so
+
+1280
+00:57:44.510 --> 00:57:47.220
+reduce has its own omit function that
+
+1281
+00:57:47.420 --> 00:57:51.000
+just takes a value to be emitted as the
+
+1282
+00:57:51.199 --> 00:57:53.579
+final output as the value for the this
+
+1283
+00:57:53.778 --> 00:57:57.629
+key so we're gonna admit a length of
+
+1284
+00:57:57.829 --> 00:58:01.589
+this array so this is also about as
+
+1285
+00:58:01.789 --> 00:58:04.079
+simplest reduce functions have are and
+
+1286
+00:58:04.278 --> 00:58:07.849
+in Map Reduce namely extremely simple
+
+1287
+00:58:08.048 --> 00:58:11.280
+and requiring no knowledge about fault
+
+1288
+00:58:11.480 --> 00:58:15.659
+tolerance or anything else alright any
+
+1289
+00:58:15.858 --> 00:58:20.528
+questions about the basic framework yes
+
+1290
+00:58:27.389 --> 00:58:30.549
+[Music]
+
+1291
+00:58:36.099 --> 00:58:39.028
+you mean can you feed the output of the
+
+1292
+00:58:39.228 --> 00:58:48.089
+reducers sort of oh yes oh yes in in in
+
+1293
+00:58:48.289 --> 00:58:49.859
+in real life all right
+
+1294
+00:58:50.059 --> 00:58:53.068
+in real life it is routine among
+
+1295
+00:58:53.268 --> 00:58:55.739
+MapReduce users to you know define a
+
+1296
+00:58:55.938 --> 00:58:58.019
+MapReduce job that took some inputs and
+
+1297
+00:58:58.219 --> 00:58:59.969
+produce some outputs and then have a
+
+1298
+00:59:00.168 --> 00:59:01.769
+second MapReduce job you know you're
+
+1299
+00:59:01.969 --> 00:59:03.739
+doing some very complicated multistage
+
+1300
+00:59:03.938 --> 00:59:08.699
+analysis or iterative algorithm like
+
+1301
+00:59:08.898 --> 00:59:10.229
+PageRank for example which is the
+
+1302
+00:59:10.429 --> 00:59:12.919
+algorithm Google uses to sort of
+
+1303
+00:59:13.119 --> 00:59:15.989
+estimate how important or influential
+
+1304
+00:59:16.188 --> 00:59:18.028
+different webpages are that's an
+
+1305
+00:59:18.228 --> 00:59:20.879
+iterative algorithm is sort of gradually
+
+1306
+00:59:21.079 --> 00:59:22.739
+converges on an answer and if you
+
+1307
+00:59:22.938 --> 00:59:24.239
+implement in MapReduce which I think
+
+1308
+00:59:24.438 --> 00:59:26.339
+they originally did you have to run the
+
+1309
+00:59:26.539 --> 00:59:28.709
+MapReduce job multiple times and the
+
+1310
+00:59:28.909 --> 00:59:30.419
+output of each one is sort of you know
+
+1311
+00:59:30.619 --> 00:59:34.159
+list of webpages with an updated sort of
+
+1312
+00:59:34.358 --> 00:59:36.449
+value or weight or importance for each
+
+1313
+00:59:36.648 --> 00:59:38.159
+webpage so it was routine to take this
+
+1314
+00:59:38.358 --> 00:59:40.079
+output and then use it as the input to
+
+1315
+00:59:40.278 --> 00:59:53.548
+another MapReduce job oh yeah well yeah
+
+1316
+00:59:53.748 --> 00:59:55.829
+you need to sort of set things up the
+
+1317
+00:59:56.028 --> 00:59:58.079
+output you need to rate the reduced
+
+1318
+00:59:58.278 --> 00:59:59.068
+function sort of in the knowledge that
+
+1319
+00:59:59.268 --> 01:00:02.459
+oh I need to produce data that's in the
+
+1320
+01:00:02.659 --> 01:00:05.219
+format or as the information required
+
+1321
+01:00:05.418 --> 01:00:07.739
+for the next MapReduce job I mean this
+
+1322
+01:00:07.938 --> 01:00:09.028
+actually brings up a little bit of a
+
+1323
+01:00:09.228 --> 01:00:11.298
+shortcoming in the MapReduce framework
+
+1324
+01:00:11.498 --> 01:00:16.109
+which is it's great if you are if the
+
+1325
+01:00:16.309 --> 01:00:18.479
+algorithm you need to run is easily
+
+1326
+01:00:18.679 --> 01:00:20.609
+expressible as a math followed by this
+
+1327
+01:00:20.809 --> 01:00:23.669
+sort of shuffling of the data by key
+
+1328
+01:00:23.869 --> 01:00:25.979
+followed by a reduce and that's it
+
+1329
+01:00:26.179 --> 01:00:27.869
+my MapReduce is fantastic for algorithms
+
+1330
+01:00:28.068 --> 01:00:30.389
+that can be cast in that form and we're
+
+1331
+01:00:30.588 --> 01:00:31.919
+furthermore each of the maps has to be
+
+1332
+01:00:32.119 --> 01:00:33.200
+completely independent and
+
+1333
+01:00:33.400 --> 01:00:39.320
+are required to be functional pure
+
+1334
+01:00:39.519 --> 01:00:42.560
+functional functions that just look at
+
+1335
+01:00:42.760 --> 01:00:44.269
+their arguments and nothing else
+
+1336
+01:00:44.469 --> 01:00:46.280
+you know that's like it's a restriction
+
+1337
+01:00:46.480 --> 01:00:48.440
+and it turns out that many people want
+
+1338
+01:00:48.639 --> 01:00:49.789
+to run much longer pipelines that
+
+1339
+01:00:49.989 --> 01:00:51.230
+involve lots and lots of different kinds
+
+1340
+01:00:51.429 --> 01:00:52.970
+of processing and with MapReduce you
+
+1341
+01:00:53.170 --> 01:00:54.170
+have to sort of cobble that together
+
+1342
+01:00:54.369 --> 01:00:58.190
+from multiple MapReduce distinct
+
+1343
+01:00:58.389 --> 01:01:00.530
+MapReduce jobs and more advanced systems
+
+1344
+01:01:00.730 --> 01:01:01.850
+which we will talk about later in the
+
+1345
+01:01:02.050 --> 01:01:04.670
+course are much better at allowing you
+
+1346
+01:01:04.869 --> 01:01:06.320
+to specify the complete pipeline of
+
+1347
+01:01:06.519 --> 01:01:08.210
+computations and they'll do optimization
+
+1348
+01:01:08.409 --> 01:01:10.700
+you know the framework realizes all the
+
+1349
+01:01:10.900 --> 01:01:12.800
+stuff you have to do and organize much
+
+1350
+01:01:13.000 --> 01:01:15.470
+more complicated efficiently optimize
+
+1351
+01:01:15.670 --> 01:01:19.590
+much more complicated computations
+
+1352
+01:01:39.659 --> 01:01:41.450
+from the programmers point of view it's
+
+1353
+01:01:41.650 --> 01:01:43.880
+just about map and reduce from our point
+
+1354
+01:01:44.079 --> 01:01:45.410
+of view it's going to be about the
+
+1355
+01:01:45.610 --> 01:01:49.120
+worker processes and the worker servers
+
+1356
+01:01:49.320 --> 01:01:53.120
+that that are they're part of MapReduce
+
+1357
+01:01:53.320 --> 01:01:55.190
+framework that among many other things
+
+1358
+01:01:55.389 --> 01:01:59.800
+call the map and reduce functions so
+
+1359
+01:02:00.000 --> 01:02:01.730
+yeah from our point of view we care a
+
+1360
+01:02:01.929 --> 01:02:04.039
+lot about how this is organized by the
+
+1361
+01:02:04.239 --> 01:02:05.990
+surrounding framework this is sort of
+
+1362
+01:02:06.190 --> 01:02:08.180
+the programmers view with all the
+
+1363
+01:02:08.380 --> 01:02:14.340
+distributive stuff stripped out yes
+
+1364
+01:02:15.960 --> 01:02:24.950
+sorry I gotta say it again oh you mean
+
+1365
+01:02:25.150 --> 01:02:31.970
+where does the immediate data go okay so
+
+1366
+01:02:32.170 --> 01:02:35.240
+there's two questions one is when you
+
+1367
+01:02:35.440 --> 01:02:37.820
+call a MIT what happens to the data and
+
+1368
+01:02:38.019 --> 01:02:42.329
+the other is where the functions run so
+
+1369
+01:02:46.909 --> 01:02:50.039
+the actual answer is that first where
+
+1370
+01:02:50.239 --> 01:02:52.829
+the stuff rotten there's a number of say
+
+1371
+01:02:53.028 --> 01:02:56.339
+a thousand servers um actually the right
+
+1372
+01:02:56.539 --> 01:02:57.990
+thing to look at here is figure one in
+
+1373
+01:02:58.190 --> 01:03:02.460
+the paper sitting underneath this in the
+
+1374
+01:03:02.659 --> 01:03:04.230
+real world there's some big collection
+
+1375
+01:03:04.429 --> 01:03:08.818
+of servers and we'll call them maybe
+
+1376
+01:03:09.018 --> 01:03:12.210
+worker servers or workers and there's
+
+1377
+01:03:12.409 --> 01:03:14.460
+also a single master server that's
+
+1378
+01:03:14.659 --> 01:03:16.318
+organizing the whole computation and
+
+1379
+01:03:16.518 --> 01:03:18.690
+what's going on here is the master
+
+1380
+01:03:18.889 --> 01:03:22.289
+server for know knows that there's some
+
+1381
+01:03:22.489 --> 01:03:24.359
+number of input files you know five
+
+1382
+01:03:24.559 --> 01:03:27.599
+thousand input files and it farms out in
+
+1383
+01:03:27.798 --> 01:03:29.339
+vacations of map to the different
+
+1384
+01:03:29.539 --> 01:03:30.690
+workers so it'll send a message to
+
+1385
+01:03:30.889 --> 01:03:33.980
+worker seven saying please run you know
+
+1386
+01:03:34.179 --> 01:03:37.559
+this map function on such-and-such an
+
+1387
+01:03:37.759 --> 01:03:41.550
+input file and then the worker function
+
+1388
+01:03:41.750 --> 01:03:43.200
+which is you know part of MapReduce and
+
+1389
+01:03:43.400 --> 01:03:46.970
+knows all about Map Reduce well then
+
+1390
+01:03:47.170 --> 01:03:49.889
+read the file read the input whatever
+
+1391
+01:03:50.088 --> 01:03:53.909
+whichever input file and call this map
+
+1392
+01:03:54.108 --> 01:03:56.399
+function with the file name value as its
+
+1393
+01:03:56.599 --> 01:04:00.200
+arguments then that worker process will
+
+1394
+01:04:00.400 --> 01:04:02.550
+employees what implements in it and
+
+1395
+01:04:02.750 --> 01:04:05.760
+every time the map calls emit the worker
+
+1396
+01:04:05.960 --> 01:04:10.079
+process will write this data to files on
+
+1397
+01:04:10.278 --> 01:04:12.568
+the local disk so what happens to map
+
+1398
+01:04:12.768 --> 01:04:17.220
+emits and is they produce files on the
+
+1399
+01:04:17.420 --> 01:04:19.619
+map workers local discs that are
+
+1400
+01:04:19.818 --> 01:04:21.750
+accumulating all the keys and values
+
+1401
+01:04:21.949 --> 01:04:26.329
+produced by the maps run on that worker
+
+1402
+01:04:26.528 --> 01:04:30.000
+so at the end of the math phase what
+
+1403
+01:04:30.199 --> 01:04:31.889
+we're left with is all those worker
+
+1404
+01:04:32.088 --> 01:04:34.889
+machines each of which has the output of
+
+1405
+01:04:35.088 --> 01:04:37.769
+some of whatever maps were run on that
+
+1406
+01:04:37.969 --> 01:04:42.169
+worker machine then the MapReduce
+
+1407
+01:04:42.369 --> 01:04:45.510
+workers arrange to move the data to
+
+1408
+01:04:45.710 --> 01:04:46.619
+where it's going to be needed for the
+
+1409
+01:04:46.818 --> 01:04:50.039
+reduces so and since and a you know in a
+
+1410
+01:04:50.239 --> 01:04:53.039
+typical big computation you know this
+
+1411
+01:04:53.239 --> 01:04:55.019
+this reduce indication is going to need
+
+1412
+01:04:55.219 --> 01:04:58.889
+all map output that
+
+1413
+01:04:59.088 --> 01:05:01.359
+mentioned the key a but it's gonna turn
+
+1414
+01:05:01.559 --> 01:05:04.089
+out you know this is a simple example
+
+1415
+01:05:04.289 --> 01:05:08.399
+but probably in general every single map
+
+1416
+01:05:08.599 --> 01:05:10.269
+indication will have produce lots of
+
+1417
+01:05:10.469 --> 01:05:12.760
+keys including some instances of key a
+
+1418
+01:05:12.960 --> 01:05:15.190
+so typically in order before we can even
+
+1419
+01:05:15.389 --> 01:05:17.260
+run this reduce function the MapReduce
+
+1420
+01:05:17.460 --> 01:05:19.990
+framework that is the MapReduce worker
+
+1421
+01:05:20.190 --> 01:05:22.389
+running on one of our thousand servers
+
+1422
+01:05:22.588 --> 01:05:24.068
+is going to have to go talk to every
+
+1423
+01:05:24.268 --> 01:05:26.379
+single other of the thousand servers and
+
+1424
+01:05:26.579 --> 01:05:28.329
+say look you know I'm gonna run the
+
+1425
+01:05:28.528 --> 01:05:30.970
+reduce for key a please look at the
+
+1426
+01:05:31.170 --> 01:05:33.010
+intermediate map output stored in your
+
+1427
+01:05:33.210 --> 01:05:35.680
+disk and fish out all of the instances
+
+1428
+01:05:35.880 --> 01:05:37.960
+of key a and send them over the network
+
+1429
+01:05:38.159 --> 01:05:40.869
+to me so the reduce worker is going to
+
+1430
+01:05:41.068 --> 01:05:43.329
+do that it's going to fetch from every
+
+1431
+01:05:43.528 --> 01:05:45.760
+worker all of the instances of the key
+
+1432
+01:05:45.960 --> 01:05:47.200
+that it's responsible for that the
+
+1433
+01:05:47.400 --> 01:05:50.139
+master has told it to be responsible for
+
+1434
+01:05:50.338 --> 01:05:51.639
+and once it's collected all of that data
+
+1435
+01:05:51.838 --> 01:05:55.619
+then it can call reduce and the reduce
+
+1436
+01:05:55.818 --> 01:05:58.269
+function itself calls reduce omit which
+
+1437
+01:05:58.469 --> 01:06:01.690
+is different from the map in it and what
+
+1438
+01:06:01.889 --> 01:06:04.510
+reduces emit does is writes the output
+
+1439
+01:06:04.710 --> 01:06:11.950
+to a file in a cluster file service that
+
+1440
+01:06:12.150 --> 01:06:14.318
+Google uses so here's something I
+
+1441
+01:06:14.518 --> 01:06:17.769
+haven't mentioned I haven't mentioned
+
+1442
+01:06:17.969 --> 01:06:21.129
+where the input lives and where the
+
+1443
+01:06:21.329 --> 01:06:25.329
+output lives they're both files because
+
+1444
+01:06:25.528 --> 01:06:28.599
+any piece of input we want the
+
+1445
+01:06:28.798 --> 01:06:31.119
+flexibility to be able to read any piece
+
+1446
+01:06:31.318 --> 01:06:34.389
+of input on any worker server that means
+
+1447
+01:06:34.588 --> 01:06:36.599
+we need some kind of network file system
+
+1448
+01:06:36.798 --> 01:06:42.309
+to store the input data and so indeed
+
+1449
+01:06:42.509 --> 01:06:43.899
+the paper talks about this thing called
+
+1450
+01:06:44.099 --> 01:06:49.960
+GFS or Google file system and GFS is a
+
+1451
+01:06:50.159 --> 01:06:51.789
+cluster file system and BFS actually
+
+1452
+01:06:51.989 --> 01:06:54.010
+runs on exactly the same set of workers
+
+1453
+01:06:54.210 --> 01:06:56.519
+that work our servers that run MapReduce
+
+1454
+01:06:56.719 --> 01:07:00.430
+and the input GFS just automatically
+
+1455
+01:07:00.630 --> 01:07:02.019
+when you you know it's a file system you
+
+1456
+01:07:02.219 --> 01:07:03.639
+can read in my files it just
+
+1457
+01:07:03.838 --> 01:07:05.919
+automatically splits up any big file you
+
+1458
+01:07:06.119 --> 01:07:08.289
+store on it across lots of servers and
+
+1459
+01:07:08.489 --> 01:07:12.120
+64 megabyte chunks so if you write
+
+1460
+01:07:12.320 --> 01:07:14.160
+if you view of ten terabytes of crawled
+
+1461
+01:07:14.360 --> 01:07:17.550
+web page contents and you just write
+
+1462
+01:07:17.750 --> 01:07:19.920
+them to GFS even as a single big file
+
+1463
+01:07:20.119 --> 01:07:22.830
+GFS will automatically split that vast
+
+1464
+01:07:23.030 --> 01:07:24.810
+amount of data up into 64 kilobyte
+
+1465
+01:07:25.010 --> 01:07:27.810
+chunks distributed evenly over all of
+
+1466
+01:07:28.010 --> 01:07:30.750
+the GFS servers which is to say all the
+
+1467
+01:07:30.949 --> 01:07:32.310
+servers that Google has available and
+
+1468
+01:07:32.510 --> 01:07:34.380
+that's fantastic that's just what we
+
+1469
+01:07:34.579 --> 01:07:36.660
+need if we then want to run a MapReduce
+
+1470
+01:07:36.860 --> 01:07:39.450
+job that takes the entire crawled web as
+
+1471
+01:07:39.650 --> 01:07:42.450
+input the data is already stored in a
+
+1472
+01:07:42.650 --> 01:07:44.340
+way that split up evenly across all the
+
+1473
+01:07:44.539 --> 01:07:47.580
+servers and so that means that the map
+
+1474
+01:07:47.780 --> 01:07:49.740
+workers you know we're gonna launch you
+
+1475
+01:07:49.940 --> 01:07:51.240
+know if we have a thousand servers we're
+
+1476
+01:07:51.440 --> 01:07:52.800
+gonna launch a thousand map workers each
+
+1477
+01:07:53.000 --> 01:07:55.650
+reading one 1000s at the input data and
+
+1478
+01:07:55.849 --> 01:07:56.880
+they're going to be able to read the
+
+1479
+01:07:57.079 --> 01:08:01.260
+data in parallel from a thousand GFS
+
+1480
+01:08:01.460 --> 01:08:04.289
+file servers thus getting now tremendous
+
+1481
+01:08:04.489 --> 01:08:07.530
+total read throughput you know the read
+
+1482
+01:08:07.730 --> 01:08:10.960
+through put up a thousand servers
+
+1483
+01:08:20.989 --> 01:08:23.289
+so so are you thinking maybe that Google
+
+1484
+01:08:23.489 --> 01:08:25.270
+has one set of physical machines among
+
+1485
+01:08:25.470 --> 01:08:27.579
+GFS and a separate set of physical
+
+1486
+01:08:27.779 --> 01:08:40.489
+machines that run MapReduce jobs okay
+
+1487
+01:08:40.579 --> 01:08:44.590
+right so the question is what does this
+
+1488
+01:08:44.789 --> 01:08:48.430
+arrow here actually involve and the
+
+1489
+01:08:48.630 --> 01:08:50.020
+answer that actually it sort of changed
+
+1490
+01:08:50.220 --> 01:08:51.430
+over the years as Google's
+
+1491
+01:08:51.630 --> 01:08:55.600
+involve this system but you know what
+
+1492
+01:08:55.800 --> 01:08:58.000
+this in those general case if we have
+
+1493
+01:08:58.199 --> 01:09:00.880
+big files stored in some big Network
+
+1494
+01:09:01.079 --> 01:09:02.680
+file system like you know it's like GFS
+
+1495
+01:09:02.880 --> 01:09:04.930
+is a bit like AFS you might have used on
+
+1496
+01:09:05.130 --> 01:09:07.029
+Athena where you go talk to some
+
+1497
+01:09:07.229 --> 01:09:09.610
+collection and your data split over big
+
+1498
+01:09:09.810 --> 01:09:10.840
+collection o servers you have to go talk
+
+1499
+01:09:11.039 --> 01:09:11.949
+to those servers over the network to
+
+1500
+01:09:12.149 --> 01:09:14.380
+retrieve your data in that case what
+
+1501
+01:09:14.579 --> 01:09:17.640
+this arrow might represent is the meta
+
+1502
+01:09:17.840 --> 01:09:20.320
+MapReduce worker process has to go off
+
+1503
+01:09:20.520 --> 01:09:22.449
+and talk across the network to the
+
+1504
+01:09:22.649 --> 01:09:25.600
+correct GFS server or maybe servers that
+
+1505
+01:09:25.800 --> 01:09:28.150
+store it's part of the input and fetch
+
+1506
+01:09:28.350 --> 01:09:30.750
+it over the network to the MapReduce
+
+1507
+01:09:30.949 --> 01:09:33.250
+worker machine in order to pass the map
+
+1508
+01:09:33.449 --> 01:09:35.110
+and that's certainly the most general
+
+1509
+01:09:35.310 --> 01:09:37.720
+case and that was eventually how
+
+1510
+01:09:37.920 --> 01:09:40.600
+MapReduce actually worked in the world
+
+1511
+01:09:40.800 --> 01:09:44.619
+of this paper though and and if you did
+
+1512
+01:09:44.819 --> 01:09:45.730
+that that's a lot of network
+
+1513
+01:09:45.930 --> 01:09:47.710
+communication are you talking about ten
+
+1514
+01:09:47.909 --> 01:09:49.150
+terabytes of data and we have moved 10
+
+1515
+01:09:49.350 --> 01:09:51.400
+terabytes across their data center
+
+1516
+01:09:51.600 --> 01:09:54.070
+network which you know data center
+
+1517
+01:09:54.270 --> 01:09:55.539
+networks wanting gigabits per second but
+
+1518
+01:09:55.739 --> 01:09:57.579
+it's still a lot of time to move tens of
+
+1519
+01:09:57.779 --> 01:10:02.260
+terabytes of data in order to try to and
+
+1520
+01:10:02.460 --> 01:10:03.970
+indeed in the world of this paper in
+
+1521
+01:10:04.170 --> 01:10:07.150
+2004 the most constraining bottleneck in
+
+1522
+01:10:07.350 --> 01:10:08.650
+their MapReduce system was Network
+
+1523
+01:10:08.850 --> 01:10:11.409
+throughput because they were running on
+
+1524
+01:10:11.609 --> 01:10:13.390
+a network if you sort of read as far as
+
+1525
+01:10:13.590 --> 01:10:18.570
+the evaluation section their network
+
+1526
+01:10:18.770 --> 01:10:24.550
+their network as was they had thousands
+
+1527
+01:10:24.750 --> 01:10:27.229
+of machines
+
+1528
+01:10:27.479 --> 01:10:30.708
+whatever and they would collect machines
+
+1529
+01:10:30.908 --> 01:10:32.720
+they would plug machines and you know
+
+1530
+01:10:32.920 --> 01:10:34.909
+each rack of machines and you know an
+
+1531
+01:10:35.109 --> 01:10:36.319
+Ethernet switch for that rack or
+
+1532
+01:10:36.519 --> 01:10:37.909
+something but then you know they all
+
+1533
+01:10:38.109 --> 01:10:40.248
+need to talk to each other but there was
+
+1534
+01:10:40.448 --> 01:10:43.788
+a route Ethernet switch that all of the
+
+1535
+01:10:43.988 --> 01:10:45.319
+Rockies are net switches talked to and
+
+1536
+01:10:45.519 --> 01:10:47.689
+this one and you know so if you just
+
+1537
+01:10:47.889 --> 01:10:50.838
+pick some Map Reduce worker and some GFS
+
+1538
+01:10:51.038 --> 01:10:52.760
+server you know chances are at least
+
+1539
+01:10:52.960 --> 01:10:54.680
+half the time the communication between
+
+1540
+01:10:54.880 --> 01:10:55.998
+them has to pass through this one
+
+1541
+01:10:56.198 --> 01:10:58.208
+wouldn't switch their routes which had
+
+1542
+01:10:58.408 --> 01:11:01.279
+only some amount of total throughput
+
+1543
+01:11:01.479 --> 01:11:05.449
+which I forget you know some number of
+
+1544
+01:11:05.649 --> 01:11:09.708
+gigabits per second and I forget the
+
+1545
+01:11:09.908 --> 01:11:13.390
+number well but when I did the division
+
+1546
+01:11:13.590 --> 01:11:17.689
+that is divided up to the total
+
+1547
+01:11:17.889 --> 01:11:18.918
+throughput available in the routes which
+
+1548
+01:11:19.118 --> 01:11:21.439
+by the roughly 2000 servers that they
+
+1549
+01:11:21.639 --> 01:11:23.569
+used in the papers experiments what I
+
+1550
+01:11:23.769 --> 01:11:25.970
+got was that each machine share of the
+
+1551
+01:11:26.170 --> 01:11:27.798
+route switch or of the total network
+
+1552
+01:11:27.998 --> 01:11:30.409
+capacity was only 50 megabits per second
+
+1553
+01:11:30.609 --> 01:11:36.109
+per second in their setup 50 megabits
+
+1554
+01:11:36.309 --> 01:11:41.329
+per second per machine and then might
+
+1555
+01:11:41.529 --> 01:11:42.890
+seem like a lot 50 megabits gosh
+
+1556
+01:11:43.090 --> 01:11:45.229
+millions and millions but it's actually
+
+1557
+01:11:45.429 --> 01:11:47.239
+quite small compared to how fast a disks
+
+1558
+01:11:47.439 --> 01:11:51.798
+Ron or CPUs run and so this with their
+
+1559
+01:11:51.998 --> 01:11:53.569
+network this 50 megabits per second was
+
+1560
+01:11:53.769 --> 01:11:56.239
+like a tremendous limit and so they
+
+1561
+01:11:56.439 --> 01:11:57.560
+really stood on their heads in the
+
+1562
+01:11:57.760 --> 01:11:59.810
+design described in the paper to avoid
+
+1563
+01:12:00.010 --> 01:12:02.779
+using the network and they played a
+
+1564
+01:12:02.979 --> 01:12:05.659
+bunch of tricks to avoid sending stuff
+
+1565
+01:12:05.859 --> 01:12:06.859
+over the network when they possibly
+
+1566
+01:12:07.059 --> 01:12:10.369
+could avoid it one of them was they
+
+1567
+01:12:10.569 --> 01:12:14.180
+would they ran the gfs servers and the
+
+1568
+01:12:14.380 --> 01:12:16.609
+MapReduce workers on the same set of
+
+1569
+01:12:16.809 --> 01:12:18.859
+machines so they have a thousand
+
+1570
+01:12:19.059 --> 01:12:22.878
+machines they'd run GFS they implement
+
+1571
+01:12:23.078 --> 01:12:24.890
+their GFS service on that thousand
+
+1572
+01:12:25.090 --> 01:12:26.899
+machines and run MapReduce on the same
+
+1573
+01:12:27.099 --> 01:12:29.329
+thousand machines and then when the
+
+1574
+01:12:29.529 --> 01:12:33.229
+master was splitting up the map work and
+
+1575
+01:12:33.429 --> 01:12:34.430
+sort of farming it out to different
+
+1576
+01:12:34.630 --> 01:12:39.190
+workers it would cleverly when it was
+
+1577
+01:12:39.390 --> 01:12:41.350
+about to run the map that was going to
+
+1578
+01:12:41.550 --> 01:12:44.440
+read from input file one it would figure
+
+1579
+01:12:44.640 --> 01:12:47.590
+out from GFS which server actually holds
+
+1580
+01:12:47.789 --> 01:12:50.140
+input file one on its local disk and it
+
+1581
+01:12:50.340 --> 01:12:52.869
+would send the map for that input file
+
+1582
+01:12:53.069 --> 01:12:55.510
+to the MapReduce software on the same
+
+1583
+01:12:55.710 --> 01:12:58.989
+machine so that by default this arrow
+
+1584
+01:12:59.189 --> 01:13:01.779
+was actually local local read from the
+
+1585
+01:13:01.979 --> 01:13:03.250
+local disk and did not involve the
+
+1586
+01:13:03.449 --> 01:13:04.960
+network and you know depending on
+
+1587
+01:13:05.159 --> 01:13:07.090
+failures or load or whatever that
+
+1588
+01:13:07.289 --> 01:13:09.820
+couldn't always do that but almost all
+
+1589
+01:13:10.020 --> 01:13:11.770
+the maps would be run on the very same
+
+1590
+01:13:11.970 --> 01:13:13.420
+machine and stored the data thus saving
+
+1591
+01:13:13.619 --> 01:13:17.199
+them vast amount of time that they would
+
+1592
+01:13:17.399 --> 01:13:18.820
+otherwise had to wait to move the input
+
+1593
+01:13:19.020 --> 01:13:22.570
+data across the network the next trick
+
+1594
+01:13:22.770 --> 01:13:26.050
+they played is that map as I mentioned
+
+1595
+01:13:26.250 --> 01:13:28.270
+before stores this output on the local
+
+1596
+01:13:28.470 --> 01:13:29.739
+disk of the machine that you run the map
+
+1597
+01:13:29.939 --> 01:13:31.659
+on so again storing the output of the
+
+1598
+01:13:31.859 --> 01:13:33.070
+map does not require network
+
+1599
+01:13:33.270 --> 01:13:35.279
+communication he's not immediately
+
+1600
+01:13:35.479 --> 01:13:37.800
+because the output stored in the disk
+
+1601
+01:13:38.000 --> 01:13:42.159
+however we know for sure that one way or
+
+1602
+01:13:42.359 --> 01:13:44.860
+another in order to group together all
+
+1603
+01:13:45.060 --> 01:13:46.779
+of you know by the way the MapReduce is
+
+1604
+01:13:46.979 --> 01:13:49.449
+defined in order to group together all
+
+1605
+01:13:49.649 --> 01:13:51.310
+of the values associated with the given
+
+1606
+01:13:51.510 --> 01:13:55.060
+key and pass them to a single invocation
+
+1607
+01:13:55.260 --> 01:13:57.550
+to produce on some machine this is going
+
+1608
+01:13:57.750 --> 01:13:59.739
+to require network communication we're
+
+1609
+01:13:59.939 --> 01:14:01.989
+gonna you know we want to need to fetch
+
+1610
+01:14:02.189 --> 01:14:03.640
+all bays and give them a single
+
+1611
+01:14:03.840 --> 01:14:05.770
+machine that have to be moved across the
+
+1612
+01:14:05.970 --> 01:14:08.470
+network and so this shuffle this
+
+1613
+01:14:08.670 --> 01:14:11.489
+movement of the keys from is kind of
+
+1614
+01:14:11.689 --> 01:14:14.650
+originally stored by row and on the same
+
+1615
+01:14:14.850 --> 01:14:16.539
+machine that ran the map we need them
+
+1616
+01:14:16.739 --> 01:14:18.579
+essentially to be stored on by column on
+
+1617
+01:14:18.779 --> 01:14:19.600
+the machine that's going to be
+
+1618
+01:14:19.800 --> 01:14:21.820
+responsible for reduce this
+
+1619
+01:14:22.020 --> 01:14:23.409
+transformation of row storage
+
+1620
+01:14:23.609 --> 01:14:25.239
+essentially column storage is called the
+
+1621
+01:14:25.439 --> 01:14:28.329
+paper calls a shuffle and it really that
+
+1622
+01:14:28.529 --> 01:14:30.279
+required moving every piece of data
+
+1623
+01:14:30.479 --> 01:14:32.800
+across the network from the map that
+
+1624
+01:14:33.000 --> 01:14:34.270
+produced it to the reduce that would
+
+1625
+01:14:34.470 --> 01:14:36.100
+need it and now it's like the expensive
+
+1626
+01:14:36.300 --> 01:14:41.869
+part of the MapReduce yeah
+
+1627
+01:14:51.840 --> 01:14:53.659
+you're right you can imagine a different
+
+1628
+01:14:53.859 --> 01:14:55.038
+definition in which you have a more kind
+
+1629
+01:14:55.238 --> 01:14:57.788
+of streaming reduce I don't know I
+
+1630
+01:14:57.988 --> 01:14:59.869
+haven't thought this through I don't
+
+1631
+01:15:00.069 --> 01:15:01.850
+know why whether that would be feasible
+
+1632
+01:15:02.050 --> 01:15:04.038
+or not certainly as far as programmer
+
+1633
+01:15:04.238 --> 01:15:05.869
+interface like if the goal their
+
+1634
+01:15:06.069 --> 01:15:09.739
+number-one goal really was to be able to
+
+1635
+01:15:09.939 --> 01:15:11.779
+make it easy to program by people who
+
+1636
+01:15:11.979 --> 01:15:13.788
+just had no idea of what was going on in
+
+1637
+01:15:13.988 --> 01:15:16.460
+the system so it may be that you know
+
+1638
+01:15:16.659 --> 01:15:18.260
+this speck this is really the way reduce
+
+1639
+01:15:18.460 --> 01:15:22.460
+functions look and you know in C++ or
+
+1640
+01:15:22.659 --> 01:15:24.650
+something like a streaming version of
+
+1641
+01:15:24.850 --> 01:15:27.890
+this is now starting to look I don't
+
+1642
+01:15:28.090 --> 01:15:29.989
+know how it look probably not this
+
+1643
+01:15:30.189 --> 01:15:33.050
+symbol but you know maybe it could be
+
+1644
+01:15:33.250 --> 01:15:35.119
+done that way and indeed many modern
+
+1645
+01:15:35.319 --> 01:15:37.760
+systems people got a lot more
+
+1646
+01:15:37.960 --> 01:15:41.329
+sophisticated with modern things that
+
+1647
+01:15:41.529 --> 01:15:43.220
+are the successors the MapReduce and
+
+1648
+01:15:43.420 --> 01:15:45.230
+they do indeed involve processing
+
+1649
+01:15:45.430 --> 01:15:48.440
+streams of data often rather than this
+
+1650
+01:15:48.640 --> 01:15:50.538
+very batch approach there is a batch
+
+1651
+01:15:50.738 --> 01:15:52.579
+approach in the sense that we wait until
+
+1652
+01:15:52.779 --> 01:15:54.770
+we get all the data and then we process
+
+1653
+01:15:54.970 --> 01:15:57.050
+it so first of all that you then have to
+
+1654
+01:15:57.250 --> 01:15:59.470
+have a notion of finite inputs right
+
+1655
+01:15:59.670 --> 01:16:01.970
+modern systems often do indeed you
+
+1656
+01:16:02.170 --> 01:16:05.779
+streams and and are able to take
+
+1657
+01:16:05.979 --> 01:16:08.710
+advantage of some efficiencies do that
+
+1658
+01:16:08.909 --> 01:16:15.260
+MapReduce okay so this is the point at
+
+1659
+01:16:15.460 --> 01:16:17.180
+which this shuffle is where all the
+
+1660
+01:16:17.380 --> 01:16:19.250
+network traffic happens this can
+
+1661
+01:16:19.449 --> 01:16:20.840
+actually be a vast amount of data so if
+
+1662
+01:16:21.039 --> 01:16:23.720
+you think about sort if you're sorting
+
+1663
+01:16:23.920 --> 01:16:26.510
+the the output of the sort has the same
+
+1664
+01:16:26.710 --> 01:16:29.239
+size as the input to the sort so that
+
+1665
+01:16:29.439 --> 01:16:30.650
+means that if you're you know if your
+
+1666
+01:16:30.850 --> 01:16:32.690
+input is 10 terabytes of data and you're
+
+1667
+01:16:32.890 --> 01:16:34.550
+running a sort you're moving 10
+
+1668
+01:16:34.750 --> 01:16:36.020
+terabytes of data across a network at
+
+1669
+01:16:36.220 --> 01:16:38.210
+this point and your output will also be
+
+1670
+01:16:38.409 --> 01:16:40.579
+10 terabytes and so this is quite a lot
+
+1671
+01:16:40.779 --> 01:16:42.230
+of data and then indeed it is from any
+
+1672
+01:16:42.430 --> 01:16:43.940
+MapReduce jobs although not all there's
+
+1673
+01:16:44.140 --> 01:16:46.250
+some that significantly reduce the
+
+1674
+01:16:46.449 --> 01:16:49.489
+amount of data at these stages somebody
+
+1675
+01:16:49.689 --> 01:16:50.869
+mentioned Oh what if you want to feed
+
+1676
+01:16:51.069 --> 01:16:52.699
+the output of reduce into another
+
+1677
+01:16:52.899 --> 01:16:54.949
+MapReduce job and indeed that was often
+
+1678
+01:16:55.149 --> 01:16:56.779
+what people wanted to do and
+
+1679
+01:16:56.979 --> 01:16:58.189
+in case the output of the reduce might
+
+1680
+01:16:58.389 --> 01:17:00.199
+be enormous like four sort or web and
+
+1681
+01:17:00.399 --> 01:17:03.199
+mixing the output of the produces on ten
+
+1682
+01:17:03.399 --> 01:17:05.060
+terabytes of input the output of the
+
+1683
+01:17:05.260 --> 01:17:07.519
+reduces again gonna be ten terabytes so
+
+1684
+01:17:07.719 --> 01:17:09.048
+the output of the reduce is also stored
+
+1685
+01:17:09.248 --> 01:17:12.439
+on GFS and the system would you know
+
+1686
+01:17:12.639 --> 01:17:13.668
+reduce would just produce these key
+
+1687
+01:17:13.868 --> 01:17:18.168
+value pairs but the MapReduce framework
+
+1688
+01:17:18.368 --> 01:17:20.119
+would gather them up and write them into
+
+1689
+01:17:20.319 --> 01:17:23.479
+giant files on GFS and so there was
+
+1690
+01:17:23.679 --> 01:17:27.288
+another round of network communication
+
+1691
+01:17:27.488 --> 01:17:30.019
+required to get the output of each
+
+1692
+01:17:30.219 --> 01:17:32.838
+reduce to the GFS server that needed to
+
+1693
+01:17:33.038 --> 01:17:35.029
+store that reduce and because you might
+
+1694
+01:17:35.229 --> 01:17:37.759
+think that they could have played the
+
+1695
+01:17:37.958 --> 01:17:39.439
+same trick with the output of storing
+
+1696
+01:17:39.639 --> 01:17:42.288
+the output on the GFS server that
+
+1697
+01:17:42.488 --> 01:17:46.248
+happened to run the MapReduce worker
+
+1698
+01:17:46.448 --> 01:17:48.769
+that ran the reduce and maybe they did
+
+1699
+01:17:48.969 --> 01:17:51.560
+do that but because GFS as well as
+
+1700
+01:17:51.760 --> 01:17:53.779
+splitting data for performance also
+
+1701
+01:17:53.979 --> 01:17:55.729
+keeps two or three copies for fault
+
+1702
+01:17:55.929 --> 01:17:57.829
+tolerance that means no matter what you
+
+1703
+01:17:58.029 --> 01:17:58.878
+need to write one copy of the data
+
+1704
+01:17:59.078 --> 01:18:01.149
+across a network to a different server
+
+1705
+01:18:01.349 --> 01:18:02.869
+so there's a lot of network
+
+1706
+01:18:03.069 --> 01:18:05.498
+communication here and a bunch here also
+
+1707
+01:18:05.698 --> 01:18:07.998
+and I was this network communication
+
+1708
+01:18:08.198 --> 01:18:09.798
+that really limited the throughput in
+
+1709
+01:18:09.998 --> 01:18:10.458
+MapReduce
+
+1710
+01:18:10.658 --> 01:18:17.479
+in 2004 in 2020 because this network
+
+1711
+01:18:17.679 --> 01:18:19.668
+arrangement was such a limiting factor
+
+1712
+01:18:19.868 --> 01:18:21.588
+for so many things people wanted to do
+
+1713
+01:18:21.788 --> 01:18:23.720
+in datacenters modern data center
+
+1714
+01:18:23.920 --> 01:18:25.878
+networks are a lot faster at the root
+
+1715
+01:18:26.078 --> 01:18:28.759
+than this was and so you know one
+
+1716
+01:18:28.958 --> 01:18:30.439
+typical data center network you might
+
+1717
+01:18:30.639 --> 01:18:32.689
+see today actually has many root instead
+
+1718
+01:18:32.889 --> 01:18:34.128
+of a single root switch that everything
+
+1719
+01:18:34.328 --> 01:18:37.430
+has to go through you might have you
+
+1720
+01:18:37.630 --> 01:18:40.069
+know many root switches and each rack
+
+1721
+01:18:40.269 --> 01:18:42.259
+switch has a connection to each of these
+
+1722
+01:18:42.458 --> 01:18:44.329
+sort of replicated root switches and the
+
+1723
+01:18:44.529 --> 01:18:46.279
+traffic is split up among the root
+
+1724
+01:18:46.479 --> 01:18:48.399
+switches so modern data center networks
+
+1725
+01:18:48.599 --> 01:18:52.069
+have far more network throughput and
+
+1726
+01:18:52.269 --> 01:18:54.680
+because of that actually modern I think
+
+1727
+01:18:54.880 --> 01:18:56.899
+Google sort of stopped using MapReduce a
+
+1728
+01:18:57.099 --> 01:19:00.109
+few years ago but before they stopped
+
+1729
+01:19:00.309 --> 01:19:02.390
+using it the modern MapReduce actually
+
+1730
+01:19:02.590 --> 01:19:04.759
+no longer tried to run the maps on the
+
+1731
+01:19:04.958 --> 01:19:06.739
+same machine as the data stored on they
+
+1732
+01:19:06.939 --> 01:19:07.939
+were happy to vote the data from
+
+1733
+01:19:08.139 --> 01:19:11.168
+anywhere because they just assumed that
+
+1734
+01:19:11.368 --> 01:19:16.239
+was extremely fast okay we're out of
+
+1735
+01:19:16.439 --> 01:19:18.239
+time for MapReduce
+
+1736
+01:19:18.439 --> 01:19:21.489
+we have a lab due at the end of next
+
+1737
+01:19:21.689 --> 01:19:22.149
+week
+
+1738
+01:19:22.349 --> 01:19:24.640
+in which you'll write your own somewhat
+
+1739
+01:19:24.840 --> 01:19:27.699
+simplified MapReduce so have fun with
+
+1740
+01:19:27.899 --> 01:19:28.149
+that
+
+1741
+01:19:28.349 --> 01:19:33.349
+and see you on Thursday
+
