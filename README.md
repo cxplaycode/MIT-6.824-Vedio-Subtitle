@@ -25,5 +25,15 @@ MIT-6.824-video-Subtitle 是啥
 
 MIT-6.824-video-Subtitle 是针对 6.824 视频课程的字幕翻译项目，主要用于翻译、制作视频字幕。
 
+#### 如何参与项目
 
+- 关联 git 登录 learnbycoding
+
+​    https://www.learnbycoding.cn/ 
+
+![](src/img1.png)
+
+- 下方有翻译字幕的 Etherpad，大家可以自由选择字幕文件翻译
+
+![](src/img2.png)
 
